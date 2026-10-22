@@ -16,23 +16,83 @@ import {
   titular,
 } from "./piezas";
 import { EJEMPLOS, PAG, lang, textosFlujo, type TextosFlujo } from "./textos";
+import { Aviso } from "./Aviso";
+import { useAceptacion } from "./useAceptacion";
 import { useConversacion, type Conversacion } from "./useConversacion";
 
 // Flujo por pantallas (ticket 02, variante B) con la accesibilidad del ticket
 // 09: cada pantalla nueva entra con un fundido, el foco va a su h1 y la página
 // vuelve arriba; mientras piensa, la pantalla anterior queda inert.
+// Antes de todo va el aviso del primer uso (tickets 08 y 15); el enlace
+// «Privacidad» del pie (#privacidad) lo reabre para retirar la aceptación.
 export function Flujo() {
   const c = useConversacion();
   const t = textosFlujo[c.idioma];
   const refTitular = useRef<HTMLHeadingElement>(null);
+  const { aceptado, aceptar, retirar } = useAceptacion();
+  const [revisando, setRevisando] = useState(false);
+  const [cambioAviso, setCambioAviso] = useState(0);
+  const [anuncioAviso, setAnuncioAviso] = useState("");
 
   useEffect(() => {
-    if (c.vez === 0) return;
+    if (c.vez === 0 && cambioAviso === 0) return;
     refTitular.current?.focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, [c.vez]);
+  }, [c.vez, cambioAviso]);
+
+  useEffect(() => {
+    const abrir = () => {
+      if (window.location.hash !== "#privacidad") return;
+      setRevisando(true);
+      setAnuncioAviso("");
+      setCambioAviso((n) => n + 1);
+    };
+    abrir();
+    window.addEventListener("hashchange", abrir);
+    return () => window.removeEventListener("hashchange", abrir);
+  }, []);
+
+  function cerrarAviso() {
+    setRevisando(false);
+    setCambioAviso((n) => n + 1);
+    if (window.location.hash === "#privacidad")
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
 
   const { pantalla, consulta } = c;
+
+  // Hasta saber si hay aceptación (servidor y antes de hidratar), nada.
+  if (aceptado === null) return <div lang={lang(c.idioma)} className="min-h-[60dvh]" />;
+
+  if (!aceptado || revisando)
+    return (
+      <div lang={lang(c.idioma)}>
+        <div className="flex justify-end">
+          <SelectorIdioma c={c} t={t} />
+        </div>
+        <div role="status" className="sr-only">
+          {anuncioAviso}
+        </div>
+        <Aviso
+          t={t}
+          aceptado={aceptado}
+          refTitular={refTitular}
+          onAceptar={() => {
+            aceptar();
+            cerrarAviso();
+          }}
+          onVolver={cerrarAviso}
+          onRetirar={() => {
+            retirar();
+            c.reiniciar();
+            setRevisando(false);
+            setAnuncioAviso(t.aviso.retirada);
+            if (window.location.hash === "#privacidad")
+              history.replaceState(null, "", window.location.pathname + window.location.search);
+          }}
+        />
+      </div>
+    );
 
   return (
     <div lang={lang(c.idioma)}>

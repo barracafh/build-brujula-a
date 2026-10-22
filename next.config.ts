@@ -8,5 +8,7 @@ const basePath = `/${ficha.equipo}`;
 const config: NextConfig = {
   basePath,
   env: { NEXT_PUBLIC_BASE_PATH: basePath },
+  // El chat de la ficha lee contexto.md en tiempo de ejecución (motor/agente.ts).
+  outputFileTracingIncludes: { "/api/consulta": ["./contexto.md"] },
 };
 export default config;

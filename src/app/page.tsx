@@ -33,7 +33,12 @@ export default function Home() {
         <div className="flex flex-wrap items-center justify-between gap-6 rounded-[28px] px-(--page-gutter) py-12 [background:radial-gradient(80%_70%_at_50%_-12%,#ffe58f_0%,rgba(255,229,143,0)_70%),linear-gradient(180deg,#ffd34d_0%,var(--brand-yellow)_46%,var(--brand-orange)_100%)] md:px-12">
           <p className="text-[15px]">
             Una pieza del squad{" "}
-            <span className="font-mono">{ficha.equipo}</span> · Build night
+            <span className="font-mono">{ficha.equipo}</span> · Build night ·{" "}
+            {/* Reabre el aviso del primer uso para retirar la aceptación. */}
+            <a href="#privacidad" className="underline underline-offset-4">
+              Privacidad<span aria-hidden="true"> · </span>
+              <span lang="ca">Privacitat</span>
+            </a>
           </p>
           <BotonAviso />
         </div>
