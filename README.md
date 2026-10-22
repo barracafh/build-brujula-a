@@ -1,88 +1,159 @@
-# Brújula · Asistente de trámites
+# Brújula · Procedure assistant
 
-**Problema.** Quien se enfrenta a una administración no sabe cómo se llama su trámite: sabe que «le han echado del trabajo» o que «no llega a fin de mes». Buscar en las sedes exige conocer el nombre oficial.
+**Describe your situation in your own words and Brújula tells you which official procedure or benefit you need, the steps, the documents, the deadline, and the direct link to the official website.**
 
-**Usuario.** Cualquier persona de la Comunitat Valenciana que describe su situación con sus palabras, en castellano o en valenciano, sin conocimientos administrativos.
+Live demo: <https://build.barraca.house/brujula-a> (the interface is in Spanish and Valencian).
 
-**Qué hemos hecho.**
-- Jev (TypeSafe System One) responde tres preguntas en una sola llamada (trámite, encaje en el catálogo, idioma) y unos umbrales deciden: respuesta directa, «¿Te refieres a…?» o fuera de catálogo.
-- Si Jev no está disponible o duda, un LLM de HelmCode elige un id del catálogo; como último recurso, coincidencia de palabras clave.
-- La ficha sale tal cual del catálogo público (`datos/`): la IA solo elige un id, nunca redacta contenido, plazos ni requisitos.
-- «Y después, ¿qué?»: trámites relacionados con enlace oficial y fuentes.
-- Interfaz en castellano y valenciano (el contenido oficial se mantiene en castellano).
+Brújula ("compass" in Spanish) is an experimental tool for residents of the Comunitat Valenciana (Spain). It is not an official service.
 
-**Qué falta para producción.**
-- RGPD y contrato de encargado de tratamiento con TypeSafe (EE. UU.) y con HelmCode.
-- Ajustar los umbrales con frases reales de ciudadanos (`src/lib/clasificar.ts`).
-- Incorporar el nuevo enlace de la RVI (renta valenciana de inclusión).
-- Traducción revisada del contenido de las fichas.
-- Métricas de uso sin guardar el texto del usuario.
+## The problem
 
-**Variables.** `JEV_API_KEY` (opcional; sin ella se usa el LLM) y `HELMCODE_API_KEY`, `HELMCODE_MODEL`, `HELMCODE_BASE_URL`. Siempre en el servidor, en `.env.local`.
+Public administrations name things in their own language: "prestación contributiva por desempleo", "alta en el padrón", "Renta Valenciana de Inclusión". People describe their problem differently: "they fired me", "I just moved", "I can't make ends meet". To find the right procedure you first need to know its official name, and most people don't.
 
-**Cómo probar.**
-- `bun scripts/unitarias.ts` (determinista, sin red).
-- `bun scripts/probar.ts [jev|llm|palabras]` (evalúa un motor con `src/datos/pruebas.json`).
+Brújula bridges that gap. The citizen writes (or dictates) the situation in Spanish or Valencian. Brújula identifies the procedure and shows the official information, always with a link to the source.
 
----
+## What it does
 
-# Tu herramienta, lista para empezar
+| You write | Brújula answers |
+|---|---|
+| "Me han echado del trabajo" | Unemployment benefit: steps, documents, deadline (15 days), link to the SEPE website. Then "And after that, what?": register with Labora, unemployment subsidy, and so on. |
+| "Me acabo de mudar a València" | Registering at the municipal register (padrón), with the steps and the city council link. |
+| "No llego a fin de mes y tengo dos críos" | Two or three candidates (child support supplement, minimum income) and the question "Do you mean…?" so you pick one. |
+| Something not in the catalogue | "We couldn't find it in Brújula", and a link to the official search engine of the Spanish government (administracion.gob.es). It never makes anything up. |
 
-Plantilla de cada equipo: Next.js y Tailwind, con rutas de servidor para llamar a la IA. La organización crea un repo por equipo a partir de esta carpeta, con los datos de su track, y lo conecta a su proyecto de Vercel. Este directorio tiene su propio `package.json` y `bun.lock`; no depende del workspace del evento.
+Features:
 
-Las reglas y el contexto para vuestro asistente de IA están en [AGENTS.md](AGENTS.md); el reto del track, en `SETUP.md`.
+- **Free text in Spanish or Valencian**, typed or dictated by voice.
+- **Complete answer card**: numbered steps, requirements, documents, deadline (the key figure), where to do it (button to the official site) and a list of official sources.
+- **"And after that, what?"**: related procedures and benefits that usually come next, each with its link.
+- **Follow-up chat** on an open procedure: you can ask about that procedure and the assistant answers only from its data. If you ask about another procedure, it searches the catalogue.
+- **Listen button**: pre-recorded audio of the answer, in Spanish and Valencian.
+- **Calendar links**: fixed deadlines can be added to Google Calendar.
+- **Recent procedures**: the last five procedures you opened are kept in your own browser only.
+- **Warnings**: entries not yet checked against the official site show a "not verified" notice.
 
-## Arrancar
+## How it works
 
-Con Bun y Node 22 o superior, dentro del repo de vuestro equipo:
+```
+citizen's sentence
+      │  (personal data such as ID numbers, emails and phones is stripped first)
+      ▼
+ server route /api/consulta
+      │
+      ▼
+ 1. Jev (TypeSafe)  ── one call, three questions: which procedure? does it fit the
+      │                  catalogue? which language? Thresholds in code decide.
+      │  unavailable or unsure
+      ▼
+ 2. HelmCode LLM    ── picks an id from the catalogue (the id is validated in code)
+      │  unavailable
+      ▼
+ 3. Keyword match   ── last resort
+      │
+      ▼
+ outcome: direct answer │ "Do you mean…?" (2–3 candidates) │ not in the catalogue
+```
+
+The central design rule: **the AI only decides which procedure it is. It never writes steps, deadlines, requirements or links.** Everything shown comes verbatim from the catalogue, each entry with its official source. The AI texts are limited to short clarification questions, and the follow-up chat is only allowed to quote figures and links that appear in the catalogue data.
+
+Other pieces:
+
+- **Catalogue**: 37 entries. 21 were provided by the organisers (13 procedures and 8 benefits, in `datos/catalogo-tramites-ayudas.json`) and 16 are procedures of the Ajuntament de València (`src/datos/catalogo-valencia.json`).
+- **Semantic search**: the catalogue is embedded once (`src/datos/vectores.json`, model `qwen3-embedding`, 1,536 dimensions). At query time the sentence is embedded and compared in memory with cosine similarity. No database.
+- **Voice**: dictation uses ElevenLabs Scribe (`src/app/api/voz/route.ts`). Without a key, the button does not appear.
+- **Audio**: answers are pre-generated as MP3 files (`public/audio/`, script `scripts/pregenerar-audio.ts`). Nothing plays on its own.
+- **Interface**: Spanish and Valencian. The official content stays in Spanish, as published by the administrations.
+
+## Rules the tool follows
+
+1. Every answer cites its official source and links the specific page that supports it.
+2. No real personal data: no ID numbers, case files or passwords. The tool asks users not to type any, and masks ID numbers, emails and phone numbers in the text before sending it to any AI service (names and addresses are not detected, so this is not a guarantee).
+3. **Nothing the citizen writes is stored**: no database and no logs with their text. The only thing kept is the list of recently opened procedures, in the browser's own storage, never sent to the server.
+4. When in doubt, the tool says it cannot confirm and links the official site. It never invents amounts, deadlines or requirements.
+5. A first-use notice explains which third parties receive the text (Jev/TypeSafe, HelmCode and, for dictation, ElevenLabs). The "Experimental tool, not an official service" notice and the "Something wrong? Let us know" button are always present.
+
+## Context
+
+Brújula was built at **Build night · BARRACA x SOTI** (22 October 2026, València), a one-night event where teams build public-service tools for citizens on a shared platform. Each team gets a track with a challenge; this one is "What procedure do I need?" plus "And after that, what?". Every tool on the platform uses the same visual system, **Sol** (by [Reforma Digital](https://github.com/samuelcorsan/reforma-digital), MIT license, see [AVISO.md](AVISO.md)).
+
+Terms used in the code and docs (full list in [GLOSSARY.md](GLOSSARY.md)): *trámite* is a procedure the citizen must do; *ayuda* is a benefit they can apply for; *entrada* is one catalogue item; *PAG* is the Punto de Acceso General, the Spanish government's procedure search portal.
+
+## What is missing for production
+
+- GDPR review and data processing agreements with TypeSafe (US) and HelmCode.
+- Tuning the confidence thresholds with real citizen sentences (`src/lib/clasificar.ts`).
+- The new procedure link for the Renta Valenciana de Inclusión, which changed law on 20 October 2026. Its entry is marked as not verified.
+- Reviewed Valencian translation of the catalogue content.
+- Usage metrics that do not store what the user writes.
+
+## Tech stack
+
+Next.js (App Router) and Tailwind CSS 4, shadcn/ui on Base UI, TypeScript, Bun. Deployed on Vercel.
+
+```
+src/app/            page and API routes (/api/consulta, /api/entradas/[id], /api/voz, /api/ia, /api/brujula)
+src/components/     interface: flujo/ (search and conversation), respuesta/ (answer card, Listen), ui/ (Sol primitives)
+src/lib/            classification, search, minimisation of personal data, Jev and HelmCode clients, motor/ (engines and chat agent)
+src/datos/          our data: Valencia catalogue, vectors, audio manifest, test sets
+src/styles/         Sol design tokens (do not edit values)
+public/audio/       pre-generated answer audio
+scripts/            tests and evaluations, audio generation
+docs/               specification, plans and the chat contract
+datos/, comun/, contexto.md, SETUP.md   organiser material, read-only for the team
+decisiones.md       log of decisions, constraints and data sources
+ficha.json          tool card: name, tagline, sources, team, data type
+```
+
+## Run it locally
+
+Requirements: [Bun](https://bun.sh) and Node 22 or later.
 
 ```sh
 bun install --frozen-lockfile
 bun run dev
 ```
 
-Abre `http://localhost:3000/<equipo>`, con el `equipo` de `ficha.json`. Cambia el ejemplo en `src/app/page.tsx`; los metadatos salen de `ficha.json`.
+Open <http://localhost:3000/brujula-a>. The app lives under `/<team>` (the `equipo` field of `ficha.json`), also locally. Do not change that field.
 
-- Pon `<Fuentes fuentes={[{ nombre: "Fuente oficial", url: "https://www.boe.es/" }]} />` debajo de **cada respuesta**. Cita la página concreta que sostiene la respuesta.
-- Conserva el aviso de no oficial y `<BotonAviso />`, que abre un issue en vuestro repo.
-- La IA se llama desde el servidor con `src/lib/ia.ts`; hay un ejemplo en `src/app/api/ia/route.ts`. Las claves van en `.env.local` y nunca en el código ni en variables `NEXT_PUBLIC_*`.
+Create `.env.local` (never committed). All keys are server-side only, never `NEXT_PUBLIC_*`:
 
-## Publicar
+| Variable | Purpose |
+|---|---|
+| `HELMCODE_API_KEY` | LLM and embeddings (OpenAI-compatible API from HelmCode). |
+| `HELMCODE_MODEL` | Chat model (the event uses `glm5.3-flash`). |
+| `HELMCODE_BASE_URL` | Optional. Defaults to `https://api.helmcode.com/v1`. |
+| `JEV_API_KEY` | Optional. Without it, the HelmCode LLM does the classification. |
+| `ELEVENLABS_API_KEY` | Optional. Without it, the dictation button is hidden. |
+| `BRUJULA_MOTOR` | Optional. Force an engine: `jev`, `helmcode` or `simulado`. |
 
-Cada push a `main` se publica solo en `https://build.barraca.house/<equipo>`. No hace falta entrar en Vercel: las claves ya están puestas en el proyecto. Si `bun run build` falla en local, tampoco se publicará.
+With no keys at all, the local app falls back to a simulated engine so the interface still works.
 
-## CLI del evento
+Checks:
 
-`buildnight` revisa las seis reglas, entrega la ficha y enseña el tablón. Necesita `gh auth login`. En macOS o Linux:
+```sh
+bun run build                       # must pass before every push
+bun run typecheck
+bun scripts/unitarias.ts            # deterministic, no network
+bun scripts/probar.ts [jev|llm|palabras]   # evaluates one engine on src/datos/pruebas.json (needs keys)
+bun run probar:buscador             # semantic search accuracy and speed (needs keys)
+bun run probar:agente               # follow-up chat loop (needs keys)
+```
+
+## Deploy
+
+Every push to `main` is published automatically at <https://build.barraca.house/brujula-a>. If `bun run build` fails, nothing is published. Keys are already set in the Vercel project.
+
+## Event delivery
+
+`ficha.json` describes the tool (`datos: "reales"` means public data, never personal). The event CLI checks the rules and registers the delivery; it needs `gh auth login`:
 
 ```sh
 curl -fsSL https://build.barraca.house/instalar.sh | sh
-buildnight                          # vuestro expediente: equipo, track y cuenta atrás
-buildnight observar                 # déjalo abierto: suma vuestros tokens al ranking
-```
-
-`observar` cuenta los tokens de Claude Code, Codex y Pi en este proyecto durante el build. La primera vez te pide confirmar tu cuenta en GitHub; no da acceso a nada.
-
-En Windows, descarga `buildnight-windows-x64.exe` de la [última release](https://github.com/barracafh/build-comite/releases/latest).
-
-## Ficha y entrega
-
-`ficha.json` describe la herramienta: nombre, frase, icono, track (`herramienta`), equipo, URL pública y fuentes. `datos` indica `simulados` o datos públicos `reales`, nunca personales. No cambiéis `equipo`: de él sale la ruta.
-
-```sh
-git add .
 buildnight ficha validar
 buildnight revisar
+buildnight registrar
 ```
 
-Hasta que la herramienta esté publicada, la regla de URL pública fallará; las otras cinco deben pasar. La revisión analiza archivos versionados; no acredita la exactitud del contenido. Incluid en vuestro README media página con problema, usuario, qué habéis hecho y qué falta para producción. Entregad con `buildnight registrar`.
+## Credits
 
-El contrato es `apps/cli/esquemas/ficha.schema.json` en el monorepo del evento. Conservad `.buildnight/plantilla.json`.
-
-## Diseño
-
-Todas las herramientas usan Sol, el sistema visual de [Reforma Digital](https://reforma-digital.es), con el OK de Samu: los tokens de `src/styles/tema.css`, Geist y Geist Mono servidas por `next/font` desde el propio sitio, Georgia en los titulares y las primitivas de shadcn/ui con Base UI de `src/components/ui/`. `src/app/page.tsx` enseña cómo se compone una respuesta. Las reglas están en [AGENTS.md](AGENTS.md#diseño); el origen y la licencia, en [AVISO.md](AVISO.md).
-
-Para añadir componentes: `bunx shadcn@4.22.1 add <componente>`. Responded **no** si pide sobrescribir componentes existentes, para conservar variantes como `sunset`. No uséis `--overwrite` ni `shadcn init`. Subid también los cambios de `package.json` y `bun.lock`.
-
-Referencias: [basePath de Next.js](https://nextjs.org/docs/app/api-reference/config/next-config-js/basePath), [Tailwind con Next.js](https://tailwindcss.com/docs/installation/framework-guides/nextjs) y [shadcn/ui con Base UI](https://ui.shadcn.com/docs).
+Team **brujula-a** at Build night · BARRACA x SOTI. Design system Sol by Reforma Digital (MIT). Official sources: [SEPE](https://sede.sepe.gob.es/), [Ajuntament de València](https://sede.valencia.es/), [Generalitat Valenciana](https://www.gva.es/) and the [PAG](https://administracion.gob.es/tramites-electronicos/resultados-actuaciones).
