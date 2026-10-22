@@ -1,10 +1,12 @@
 import "server-only";
+import { motorAgente } from "./agente";
 import type { Motor } from "./contrato";
 import { motorHelmcode } from "./helmcode";
 import { motorJev } from "./jev";
 import { motorSimulado } from "./simulado";
 
-// Un adaptador por proveedor, elegido con BRUJULA_MOTOR.
+// Un adaptador por proveedor, elegido con BRUJULA_MOTOR. El chat de la
+// ficha (con `entradaAbierta`) va siempre al agente.
 const motores: Record<string, Motor> = {
   jev: motorJev, // con HelmCode de respaldo
   helmcode: motorHelmcode,
@@ -25,5 +27,10 @@ export function motor(): Motor {
   const nombre = process.env.BRUJULA_MOTOR ?? porDefecto();
   const elegido = motores[nombre];
   if (!elegido) throw new Error(`BRUJULA_MOTOR desconocido: ${nombre}`);
-  return elegido;
+  return {
+    clasificar: (historial, senal, entradaAbierta) =>
+      entradaAbierta
+        ? motorAgente.clasificar(historial, senal, entradaAbierta)
+        : elegido.clasificar(historial, senal),
+  };
 }

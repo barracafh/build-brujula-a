@@ -93,6 +93,12 @@ export function useConversacion() {
       ];
       const viendoRespuesta = e.pantalla.tipo === "respuesta" && e.respuesta;
 
+      if (r.tipo === "contestacion") {
+        // TODO(frontend): chat de la ficha (docs/CHAT.md). Esta pantalla no
+        // manda `entradaAbierta`, así que hoy no llega aquí.
+        return { ...e, historial: decir(r.texto), anuncio: r.texto };
+      }
+
       if (r.tipo === "respuesta") {
         // Afinar que confirma la misma entrada: no se sustituye nada.
         if (viendoRespuesta && e.respuesta?.id === r.entrada.id) {

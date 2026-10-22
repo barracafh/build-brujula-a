@@ -4,15 +4,21 @@ import { motor } from "@/lib/motor";
 import {
   MAX_CARACTERES,
   MAX_TURNOS,
+  type Candidata,
   type Resultado,
   type Turno,
 } from "@/lib/motor/contrato";
 import type { RespuestaConsulta } from "@/lib/consulta";
 
-// POST {"historial": Turno[]} → RespuestaConsulta (src/lib/consulta.ts).
-// Es lo único que llama al motor: valida, minimiza, clasifica y completa los
-// ids con el catálogo. No se guarda ni se registra el texto (regla 3).
+// POST {"historial": Turno[], "entradaAbierta"?: id} → RespuestaConsulta
+// (src/lib/consulta.ts). Es lo único que llama al motor: valida, minimiza,
+// clasifica y completa los ids con el catálogo. Con `entradaAbierta` responde
+// el chat de la ficha, que necesita más tiempo (varias llamadas al LLM).
+// No se guarda ni se registra el texto (regla 3).
 const TIMEOUT_MS = 15_000;
+const TIMEOUT_CHAT_MS = 45_000;
+
+export const maxDuration = 60;
 
 function leerHistorial(cuerpo: unknown): Turno[] | null {
   if (!cuerpo || typeof cuerpo !== "object" || Array.isArray(cuerpo))
@@ -31,18 +37,22 @@ function leerHistorial(cuerpo: unknown): Turno[] | null {
   return turnos.slice(-MAX_TURNOS);
 }
 
-async function completar(r: Resultado): Promise<RespuestaConsulta | null> {
-  if (r.tipo === "sin_coincidencia")
-    return { tipo: r.tipo, texto: r.texto, idioma: r.idioma };
-  if (r.tipo === "respuesta") {
-    const entrada = await catalogo.obtener(r.candidata.id);
-    return entrada ? { tipo: r.tipo, entrada, idioma: r.idioma } : null;
-  }
-  const candidatas = [];
-  for (const c of r.candidatas) {
+// undefined: no viene (clasificar). null: viene pero no es un id del catálogo.
+async function leerEntradaAbierta(
+  cuerpo: object,
+): Promise<string | undefined | null> {
+  const id = (cuerpo as { entradaAbierta?: unknown }).entradaAbierta;
+  if (id === undefined) return undefined;
+  if (typeof id !== "string") return null;
+  return (await catalogo.obtener(id)) ? id : null;
+}
+
+async function resumir(candidatas: Candidata[]) {
+  const resumidas = [];
+  for (const c of candidatas) {
     const e = await catalogo.obtener(c.id);
     if (e)
-      candidatas.push({
+      resumidas.push({
         id: e.id,
         tipo: e.tipo,
         titulo: e.titulo,
@@ -50,21 +60,48 @@ async function completar(r: Resultado): Promise<RespuestaConsulta | null> {
         confianza: c.confianza,
       });
   }
+  return resumidas;
+}
+
+async function completar(r: Resultado): Promise<RespuestaConsulta | null> {
+  if (r.tipo === "sin_coincidencia")
+    return { tipo: r.tipo, texto: r.texto, idioma: r.idioma };
+  if (r.tipo === "respuesta") {
+    const entrada = await catalogo.obtener(r.candidata.id);
+    return entrada ? { tipo: r.tipo, entrada, idioma: r.idioma } : null;
+  }
+  if (r.tipo === "contestacion")
+    return {
+      tipo: r.tipo,
+      texto: r.texto,
+      fuentes: r.fuentes,
+      candidatas: await resumir(r.candidatas),
+      idioma: r.idioma,
+    };
+  const candidatas = await resumir(r.candidatas);
   return candidatas.length > 0
     ? { tipo: r.tipo, texto: r.texto, candidatas, idioma: r.idioma }
     : null;
 }
 
 export async function POST(req: Request) {
-  const historial = leerHistorial(await req.json().catch(() => null));
-  if (!historial)
+  const cuerpo = await req.json().catch(() => null);
+  const historial = leerHistorial(cuerpo);
+  const entradaAbierta = historial
+    ? await leerEntradaAbierta(cuerpo as object)
+    : null;
+  if (!historial || entradaAbierta === null)
     return Response.json({ error: "Consulta no válida." }, { status: 400 });
 
-  const senal = AbortSignal.any([req.signal, AbortSignal.timeout(TIMEOUT_MS)]);
+  const senal = AbortSignal.any([
+    req.signal,
+    AbortSignal.timeout(entradaAbierta ? TIMEOUT_CHAT_MS : TIMEOUT_MS),
+  ]);
   try {
     const resultado = await motor().clasificar(
       historial.map((t) => ({ ...t, texto: minimizar(t.texto) })),
       senal,
+      entradaAbierta,
     );
     const respuesta = await completar(resultado);
     if (!respuesta) throw new Error("El motor devolvió ids fuera del catálogo");

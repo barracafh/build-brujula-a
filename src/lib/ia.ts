@@ -10,10 +10,66 @@ export type Mensaje = {
   content: string | Parte[];
 };
 
+// Herramientas (function calling). HelmCode las acepta como OpenAI, pero no
+// las ejecuta: el loop es nuestro (src/lib/motor/agente.ts).
+export type Herramienta = {
+  type: "function";
+  function: { name: string; description: string; parameters: object };
+};
+export type LlamadaHerramienta = {
+  id: string;
+  type: "function";
+  function: { name: string; arguments: string };
+};
+export type MensajeAsistente = {
+  role: "assistant";
+  content: string | null;
+  tool_calls?: LlamadaHerramienta[];
+  // Modelos con razonamiento (DeepSeek): hay que devolverlo tal cual en la
+  // siguiente vuelta del loop, o la API puede rechazarla.
+  reasoning_content?: string;
+};
+export type MensajeChat =
+  | Mensaje
+  | MensajeAsistente
+  | { role: "tool"; tool_call_id: string; content: string };
+
 export async function completar(
   messages: Mensaje[],
   { signal }: { signal?: AbortSignal } = {},
 ): Promise<string> {
+  const data = await pedir({ messages }, signal);
+  return data.choices[0].message.content;
+}
+
+// Una vuelta del loop: devuelve el mensaje del asistente tal cual, con texto
+// o con llamadas a herramientas, listo para añadirlo a `messages`.
+export async function conversar(
+  messages: MensajeChat[],
+  {
+    tools,
+    toolChoice = "auto",
+    signal,
+  }: {
+    tools: Herramienta[];
+    toolChoice?: "auto" | "none";
+    signal?: AbortSignal;
+  },
+): Promise<MensajeAsistente> {
+  const data = await pedir(
+    { messages, tools, tool_choice: toolChoice },
+    signal,
+  );
+  const { content, tool_calls, reasoning_content } = data.choices[0].message;
+  return {
+    role: "assistant",
+    content: content ?? null,
+    ...(tool_calls?.length ? { tool_calls } : {}),
+    ...(reasoning_content ? { reasoning_content } : {}),
+  };
+}
+
+async function pedir(cuerpo: object, signal?: AbortSignal) {
   const { HELMCODE_API_KEY, HELMCODE_BASE_URL, HELMCODE_MODEL } = process.env;
   if (!HELMCODE_API_KEY || !HELMCODE_MODEL)
     throw new Error("Faltan HELMCODE_API_KEY o HELMCODE_MODEL en .env.local");
@@ -27,7 +83,7 @@ export async function completar(
           authorization: `Bearer ${HELMCODE_API_KEY}`,
           "content-type": "application/json",
         },
-        body: JSON.stringify({ model: HELMCODE_MODEL, messages }),
+        body: JSON.stringify({ model: HELMCODE_MODEL, ...cuerpo }),
         signal,
       },
     );
@@ -37,8 +93,7 @@ export async function completar(
       continue;
     }
     if (!res.ok) throw new Error(`HelmCode respondió ${res.status}`);
-    const data = await res.json();
-    return data.choices[0].message.content;
+    return await res.json();
   }
 }
 
