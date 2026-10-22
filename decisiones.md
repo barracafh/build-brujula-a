@@ -110,3 +110,14 @@ Dominios del catálogo que **no** rastreamos: gva.es, sede.gva.es, labora.gva.es
     - La sede devolvió «PAGINA DE ERROR – Dificultad Técnica» para UR.LC.10 en los dos intentos. No se insiste para no cargar la sede. El alcance sigue en **37 trámites** (21 de la organización + 16 de València).
     - Los dos enlaces web del Registro Municipal de Entidades sí tienen ficha: `WEB_ASSET_CRG_0141` es **PC.AE.10** (Inscripción) y `WEB_ASSET_1_20170000428694` es **PC.AE.40** (Actualización de datos). Se indexan con su código real.
     - El texto se guarda como `.txt` (cabecera `URL_FINAL` y `CONSULTADO`, texto visible y lista de enlaces), no como `.json`: es más fácil de revisar.
+15. **Revisión de las 16 fichas hecha (22/10/2026): 15 verificadas, 1 no.**
+    - **TR.OT.60** (carné EMT ambTU) queda `verificado: false`: la sede cita la normativa de 2026 pero fija el Abono Anual en 10 € «para el año 2025».
+    - **LA.AI.90, LA.OT.10, VP.PU.55 y CU.US.10** dan en la sede dos plazos de resolución distintos (3 meses y «no aplica»). Se dejan los dos en `plazo` y se avisa en `nota`.
+    - El LLM no copió los costes de casi ninguna ficha; se añadieron en la revisión como un requisito «Coste: …». Todas las cifras finales están en el texto de la sede (comprobado con la misma validación del paso 3).
+    - Registro de cambios por ficha: `docs/revision-valencia.md`.
+16. **Los resúmenes se guardan en `src/datos/resumenes.json` (37), no en `resumenes-catalogo.json`.** Un solo fichero para los de la organización y los de València: `embeber.ts` lee uno.
+17. **Índice: gana la variante D con la instrucción de Qwen3 delante de la pregunta.**
+    - Probamos A, C y D, cada una con y sin `Instruct: … Query: ` en la consulta. Con 40 preguntas ciegas, D con instrucción da top 3 del 100 % y top 1 del 83 %; ninguna otra llega al 100 % en el top 3. Tabla completa en `docs/index_specification.md`, sección 5.
+    - La instrucción mejora todas las variantes (A pasa de 93 % a 98 % en el top 3). Al consultar hay que ponerla delante: va en `vectores.json` como `instruccion_consulta`.
+    - Las frases de usuario (variante C) no entran en el índice. Se siguen usando como ejemplos en Jev (punto 11).
+    - Las preguntas las escribió un subagente que solo vio ids y títulos. Tres trámites de la organización no tienen pregunta (`bono-alquiler-joven`, `ayudas-comedor-escolar`, `xarxa-llibres`), y 40 preguntas son pocas: la diferencia entre variantes es de una o dos preguntas.
