@@ -271,6 +271,7 @@ function Inicio({
         avisosAparte
         className="mt-10"
       />
+      <Avisos t={t} id="consulta" className="mt-2" />
       <div className="mt-6">
         <p className="text-base text-(--text-secondary)">{t.ejemplos}</p>
         <ul className="mt-3 flex flex-wrap gap-2">
@@ -289,7 +290,6 @@ function Inicio({
           ))}
         </ul>
       </div>
-      <Avisos t={t} id="consulta" className="mt-6" />
       <Recientes c={c} t={t} recientes={recientes} />
     </>
   );

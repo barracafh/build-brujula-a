@@ -22,7 +22,8 @@ export const titular =
 // Caja de texto que envía un mensaje. Lleva siempre el aviso de IA (AI Act,
 // art. 50.1), asociado con aria-describedby: debajo, o donde se pinte <Avisos />
 // si avisosAparte. Al lado, «Dictar» (ticket 13): lo dictado se añade a la
-// caja y se envía con el botón.
+// caja y se envía con el botón. La grande, la de la primera pregunta (ticket
+// 18), es una barra: el h1 hace de etiqueta visible.
 export function Composer({
   c,
   t,
@@ -60,7 +61,7 @@ export function Composer({
   const dictar = (
     <Dictar
       t={t}
-      grande={grande}
+      grande={false}
       deshabilitado={c.pensando}
       alTexto={(tr) => {
         setTexto((prev) =>
@@ -92,13 +93,18 @@ export function Composer({
     <form onSubmit={enviar} className={cn("grid gap-3", className)}>
       <label
         htmlFor={id}
-        className={cn("font-medium", grande ? "text-base" : "text-sm")}
+        className={cn("text-sm font-medium", grande && "sr-only")}
       >
         {etiqueta}
       </label>
-      {/* En móvil, la caja pequeña ocupa su línea y los botones bajan. */}
+      {/* En móvil, la caja ocupa su línea y los botones bajan. En la barra,
+          el foco se ve en el marco y no en la caja. */}
       <div
-        className={cn(grande ? "grid gap-3" : "flex flex-wrap items-end gap-2")}
+        className={cn(
+          "flex flex-wrap items-end gap-2",
+          grande &&
+            "rounded-xl border border-input p-1.5 transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50",
+        )}
       >
         <Textarea
           id={id}
@@ -116,28 +122,25 @@ export function Composer({
             }
           }}
           maxLength={MAX_CARACTERES}
-          rows={grande ? 3 : 1}
+          rows={1}
+          placeholder={grande ? t.ejemploCaja : undefined}
           aria-describedby={descripcion}
           className={cn(
-            "text-base md:text-base",
-            grande
-              ? "min-h-24 px-4 py-3 text-lg md:text-lg"
-              : "min-h-11 min-w-0 flex-1 max-sm:basis-full",
+            "min-h-11 min-w-0 flex-1 text-base max-sm:basis-full md:text-base",
+            grande &&
+              "resize-none border-0 bg-transparent px-3 py-2 text-lg shadow-none focus-visible:ring-0 md:text-lg dark:bg-transparent",
           )}
         />
-        {!grande && dictar}
-        <div className={cn(grande && "flex flex-wrap items-start gap-2")}>
-          <Button
-            type="submit"
-            variant={principal ? "sunset" : "outline"}
-            size="lg"
-            disabled={c.pensando}
-            className={cn("min-h-11", grande && "max-md:w-full")}
-          >
-            {grande ? t.buscar : t.enviar}
-          </Button>
-          {grande && dictar}
-        </div>
+        {dictar}
+        <Button
+          type="submit"
+          variant={principal ? "sunset" : "outline"}
+          size="lg"
+          disabled={c.pensando}
+          className={cn("min-h-11", grande && "px-4 max-sm:ml-auto")}
+        >
+          {grande ? t.buscar : t.enviar}
+        </Button>
       </div>
       {pista && (
         <p id={`${id}-pista`} className="text-sm text-(--text-secondary)">

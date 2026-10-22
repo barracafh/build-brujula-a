@@ -55,6 +55,7 @@ Decisiones sobre la voz con ElevenLabs (suscripción del plan Creator), tomadas 
 - [Clave de ElevenLabs en Vercel](issues/16-clave-elevenlabs-vercel.md): Jev comprobado en producción desde el navegador (`motor: jev` en `es` y `va`); la voz en producción queda como condición para terminar la implementación, porque aún no hay ruta de voz en `main`; el interruptor de entrenamiento de ElevenLabs está encendido y le toca apagarlo a Nico.
 - [Pregenerar el audio de las respuestas](issues/17-pregenerar-audio.md): 42 MP3 con Alice (21 entradas × `es`/`va`, 17 MB) en `public/audio/`, manifiesto con duraciones en `src/datos/audio.json`; `eleven_v4_turbo` cuesta unos 0,21 créditos por carácter (5.530 por todo el catálogo).
 - [Proveedor por defecto](issues/07-proveedor-por-defecto.md): Jev por defecto con HelmCode de respaldo si falla; `BRUJULA_MOTOR=helmcode` como alternativa; ya aplicado en `src/lib/motor/index.ts` y comprobado en producción. El encaje de 0,20 queda para la spec.
+- [Caja de la primera pregunta y sus avisos](issues/18-caja-primera-pregunta.md): barra de una línea con «Dictar» y «Buscar» dentro y etiqueta solo para lectores (el `h1` hace de etiqueta); los avisos de datos e IA («Usa IA» con popover) van justo debajo de la barra.
 
 ## Not yet specified
 
