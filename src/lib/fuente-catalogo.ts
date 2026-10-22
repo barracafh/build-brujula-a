@@ -1,5 +1,6 @@
 import "server-only";
 import catalogoJson from "../../datos/catalogo-tramites-ayudas.json";
+import valenciaJson from "@/datos/catalogo-valencia.json";
 import { nombresFuentes } from "@/datos/nombres-fuentes";
 import { notasSustituidas } from "@/datos/notas";
 import type { Entrada, Fuente, FuenteCatalogo } from "./entrada";
@@ -8,7 +9,9 @@ import type { Entrada, Fuente, FuenteCatalogo } from "./entrada";
 // la organización, leído en build y normalizado una vez. Otra fuente solo
 // tiene que devolver la misma `Entrada`.
 
-type EntradaJson = (typeof catalogoJson.items)[number];
+type EntradaJson =
+  | (typeof catalogoJson.items)[number]
+  | (typeof valenciaJson.items)[number];
 
 function partirFuentes(fuente: string): Fuente[] {
   return fuente
@@ -32,7 +35,7 @@ function normalizar(e: EntradaJson): Entrada {
   };
 }
 
-const entradas: Entrada[] = catalogoJson.items.map(normalizar);
+const entradas: Entrada[] = [...catalogoJson.items, ...valenciaJson.items].map(normalizar);
 const porId = new Map(entradas.map((e) => [e.id, e]));
 
 export const catalogo: FuenteCatalogo = {
