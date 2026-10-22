@@ -2,7 +2,7 @@
 
 ## Destination
 
-Una spec implementable (`.scratch/brujula/spec.md`) de la pieza 1, centrada en la UX: flujo híbrido consulta → aclaración → respuesta compuesta, contrato del motor con proveedores intercambiables, fuente del catálogo reemplazable e idioma dinámico (castellano y valenciano).
+Una spec implementable (`.scratch/brujula/spec.md`) de la pieza 1, centrada en la UX: flujo híbrido consulta → aclaración → respuesta compuesta, contrato del motor con proveedores intercambiables, fuente del catálogo reemplazable e idioma dinámico (castellano y valenciano). Incluye la voz con ElevenLabs: consulta por voz y escuchar la respuesta, las dos para la demo de esta noche.
 
 ## Notes
 
@@ -27,6 +27,15 @@ Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 - Proveedores: interfaz `clasificar(historial) → resultado` con un adaptador por proveedor elegido por variable de entorno; HelmCode por defecto. Hay acceso a las variables de entorno de Vercel.
 - Privacidad: la consulta nunca va en la URL ni en logs. Cada entrada tiene su ruta propia compartible.
 
+Decisiones sobre la voz con ElevenLabs (suscripción del plan Creator), tomadas al ampliar el mapa (22/10/2026):
+
+- Dos usos: consulta por voz (Scribe) y escuchar la respuesta (texto a voz). Las dos, completas, para la demo de esta noche. La voz se activa con `ELEVENLABS_API_KEY`; sin ella, Brújula funciona como ahora.
+- La consulta por voz produce texto que entra en el mismo `clasificar(historial)`: no cambia el contrato del motor.
+- Valenciano: para ElevenLabs se trata como catalán (`ca`) en el servidor, y al ciudadano se le muestra siempre «valenciano».
+- Privacidad: el aviso del primer uso del ticket 08 se amplía para nombrar a ElevenLabs. El audio no se guarda en nuestro servidor y la transcripción pasa por la misma minimización. Pendiente de validar con un experto humano.
+- La clave de ElevenLabs solo vive en el servidor; el navegador nunca la ve.
+- Escuchar la respuesta usa audio pregenerado en `public/`, sin generar al vuelo: no gasta créditos ni depende de ElevenLabs en directo. (22/10/2026)
+
 ## Decisions so far
 
 - [Flujo consulta → aclaración → respuesta](issues/02-flujo-consulta-aclaracion-respuesta.md): pantallas que se sustituyen con fundido, igual en escritorio y móvil; la aclaración surgida al afinar ofrece volver a la respuesta, y la respuesta lleva una barra fija para afinar.
@@ -38,6 +47,15 @@ Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 - [Tarjetas de la respuesta: lado a lado o apiladas](issues/10-tarjetas-respuesta-apiladas.md): apiladas a todo el ancho, con etiquetas mono como `h2`, pastillas con icono sobre `bg-muted` y la nota en tarjeta visible antes de «Dónde se hace»; pendiente de que Nico lo ratifique.
 - [¿Jev es compatible con la regla 3?](issues/08-jev-y-regla-3.md): Jev se admite en producción con aviso aceptado en el primer uso y minimización de DNI, correos y teléfonos; pendiente de validar con un experto humano.
 - [Conjunto de evaluación](issues/06-conjunto-evaluacion.md): Jev y HelmCode empatan en precisión (92 % y 88 % en las consultas nuevas); Jev es unas 18 veces más rápido pero cae con una inyección; con clave clasifica Jev y HelmCode solo entra si falla; encaje recomendado de 0,20.
+- [Capacidades de ElevenLabs para la voz de Brújula](issues/11-capacidades-elevenlabs.md): Scribe v2 por lotes desde una ruta de servidor con autodetección (`ca`/`cat` → `va`), `eleven_v4_turbo` para leer en castellano y valenciano, escucha generable por adelantado; Creator retiene audio en EE. UU. sin retención cero, así que el aviso pide no decir datos personales.
+- [Clave de ElevenLabs en local y en Vercel](issues/12-clave-elevenlabs.md): clave en `.env.local` y verificada con llamadas reales (plan Creator, 131.000 caracteres al mes, no 275.000; renueva el 22/11/2026); sin `voices_read`, así que el `voice_id` va fijo; Vercel pasa a los organizadores.
+- [Consulta por voz: cómo se habla a Brújula](issues/13-consulta-por-voz.md): botón «Dictar» `outline` junto a Buscar, pulsar para empezar y parar, en todas las cajas; Scribe por lotes rellena la caja sin enviar; para a los 60 s; el idioma detectado cambia la interfaz si no se eligió a mano; Creator no admite retención cero.
+- [Aviso del primer uso con ElevenLabs](issues/15-aviso-elevenlabs.md): un solo aviso al inicio con texto fijo que nombra a Jev, HelmCode y ElevenLabs («tu voz va a ElevenLabs (en EE. UU.), que guarda el audio y el texto»); «Más información» en un desplegable y «Retirar la aceptación» desde «Privacidad» en el pie; pendiente de validar con un experto humano.
+- [Escuchar la respuesta: qué se lee y cuándo se genera](issues/14-escuchar-respuesta.md): se lee todo lo visible en orden, sin URL ni fuentes y con una tabla de pronunciación solo para el audio; un MP3 por entrada e idioma (etiquetas en valenciano, contenido en castellano); botón `outline` «Escuchar» → «Pausar · 0:42 / 1:20» sin adelantar; voz Alice, provisional hasta que alguien la escuche.
+- [Clave de ElevenLabs en Vercel](issues/16-clave-elevenlabs-vercel.md): Jev comprobado en producción desde el navegador (`motor: jev` en `es` y `va`); la voz en producción queda como condición para terminar la implementación, porque aún no hay ruta de voz en `main`; el interruptor de entrenamiento de ElevenLabs está encendido y le toca apagarlo a Nico.
+- [Pregenerar el audio de las respuestas](issues/17-pregenerar-audio.md): 42 MP3 con Alice (21 entradas × `es`/`va`, 17 MB) en `public/audio/`, manifiesto con duraciones en `src/datos/audio.json`; `eleven_v4_turbo` cuesta unos 0,21 créditos por carácter (5.530 por todo el catálogo).
+- [Proveedor por defecto](issues/07-proveedor-por-defecto.md): Jev por defecto con HelmCode de respaldo si falla; `BRUJULA_MOTOR=helmcode` como alternativa; ya aplicado en `src/lib/motor/index.ts` y comprobado en producción. El encaje de 0,20 queda para la spec.
+- [Caja de la primera pregunta y sus avisos](issues/18-caja-primera-pregunta.md): barra de una línea con «Dictar» y «Buscar» dentro y etiqueta solo para lectores (el `h1` hace de etiqueta); los avisos de datos e IA («Usa IA» con popover) van justo debajo de la barra.
 
 ## Not yet specified
 
@@ -50,3 +68,6 @@ Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 - Pieza 2, «Y después, ¿qué?»: encadenar entradas con `relacionados`. El equipo acota el destino a la pieza 1.
 - Clasificador léxico local de respaldo: el equipo prefiere fiarse de la IA y de varios proveedores.
 - Traducción del contenido de las entradas: riesgo de alterar plazos o requisitos (regla 4).
+- Agentes de voz de ElevenLabs (ElevenAgents, widget o teléfono): el agente habla con texto generado por un LLM, y eso rompe «la IA elige entradas» y la regla 4.
+- Usos creativos de ElevenLabs (voz en off, doblaje) fuera del producto: solo para el pitch, si sobra tiempo.
+- Escuchar las preguntas de aclaración: HelmCode las redacta en directo y habría que generar audio al vuelo, lo que se descartó para la respuesta ([Escuchar la respuesta](issues/14-escuchar-respuesta.md)).

@@ -1,0 +1,738 @@
+{
+  "voz": {
+    "nombre": "Alice",
+    "id": "Xb7hH8MSUJpSbSDYk0k2"
+  },
+  "modelo": "eleven_v4_turbo",
+  "formato": "mp3_22050_32",
+  "entradas": {
+    "alta-padron-valencia": {
+      "es": {
+        "segundos": 123,
+        "bytes": 492147,
+        "fragmentos": [
+          "b680f17f886897d8",
+          "89063653f6c389fe",
+          "95782afae1b2306b",
+          "4a2c47afbb3f4912",
+          "733886568a40294c",
+          "fce12785fa5829bd",
+          "fb38c90ed5941074",
+          "b6b29e6db6876513",
+          "4de032f0025ed589",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 123.3,
+        "bytes": 493089,
+        "fragmentos": [
+          "b680f17f886897d8",
+          "ee0bd6a08190cfcd",
+          "95782afae1b2306b",
+          "1ef6447a42823ec9",
+          "733886568a40294c",
+          "2bbb913e651d2d24",
+          "fb38c90ed5941074",
+          "6924d9b8664b60df",
+          "4de032f0025ed589",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "ayudas-comedor-escolar": {
+      "es": {
+        "segundos": 136.4,
+        "bytes": 545541,
+        "fragmentos": [
+          "765f00bcf2cd39bf",
+          "89063653f6c389fe",
+          "63cb2e6f22041b22",
+          "4a2c47afbb3f4912",
+          "ba79d657c009af30",
+          "fce12785fa5829bd",
+          "7af95ae37da38487",
+          "b6b29e6db6876513",
+          "e56bad8df50384f6",
+          "67881a3fa51fee7b",
+          "d5695bbb8ec009f8",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 136.5,
+        "bytes": 546169,
+        "fragmentos": [
+          "765f00bcf2cd39bf",
+          "ee0bd6a08190cfcd",
+          "63cb2e6f22041b22",
+          "1ef6447a42823ec9",
+          "ba79d657c009af30",
+          "2bbb913e651d2d24",
+          "7af95ae37da38487",
+          "6924d9b8664b60df",
+          "e56bad8df50384f6",
+          "cfd0a39aab83b18f",
+          "d5695bbb8ec009f8",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "bono-alquiler-joven": {
+      "es": {
+        "segundos": 226,
+        "bytes": 904047,
+        "fragmentos": [
+          "205bd2abe2c2eaa1",
+          "89063653f6c389fe",
+          "d47ad4c54bb50809",
+          "4a2c47afbb3f4912",
+          "fc50e1860c722dd4",
+          "fce12785fa5829bd",
+          "796a366194727bf5",
+          "b6b29e6db6876513",
+          "6a435854bc759b06",
+          "67881a3fa51fee7b",
+          "1bac5adc6e3f2e5d",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 226.2,
+        "bytes": 904675,
+        "fragmentos": [
+          "205bd2abe2c2eaa1",
+          "ee0bd6a08190cfcd",
+          "d47ad4c54bb50809",
+          "1ef6447a42823ec9",
+          "fc50e1860c722dd4",
+          "2bbb913e651d2d24",
+          "796a366194727bf5",
+          "6924d9b8664b60df",
+          "6a435854bc759b06",
+          "cfd0a39aab83b18f",
+          "1bac5adc6e3f2e5d",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "bono-social-electrico": {
+      "es": {
+        "segundos": 134.9,
+        "bytes": 539690,
+        "fragmentos": [
+          "9974a6bef4411106",
+          "89063653f6c389fe",
+          "c460e316fc20092f",
+          "4a2c47afbb3f4912",
+          "f6b24c429631f5f8",
+          "fce12785fa5829bd",
+          "f35b1789a4a043de",
+          "b6b29e6db6876513",
+          "738eb72b0bf872d8",
+          "67881a3fa51fee7b",
+          "472666558a8c851d",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 135.1,
+        "bytes": 540318,
+        "fragmentos": [
+          "9974a6bef4411106",
+          "ee0bd6a08190cfcd",
+          "c460e316fc20092f",
+          "1ef6447a42823ec9",
+          "f6b24c429631f5f8",
+          "2bbb913e651d2d24",
+          "f35b1789a4a043de",
+          "6924d9b8664b60df",
+          "738eb72b0bf872d8",
+          "cfd0a39aab83b18f",
+          "472666558a8c851d",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "cambio-domicilio-dgt": {
+      "es": {
+        "segundos": 79.3,
+        "bytes": 317023,
+        "fragmentos": [
+          "1106ed4f705f190d",
+          "89063653f6c389fe",
+          "2cba0c40ef970e19",
+          "4a2c47afbb3f4912",
+          "089b53c19d1dc287",
+          "fce12785fa5829bd",
+          "c97077618903d8d1",
+          "b6b29e6db6876513",
+          "ab5b422e4e1aeb8f",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 79.5,
+        "bytes": 317965,
+        "fragmentos": [
+          "1106ed4f705f190d",
+          "ee0bd6a08190cfcd",
+          "2cba0c40ef970e19",
+          "1ef6447a42823ec9",
+          "089b53c19d1dc287",
+          "2bbb913e651d2d24",
+          "c97077618903d8d1",
+          "6924d9b8664b60df",
+          "ab5b422e4e1aeb8f",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "certificado-empadronamiento": {
+      "es": {
+        "segundos": 64.1,
+        "bytes": 256418,
+        "fragmentos": [
+          "8368dd4436edae80",
+          "89063653f6c389fe",
+          "46da1719c00f1e1b",
+          "fce12785fa5829bd",
+          "f766d937bb834807",
+          "b6b29e6db6876513",
+          "bd103f1450046dab",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 64.2,
+        "bytes": 256733,
+        "fragmentos": [
+          "8368dd4436edae80",
+          "ee0bd6a08190cfcd",
+          "46da1719c00f1e1b",
+          "2bbb913e651d2d24",
+          "f766d937bb834807",
+          "6924d9b8664b60df",
+          "bd103f1450046dab",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "cita-medica-gva": {
+      "es": {
+        "segundos": 45.3,
+        "bytes": 181185,
+        "fragmentos": [
+          "fd62b458c99b579b",
+          "89063653f6c389fe",
+          "fdf6e1dcaf535664",
+          "fce12785fa5829bd",
+          "04b970142fdb2fbd",
+          "b6b29e6db6876513",
+          "59aee6010d98c0ef",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 45.4,
+        "bytes": 181500,
+        "fragmentos": [
+          "fd62b458c99b579b",
+          "ee0bd6a08190cfcd",
+          "fdf6e1dcaf535664",
+          "2bbb913e651d2d24",
+          "04b970142fdb2fbd",
+          "6924d9b8664b60df",
+          "59aee6010d98c0ef",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "complemento-ayuda-infancia": {
+      "es": {
+        "segundos": 97.3,
+        "bytes": 389330,
+        "fragmentos": [
+          "5f3b9b5962ee1555",
+          "89063653f6c389fe",
+          "a8bd7759e31868df",
+          "fce12785fa5829bd",
+          "bd0c54fc8dc3044c",
+          "b6b29e6db6876513",
+          "6cfd28d0556122f0",
+          "67881a3fa51fee7b",
+          "cb7314505a0c99b0",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 97.3,
+        "bytes": 389331,
+        "fragmentos": [
+          "5f3b9b5962ee1555",
+          "ee0bd6a08190cfcd",
+          "a8bd7759e31868df",
+          "2bbb913e651d2d24",
+          "bd0c54fc8dc3044c",
+          "6924d9b8664b60df",
+          "6cfd28d0556122f0",
+          "cfd0a39aab83b18f",
+          "cb7314505a0c99b0",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "declaracion-renta": {
+      "es": {
+        "segundos": 84.8,
+        "bytes": 339174,
+        "fragmentos": [
+          "9ab420326b77f3ca",
+          "89063653f6c389fe",
+          "5bc843f5368b1300",
+          "4a2c47afbb3f4912",
+          "c0cef0dc49813b14",
+          "fce12785fa5829bd",
+          "952efb4f539af988",
+          "b6b29e6db6876513",
+          "a7fa56628dab54d7",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 85,
+        "bytes": 340116,
+        "fragmentos": [
+          "9ab420326b77f3ca",
+          "ee0bd6a08190cfcd",
+          "5bc843f5368b1300",
+          "1ef6447a42823ec9",
+          "c0cef0dc49813b14",
+          "2bbb913e651d2d24",
+          "952efb4f539af988",
+          "6924d9b8664b60df",
+          "a7fa56628dab54d7",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "identificacion-digital": {
+      "es": {
+        "segundos": 92.6,
+        "bytes": 370312,
+        "fragmentos": [
+          "44a8aa8b54c4dc76",
+          "89063653f6c389fe",
+          "4d15cb6821dedbe5",
+          "fce12785fa5829bd",
+          "1b5d2d8d8f9e883c",
+          "b6b29e6db6876513",
+          "a871d9d6890368ea",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 92.7,
+        "bytes": 370627,
+        "fragmentos": [
+          "44a8aa8b54c4dc76",
+          "ee0bd6a08190cfcd",
+          "4d15cb6821dedbe5",
+          "2bbb913e651d2d24",
+          "1b5d2d8d8f9e883c",
+          "6924d9b8664b60df",
+          "a871d9d6890368ea",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "ingreso-minimo-vital": {
+      "es": {
+        "segundos": 102.7,
+        "bytes": 410854,
+        "fragmentos": [
+          "60e89426f5f85d78",
+          "89063653f6c389fe",
+          "44cd29b9b6abd171",
+          "4a2c47afbb3f4912",
+          "b89c0be288eaf045",
+          "fce12785fa5829bd",
+          "5e75d985aa15a6e0",
+          "b6b29e6db6876513",
+          "52baf19436f4d977",
+          "67881a3fa51fee7b",
+          "02681c2a6c44cd0d",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 102.9,
+        "bytes": 411482,
+        "fragmentos": [
+          "60e89426f5f85d78",
+          "ee0bd6a08190cfcd",
+          "44cd29b9b6abd171",
+          "1ef6447a42823ec9",
+          "b89c0be288eaf045",
+          "2bbb913e651d2d24",
+          "5e75d985aa15a6e0",
+          "6924d9b8664b60df",
+          "52baf19436f4d977",
+          "cfd0a39aab83b18f",
+          "02681c2a6c44cd0d",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "inscripcion-demandante-labora": {
+      "es": {
+        "segundos": 148.6,
+        "bytes": 594442,
+        "fragmentos": [
+          "56cb879fad3aaedf",
+          "89063653f6c389fe",
+          "9d9454b2877aa33e",
+          "4a2c47afbb3f4912",
+          "288b578ec9475ac6",
+          "fce12785fa5829bd",
+          "f483499d44a6a010",
+          "b6b29e6db6876513",
+          "8f368fd39f8ae853",
+          "67881a3fa51fee7b",
+          "45bf4640121f53de",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 148.8,
+        "bytes": 595070,
+        "fragmentos": [
+          "56cb879fad3aaedf",
+          "ee0bd6a08190cfcd",
+          "9d9454b2877aa33e",
+          "1ef6447a42823ec9",
+          "288b578ec9475ac6",
+          "2bbb913e651d2d24",
+          "f483499d44a6a010",
+          "6924d9b8664b60df",
+          "8f368fd39f8ae853",
+          "cfd0a39aab83b18f",
+          "45bf4640121f53de",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "multa-dgt": {
+      "es": {
+        "segundos": 86.6,
+        "bytes": 346280,
+        "fragmentos": [
+          "e5dc233ef4ffde77",
+          "89063653f6c389fe",
+          "5d18880af16e2abf",
+          "4a2c47afbb3f4912",
+          "490f6b410b35a531",
+          "fce12785fa5829bd",
+          "5fdfc057789bd54d",
+          "b6b29e6db6876513",
+          "ae2e965c8ce1ec24",
+          "67881a3fa51fee7b",
+          "41f9b999df20de63",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 86.7,
+        "bytes": 346908,
+        "fragmentos": [
+          "e5dc233ef4ffde77",
+          "ee0bd6a08190cfcd",
+          "5d18880af16e2abf",
+          "1ef6447a42823ec9",
+          "490f6b410b35a531",
+          "2bbb913e651d2d24",
+          "5fdfc057789bd54d",
+          "6924d9b8664b60df",
+          "ae2e965c8ce1ec24",
+          "cfd0a39aab83b18f",
+          "41f9b999df20de63",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "prestacion-desempleo": {
+      "es": {
+        "segundos": 97.3,
+        "bytes": 389016,
+        "fragmentos": [
+          "5b342a907ed4037f",
+          "89063653f6c389fe",
+          "e09de50eeca183a9",
+          "4a2c47afbb3f4912",
+          "a741300f6c89da4c",
+          "fce12785fa5829bd",
+          "1a5452c508aecf39",
+          "b6b29e6db6876513",
+          "ae302a88f8f34af9",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 97.5,
+        "bytes": 389958,
+        "fragmentos": [
+          "5b342a907ed4037f",
+          "ee0bd6a08190cfcd",
+          "e09de50eeca183a9",
+          "1ef6447a42823ec9",
+          "a741300f6c89da4c",
+          "2bbb913e651d2d24",
+          "1a5452c508aecf39",
+          "6924d9b8664b60df",
+          "ae302a88f8f34af9",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "renovacion-dni": {
+      "es": {
+        "segundos": 77.5,
+        "bytes": 310022,
+        "fragmentos": [
+          "27975386298abaf1",
+          "89063653f6c389fe",
+          "70c9c41ef13ad7f9",
+          "fce12785fa5829bd",
+          "4d507e87de2f60bb",
+          "b6b29e6db6876513",
+          "69755ec446aa2c46",
+          "67881a3fa51fee7b",
+          "575ac4883c79ad0b",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 77.5,
+        "bytes": 310023,
+        "fragmentos": [
+          "27975386298abaf1",
+          "ee0bd6a08190cfcd",
+          "70c9c41ef13ad7f9",
+          "2bbb913e651d2d24",
+          "4d507e87de2f60bb",
+          "6924d9b8664b60df",
+          "69755ec446aa2c46",
+          "cfd0a39aab83b18f",
+          "575ac4883c79ad0b",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "renta-valenciana-inclusion": {
+      "es": {
+        "segundos": 158.9,
+        "bytes": 635403,
+        "fragmentos": [
+          "19e67ae54690cebc",
+          "e574329d895e0415",
+          "89063653f6c389fe",
+          "0dd266a476691f58",
+          "fce12785fa5829bd",
+          "e3320a2e08d8a343",
+          "b6b29e6db6876513",
+          "bbcb23c318354860",
+          "67881a3fa51fee7b",
+          "f95a8c84157e532b",
+          "9e670ac834c6b344"
+        ]
+      },
+      "va": {
+        "segundos": 159,
+        "bytes": 635821,
+        "fragmentos": [
+          "1356d6ef1effba15",
+          "e574329d895e0415",
+          "ee0bd6a08190cfcd",
+          "0dd266a476691f58",
+          "2bbb913e651d2d24",
+          "e3320a2e08d8a343",
+          "6924d9b8664b60df",
+          "bbcb23c318354860",
+          "cfd0a39aab83b18f",
+          "f95a8c84157e532b",
+          "40ba3271bcf79fd7"
+        ]
+      }
+    },
+    "subsidio-desempleo": {
+      "es": {
+        "segundos": 90.4,
+        "bytes": 361641,
+        "fragmentos": [
+          "cce63af4047bf80d",
+          "89063653f6c389fe",
+          "a1e682451a48397e",
+          "fce12785fa5829bd",
+          "e9452aeae2eede57",
+          "b6b29e6db6876513",
+          "c077439a7c903cf5",
+          "67881a3fa51fee7b",
+          "b873b45a01ee7b86",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 90.4,
+        "bytes": 361642,
+        "fragmentos": [
+          "cce63af4047bf80d",
+          "ee0bd6a08190cfcd",
+          "a1e682451a48397e",
+          "2bbb913e651d2d24",
+          "e9452aeae2eede57",
+          "6924d9b8664b60df",
+          "c077439a7c903cf5",
+          "cfd0a39aab83b18f",
+          "b873b45a01ee7b86",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "tarjeta-sanitaria-sip": {
+      "es": {
+        "segundos": 66.9,
+        "bytes": 267495,
+        "fragmentos": [
+          "48dc261d4ac0f611",
+          "89063653f6c389fe",
+          "a8225c1115280636",
+          "fce12785fa5829bd",
+          "e9b2f83fb0f50b31",
+          "b6b29e6db6876513",
+          "d0a66e66057aec1a",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 67,
+        "bytes": 267810,
+        "fragmentos": [
+          "48dc261d4ac0f611",
+          "ee0bd6a08190cfcd",
+          "a8225c1115280636",
+          "2bbb913e651d2d24",
+          "e9b2f83fb0f50b31",
+          "6924d9b8664b60df",
+          "d0a66e66057aec1a",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "vida-laboral": {
+      "es": {
+        "segundos": 58.6,
+        "bytes": 234267,
+        "fragmentos": [
+          "96854223cfcd2529",
+          "89063653f6c389fe",
+          "9b1cde6bd3aae7eb",
+          "fce12785fa5829bd",
+          "c927599c4e9ad739",
+          "b6b29e6db6876513",
+          "fd81e992a907199f",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 58.6,
+        "bytes": 234582,
+        "fragmentos": [
+          "96854223cfcd2529",
+          "ee0bd6a08190cfcd",
+          "9b1cde6bd3aae7eb",
+          "2bbb913e651d2d24",
+          "c927599c4e9ad739",
+          "6924d9b8664b60df",
+          "fd81e992a907199f",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "voto-por-correo": {
+      "es": {
+        "segundos": 115,
+        "bytes": 459964,
+        "fragmentos": [
+          "a50e5388e38a0732",
+          "89063653f6c389fe",
+          "94bf7e89079d4d4b",
+          "4a2c47afbb3f4912",
+          "e413993ce9f2299f",
+          "fce12785fa5829bd",
+          "442b6cae4b7477d1",
+          "b6b29e6db6876513",
+          "10bdad02547d7532",
+          "67881a3fa51fee7b",
+          "5ed64272919a930a",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 115.1,
+        "bytes": 460592,
+        "fragmentos": [
+          "a50e5388e38a0732",
+          "ee0bd6a08190cfcd",
+          "94bf7e89079d4d4b",
+          "1ef6447a42823ec9",
+          "e413993ce9f2299f",
+          "2bbb913e651d2d24",
+          "442b6cae4b7477d1",
+          "6924d9b8664b60df",
+          "10bdad02547d7532",
+          "cfd0a39aab83b18f",
+          "5ed64272919a930a",
+          "478a6d01a8057474"
+        ]
+      }
+    },
+    "xarxa-llibres": {
+      "es": {
+        "segundos": 137.3,
+        "bytes": 549200,
+        "fragmentos": [
+          "75c590bde204f3c1",
+          "89063653f6c389fe",
+          "90867454c38ffd97",
+          "4a2c47afbb3f4912",
+          "4511d264b1cadde3",
+          "fce12785fa5829bd",
+          "2be2deb4d335e606",
+          "b6b29e6db6876513",
+          "4b371dcb4734281a",
+          "67881a3fa51fee7b",
+          "63e761e07f828741",
+          "9acad780e3698eec"
+        ]
+      },
+      "va": {
+        "segundos": 137.5,
+        "bytes": 549828,
+        "fragmentos": [
+          "75c590bde204f3c1",
+          "ee0bd6a08190cfcd",
+          "90867454c38ffd97",
+          "1ef6447a42823ec9",
+          "4511d264b1cadde3",
+          "2bbb913e651d2d24",
+          "2be2deb4d335e606",
+          "6924d9b8664b60df",
+          "4b371dcb4734281a",
+          "cfd0a39aab83b18f",
+          "63e761e07f828741",
+          "478a6d01a8057474"
+        ]
+      }
+    }
+  }
+}

@@ -1,19 +1,29 @@
 "use client";
 
 import { useState, type FormEvent, type Ref } from "react";
+import { Info, TriangleAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { MAX_CARACTERES } from "@/lib/motor/contrato";
 import type { Candidata, Conversacion } from "./useConversacion";
 import { PAG, lang, type TextosFlujo } from "./textos";
+import { Dictar } from "./voz/Dictar";
 
 export const titular =
   "rounded-md text-[clamp(30px,5vw,48px)] leading-[1.1] tracking-[-0.02em] outline-none";
 
-// Caja de texto que envía un mensaje. Lleva siempre debajo el aviso de IA
-// (AI Act, art. 50.1), asociado con aria-describedby.
+// Caja de texto que envía un mensaje. Lleva siempre el aviso de IA (AI Act,
+// art. 50.1), asociado con aria-describedby: debajo, o donde se pinte <Avisos />
+// si avisosAparte. Al lado, «Dictar» (ticket 13): lo dictado se añade a la
+// caja y se envía con el botón. La grande, la de la primera pregunta (ticket
+// 18), es una barra: el h1 hace de etiqueta visible.
 export function Composer({
   c,
   t,
@@ -22,6 +32,7 @@ export function Composer({
   pista,
   grande = false,
   principal = false,
+  avisosAparte = false,
   refCaja,
   onEscape,
   className,
@@ -33,6 +44,7 @@ export function Composer({
   pista?: string;
   grande?: boolean;
   principal?: boolean;
+  avisosAparte?: boolean;
   refCaja?: Ref<HTMLTextAreaElement>;
   onEscape?: () => void;
   className?: string;
@@ -46,7 +58,34 @@ export function Composer({
     setTexto("");
   }
 
-  const descripcion = [pista && `${id}-pista`, `${id}-ia`]
+  const dictar = (
+    <Dictar
+      t={t}
+      grande={false}
+      deshabilitado={c.pensando}
+      alTexto={(tr) => {
+        setTexto((prev) =>
+          (prev.trim() ? `${prev.trimEnd()} ${tr.texto}` : tr.texto).slice(
+            0,
+            MAX_CARACTERES,
+          ),
+        );
+        if (tr.idioma) c.idiomaDetectado(tr.idioma);
+        // Foco a la caja con el cursor al final, para revisar antes de enviar.
+        requestAnimationFrame(() => {
+          const caja = document.getElementById(id) as HTMLTextAreaElement | null;
+          caja?.focus();
+          caja?.setSelectionRange(caja.value.length, caja.value.length);
+        });
+      }}
+    />
+  );
+
+  const descripcion = [
+    pista && `${id}-pista`,
+    avisosAparte && `${id}-datos`,
+    `${id}-ia`,
+  ]
     .filter(Boolean)
     .join(" ");
 
@@ -54,11 +93,19 @@ export function Composer({
     <form onSubmit={enviar} className={cn("grid gap-3", className)}>
       <label
         htmlFor={id}
-        className={cn("font-medium", grande ? "text-base" : "text-sm")}
+        className={cn("text-sm font-medium", grande && "sr-only")}
       >
         {etiqueta}
       </label>
-      <div className={cn(grande ? "grid gap-3" : "flex items-end gap-2")}>
+      {/* En móvil, la caja ocupa su línea y los botones bajan. En la barra,
+          el foco se ve en el marco y no en la caja. */}
+      <div
+        className={cn(
+          "flex flex-wrap items-end gap-2",
+          grande &&
+            "rounded-xl border border-input p-1.5 transition-colors focus-within:border-ring focus-within:ring-3 focus-within:ring-ring/50",
+        )}
+      >
         <Textarea
           id={id}
           ref={refCaja}
@@ -75,34 +122,86 @@ export function Composer({
             }
           }}
           maxLength={MAX_CARACTERES}
-          rows={grande ? 3 : 1}
+          rows={1}
+          placeholder={grande ? t.ejemploCaja : undefined}
           aria-describedby={descripcion}
           className={cn(
-            "text-base md:text-base",
-            grande ? "min-h-24 px-4 py-3 text-lg md:text-lg" : "min-h-11",
+            "min-h-11 min-w-0 flex-1 text-base max-sm:basis-full md:text-base",
+            grande &&
+              "resize-none border-0 bg-transparent px-3 py-2 text-lg shadow-none focus-visible:ring-0 md:text-lg dark:bg-transparent",
           )}
         />
-        <div>
-          <Button
-            type="submit"
-            variant={principal ? "sunset" : "outline"}
-            size="lg"
-            disabled={c.pensando}
-            className={cn("min-h-11", grande && "max-md:w-full")}
-          >
-            {grande ? t.buscar : t.enviar}
-          </Button>
-        </div>
+        {dictar}
+        <Button
+          type="submit"
+          variant={principal ? "sunset" : "outline"}
+          size="lg"
+          disabled={c.pensando}
+          className={cn("min-h-11", grande && "px-4 max-sm:ml-auto")}
+        >
+          {grande ? t.buscar : t.enviar}
+        </Button>
       </div>
       {pista && (
         <p id={`${id}-pista`} className="text-sm text-(--text-secondary)">
           {pista}
         </p>
       )}
-      <p id={`${id}-ia`} className="text-sm text-(--text-secondary)">
-        {t.avisoIA}
-      </p>
+      {!avisosAparte && <AvisoIA t={t} id={id} />}
     </form>
+  );
+}
+
+// Avisos de la caja principal, uno debajo del otro: datos personales e IA.
+// Las ids coinciden con el aria-describedby del Composer con avisosAparte.
+export function Avisos({
+  t,
+  id,
+  className,
+}: {
+  t: TextosFlujo;
+  id: string;
+  className?: string;
+}) {
+  return (
+    <div className={cn("grid justify-items-start gap-1", className)}>
+      <p
+        id={`${id}-datos`}
+        className="flex items-start gap-1.5 text-sm text-(--text-secondary)"
+      >
+        <TriangleAlert
+          aria-hidden="true"
+          className="mt-0.5 size-4 shrink-0"
+          strokeWidth={1.5}
+        />
+        {t.pista}
+      </p>
+      <AvisoIA t={t} id={id} />
+    </div>
+  );
+}
+
+// «Usa IA» con el aviso completo en un popover (hover, clic o teclado).
+function AvisoIA({ t, id }: { t: TextosFlujo; id: string }) {
+  return (
+    <p className="flex items-center gap-0.5 text-sm text-(--text-secondary)">
+      <span id={`${id}-ia`}>{t.usaIA}</span>
+      <Popover>
+        <PopoverTrigger
+          openOnHover
+          aria-label={t.infoIA}
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "icon-sm" }),
+            "text-(--text-secondary)",
+          )}
+        >
+          <Info aria-hidden="true" strokeWidth={1.5} />
+        </PopoverTrigger>
+        <PopoverContent align="start" className="p-3 text-sm">
+          {t.avisoIA}
+        </PopoverContent>
+      </Popover>
+    </p>
   );
 }
 

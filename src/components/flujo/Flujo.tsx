@@ -6,8 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Fuentes } from "@/components/Fuentes";
 import { RespuestaCompuesta } from "@/components/respuesta/RespuestaCompuesta";
-import type { Entrada } from "@/lib/entrada";
+import type { Entrada, Resumen } from "@/lib/entrada";
 import {
+  Avisos,
   BotonesCandidatas,
   Composer,
   EnlacePag,
@@ -16,21 +17,64 @@ import {
   titular,
 } from "./piezas";
 import { EJEMPLOS, PAG, lang, textosFlujo, type TextosFlujo } from "./textos";
+import { Aviso } from "./Aviso";
+import { useAceptacion } from "./useAceptacion";
 import { useConversacion, type Conversacion } from "./useConversacion";
+import { borrarRecientes, recordar, useRecientes } from "./useRecientes";
 
 // Flujo por pantallas (ticket 02, variante B) con la accesibilidad del ticket
 // 09: cada pantalla nueva entra con un fundido, el foco va a su h1 y la página
 // vuelve arriba; mientras piensa, la pantalla anterior queda inert.
+// Antes de todo va el aviso del primer uso (tickets 08 y 15); el enlace
+// «Privacidad» del pie (#privacidad) lo reabre para retirar la aceptación.
+// Cada respuesta abierta se apunta en los trámites recientes del inicio.
 export function Flujo() {
   const c = useConversacion();
   const t = textosFlujo[c.idioma];
   const refTitular = useRef<HTMLHeadingElement>(null);
+  const { aceptado, aceptar, retirar } = useAceptacion();
+  const recientes = useRecientes();
+  const [revisando, setRevisando] = useState(false);
+  const [cambioAviso, setCambioAviso] = useState(0);
+  const [anuncioAviso, setAnuncioAviso] = useState("");
 
   useEffect(() => {
-    if (c.vez === 0) return;
+    if (c.vez === 0 && cambioAviso === 0) return;
     refTitular.current?.focus({ preventScroll: true });
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, [c.vez]);
+  }, [c.vez, cambioAviso]);
+
+  useEffect(() => {
+    if (c.pantalla.tipo === "respuesta") recordar(c.pantalla.entrada);
+  }, [c.pantalla]);
+
+  useEffect(() => {
+    const abrir = () => {
+      if (window.location.hash !== "#privacidad") return;
+      setRevisando(true);
+      setAnuncioAviso("");
+    };
+    abrir();
+    window.addEventListener("hashchange", abrir);
+    return () => window.removeEventListener("hashchange", abrir);
+  }, []);
+
+  function cerrarAviso() {
+    setRevisando(false);
+    setCambioAviso((n) => n + 1);
+    if (window.location.hash === "#privacidad")
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
+
+  function retirarAceptacion() {
+    retirar();
+    borrarRecientes();
+    c.reiniciar();
+    setRevisando(false);
+    setAnuncioAviso(t.aviso.retirada);
+    if (window.location.hash === "#privacidad")
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
 
   const { pantalla, consulta } = c;
 
@@ -57,6 +101,22 @@ export function Flujo() {
       <div role="status" className="sr-only">
         {c.anuncio}
       </div>
+
+      <Aviso
+        t={t}
+        lang={lang(c.idioma)}
+        abierto={aceptado === false || (aceptado === true && revisando)}
+        aceptado={aceptado === true}
+        anuncio={anuncioAviso}
+        selectorIdioma={<SelectorIdioma c={c} t={t} />}
+        onAceptar={() => {
+          aceptar();
+          setAnuncioAviso("");
+          cerrarAviso();
+        }}
+        onVolver={cerrarAviso}
+        onRetirar={retirarAceptacion}
+      />
       {c.pensando && (
         <p
           aria-hidden="true"
@@ -78,7 +138,12 @@ export function Flujo() {
           className="transition-opacity duration-300 ease-(--ease-brand) motion-reduce:transition-none starting:opacity-0"
         >
           {pantalla.tipo === "inicio" && (
-            <Inicio c={c} t={t} refTitular={refTitular} />
+            <Inicio
+              c={c}
+              t={t}
+              refTitular={refTitular}
+              recientes={recientes}
+            />
           )}
 
           {pantalla.tipo === "aclaracion" && (
@@ -179,10 +244,12 @@ function Inicio({
   c,
   t,
   refTitular,
+  recientes,
 }: {
   c: Conversacion;
   t: TextosFlujo;
   refTitular: Ref<HTMLHeadingElement>;
+  recientes: Resumen[];
 }) {
   return (
     <>
@@ -199,11 +266,12 @@ function Inicio({
         t={t}
         id="consulta"
         etiqueta={t.etiqueta}
-        pista={t.pista}
         grande
         principal
+        avisosAparte
         className="mt-10"
       />
+      <Avisos t={t} id="consulta" className="mt-2" />
       <div className="mt-6">
         <p className="text-base text-(--text-secondary)">{t.ejemplos}</p>
         <ul className="mt-3 flex flex-wrap gap-2">
@@ -222,7 +290,87 @@ function Inicio({
           ))}
         </ul>
       </div>
+      <Recientes c={c} t={t} recientes={recientes} />
     </>
+  );
+}
+
+// Trámites abiertos antes en este navegador (useRecientes). Abrir uno no
+// llama al motor: trae la entrada como una candidata elegida. Al borrar, el
+// foco pasa al aviso de borrado para no perderse con el botón.
+function Recientes({
+  c,
+  t,
+  recientes,
+}: {
+  c: Conversacion;
+  t: TextosFlujo;
+  recientes: Resumen[];
+}) {
+  const [borrado, setBorrado] = useState(false);
+  const refAviso = useRef<HTMLParagraphElement>(null);
+  useEffect(() => {
+    if (borrado) refAviso.current?.focus();
+  }, [borrado]);
+
+  if (recientes.length === 0)
+    return borrado ? (
+      <p
+        ref={refAviso}
+        tabIndex={-1}
+        className="mt-12 rounded-md text-base text-(--text-secondary) outline-none"
+      >
+        {t.recientesBorrados}
+      </p>
+    ) : null;
+
+  return (
+    <section aria-labelledby="recientes-titulo" className="mt-12 grid gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2
+          id="recientes-titulo"
+          className="font-mono text-sm tracking-[0.06em] text-(--text-secondary) uppercase"
+        >
+          {t.recientes}
+        </h2>
+        <Button
+          type="button"
+          variant="ghost"
+          size="lg"
+          onClick={() => {
+            borrarRecientes();
+            setBorrado(true);
+          }}
+          className="min-h-11"
+        >
+          {t.borrarRecientes}
+        </Button>
+      </div>
+      <ul className="grid gap-2">
+        {recientes.map((r) => (
+          <li key={r.id}>
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              onClick={() => c.elegir(r)}
+              className="h-auto min-h-11 w-full flex-col items-start justify-start gap-1 px-4 py-3 text-left whitespace-normal"
+            >
+              <Badge variant="outline">
+                {r.tipo === "ayuda" ? t.tipoAyuda : t.tipoTramite}
+              </Badge>
+              <span lang="es" className="text-base font-medium">
+                {r.titulo}
+              </span>
+              <span lang="es" className="text-sm text-(--text-secondary)">
+                {r.organismo}
+              </span>
+            </Button>
+          </li>
+        ))}
+      </ul>
+      <p className="text-sm text-(--text-secondary)">{t.recientesPista}</p>
+    </section>
   );
 }
 
