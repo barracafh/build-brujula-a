@@ -34,6 +34,7 @@ Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 - [Fuente del catálogo](issues/05-fuente-del-catalogo.md): interfaz asíncrona de servidor (`listar`, `obtener`); la implementación por defecto normaliza fuentes y notas; el catálogo es `datos/catalogo-tramites-ayudas.json`, no `ficha.json`.
 - [Accesibilidad del flujo por pantallas](issues/09-accesibilidad-flujo-pantallas.md): cada pantalla nueva lleva el foco a su `h1` y vuelve arriba; «Pensando…» es una región de estado fija y visible con la pantalla anterior `inert`; afinar sin cambio anuncia «Sigue siendo: <título>»; la barra de afinar devuelve el foco al cerrarse.
 - [Tarjetas de la respuesta: lado a lado o apiladas](issues/10-tarjetas-respuesta-apiladas.md): apiladas a todo el ancho, con etiquetas mono como `h2`, pastillas con icono sobre `bg-muted` y la nota en tarjeta visible antes de «Dónde se hace»; pendiente de que Nico lo ratifique.
+- [¿Jev es compatible con la regla 3?](issues/08-jev-y-regla-3.md): Jev se admite en producción con aviso aceptado en el primer uso y minimización de DNI, correos y teléfonos; pendiente de validar con un experto humano.
 
 ## Not yet specified
 
