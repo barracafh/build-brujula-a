@@ -89,9 +89,14 @@ export default defineConfig({
     },
   },
 
-  // Sin inicio de sesión: basta con que la página de inicio cargue.
+  // Sin inicio de sesión. Lo más parecido: aceptar el aviso del primer uso,
+  // que queda en el localStorage del navegador y, con él, en la sesión
+  // guardada. Si cambia la clave del aviso (brujula-aviso-v2...), se renueva
+  // con `qa-cockpit sessions`.
   signIn: async ({ page }) => {
     await page.goto(INICIO);
+    await page.getByRole('heading', { name: 'Antes de empezar' }).waitFor();
+    await page.getByRole('button', { name: 'Aceptar y seguir', exact: true }).click();
     await page.getByRole('heading', { name: '¿Qué trámite necesitas?' }).waitFor();
   },
 

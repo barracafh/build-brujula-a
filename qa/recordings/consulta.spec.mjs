@@ -1,4 +1,4 @@
-// suite: consulta.md sha256:8bee50d5772424e4ed0c27df84034010e5b6dcd92e454ed107b974f224bcb40d
+// suite: consulta.md sha256:cc6a148987833b94e568ac7db0e4898dd65632a2c4bffafca210072c491f0818
 // La grabación de suites/consulta.md: una prueba por prueba de la suite y un
 // `test.step` por fila, «n · Quién: qué hace». La primera línea es el hash de
 // la suite (`qa-cockpit stamp consulta`).

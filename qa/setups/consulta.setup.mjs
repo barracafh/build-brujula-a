@@ -10,9 +10,9 @@ test.describe.configure({ mode: 'serial' });
 test('S1 · La copia de QA en marcha, con el motor simulado', async ({ page }) => {
   const respuesta = await page.goto('/brujula-a');
   expect(respuesta?.ok()).toBeTruthy();
-  await expect(page.getByRole('heading', { name: '¿Qué trámite necesitas?' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Antes de empezar' })).toBeVisible();
 });
 
-test('S2 · Ana y Pau abren Brújula una vez', async ({ browser }) => {
+test('S2 · Ana y Pau abren Brújula una vez y aceptan el aviso', async ({ browser }) => {
   for (const id of ['ana', 'pau']) await saveSession(browser, config, id);
 });

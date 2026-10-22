@@ -21,8 +21,8 @@ ficha, que sale tal cual de `datos/catalogo-tramites-ayudas.json`.
 
 | # | Qué | Comprobación |
 |---|-----|--------------|
-| S1 | La copia de QA en marcha, con el motor simulado (`npx qa-cockpit up`). | La página de inicio responde y dice «¿Qué trámite necesitas?». |
-| S2 | Ana y Pau abren Brújula una vez y se guardan sus sesiones. | Cada uno ve «¿Qué trámite necesitas?». |
+| S1 | La copia de QA en marcha, con el motor simulado (`npx qa-cockpit up`). | La página de inicio responde y, como en toda primera visita, enseña el aviso «Antes de empezar». |
+| S2 | Ana y Pau abren Brújula una vez, pulsan «Aceptar y seguir» y se guardan sus sesiones (la aceptación vive en su navegador). | Cada uno ve «¿Qué trámite necesitas?». |
 
 ## Pruebas
 
@@ -62,3 +62,4 @@ ficha, que sale tal cual de `datos/catalogo-tramites-ayudas.json`.
 | Fecha | Quién | Resultado | Notas |
 |-------|-------|-----------|-------|
 | 2026-10-22 | agent (Claude Opus 5.5) | green | Primera grabación: T1-T4 en verde contra la copia de QA (next start, motor simulado). |
+| 2026-10-22 | agent (Claude Opus 5.5) | green | Tras fusionar main: el aviso del primer uso se acepta al guardar las sesiones; T1-T4 en verde. |
