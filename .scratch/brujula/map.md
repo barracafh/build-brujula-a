@@ -47,6 +47,7 @@ Decisiones sobre la voz con ElevenLabs (suscripción del plan Creator), tomadas 
 - [Capacidades de ElevenLabs para la voz de Brújula](issues/11-capacidades-elevenlabs.md): Scribe v2 por lotes desde una ruta de servidor con autodetección (`ca`/`cat` → `va`), `eleven_v4_turbo` para leer en castellano y valenciano, escucha generable por adelantado; Creator retiene audio en EE. UU. sin retención cero, así que el aviso pide no decir datos personales.
 - [Clave de ElevenLabs en local y en Vercel](issues/12-clave-elevenlabs.md): clave en `.env.local` y verificada con llamadas reales (plan Creator, 131.000 caracteres al mes, no 275.000; renueva el 22/11/2026); sin `voices_read`, así que el `voice_id` va fijo; Vercel pasa a los organizadores.
 - [Consulta por voz: cómo se habla a Brújula](issues/13-consulta-por-voz.md): botón «Dictar» `outline` junto a Buscar, pulsar para empezar y parar, en todas las cajas; Scribe por lotes rellena la caja sin enviar; para a los 60 s; el idioma detectado cambia la interfaz si no se eligió a mano; Creator no admite retención cero.
+- [Aviso del primer uso con ElevenLabs](issues/15-aviso-elevenlabs.md): un solo aviso al inicio con texto fijo que nombra a Jev, HelmCode y ElevenLabs («tu voz va a ElevenLabs (en EE. UU.), que guarda el audio y el texto»); «Más información» en un desplegable y «Retirar la aceptación» desde «Privacidad» en el pie; pendiente de validar con un experto humano.
 
 ## Not yet specified
 
