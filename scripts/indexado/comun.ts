@@ -76,9 +76,15 @@ export function extraerJson<T>(respuesta: string): T {
 }
 
 // Cifras de un texto («3 meses», «5,00 €», «65%»), para comprobar que el LLM
-// no ha inventado ninguna. Se comparan sin separadores de miles ni decimales cero.
+// no ha inventado ninguna. Se comparan sin separadores de miles ni decimales cero
+// y con coma decimal: «6.010,12» y «6010,12» son la misma; «1,50» y «150», no.
 export const cifras = (texto: string): string[] =>
-  (texto.match(/\d+(?:[.,]\d+)*/g) ?? []).map((n) => n.replace(/[.,]00$/, "").replace(/[.,]/g, ""));
+  (texto.match(/\d+(?:[.,]\d+)*/g) ?? []).map((n) =>
+    n
+      .replace(/[.,]00$/, "")
+      .replace(/[.,](?=\d{3}(?:[.,]|$))/g, "")
+      .replace(".", ","),
+  );
 
 export function cifrasInventadas(salida: string, fuente: string): string[] {
   const validas = new Set(cifras(fuente));
