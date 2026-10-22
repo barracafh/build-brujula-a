@@ -34,9 +34,10 @@ import { sinRespaldo } from "./respaldo";
 const MAX_LLAMADAS = 4; // la última, sin herramientas
 const MAX_TEXTO = MAX_CARACTERES; // el frontend lo reenvía en el historial
 const MAX_CANDIDATAS = 3;
-// Respaldo para «ninguno encaja»: el chat puede enlazarlo sin que lo devuelva
-// una herramienta.
-const PAG = "https://administracion.gob.es/";
+// Respaldo para «ninguno encaja»: el buscador del PAG, que el chat puede
+// enlazar sin que lo devuelva una herramienta.
+const PAG =
+  "https://administracion.gob.es/tramites-electronicos/resultados-actuaciones";
 
 // contexto.md (unos 30k tokens) se lee una vez por instancia. En Vercel llega
 // gracias a outputFileTracingIncludes (next.config.ts).
@@ -183,12 +184,12 @@ function unicas(fuentes: FuenteResultado[]): FuenteResultado[] {
   return fuentes.filter((f) => !vistas.has(f.url) && vistas.add(f.url));
 }
 
-function cerrar(
+async function cerrar(
   texto: string,
   idioma: Idioma,
   abierta: Entrada,
   estado: Estado,
-): Resultado {
+): Promise<Resultado> {
   const comun = { idioma, proveedor: "helmcode" as const };
   // Las consultadas y, de lo que devolvió la búsqueda, lo que el texto nombra.
   const nombradas = [...estado.devueltos]
@@ -209,14 +210,21 @@ function cerrar(
       ...comun,
     };
 
+  // Fuentes: las fichas que sostienen la respuesta (consultadas o nombradas),
+  // nunca la abierta por defecto. Sin ninguna, el buscador del PAG.
+  const ids = new Set([
+    ...estado.consultadas.keys(),
+    ...candidatas.map((c) => c.id),
+  ]);
+  const entradas = await Promise.all([...ids].map((id) => catalogo.obtener(id)));
+  const fuentes = unicas(entradas.flatMap((e) => e?.fuentes ?? []));
+  if (!fuentes.length)
+    fuentes.push({ nombre: "Buscador de trámites del PAG", url: PAG });
+
   // Solo el material oficial respalda cifras y enlaces: lo que escribió el
   // ciudadano no cuenta (si dice «me dijeron 30 días», el chat no lo confirma).
   const material = estado.material.join("\n");
   const limpio = texto.trim();
-  const consultadas = [...estado.consultadas.values()];
-  const fuentes = unicas(
-    (consultadas.length ? consultadas : [abierta]).flatMap((e) => e.fuentes),
-  );
 
   if (
     !limpio ||
@@ -226,10 +234,7 @@ function cerrar(
     return {
       tipo: "contestacion",
       texto: plantillas[idioma].noConfirmado,
-      fuentes: unicas([
-        { nombre: abierta.organismo, url: abierta.enlace_info },
-        ...fuentes,
-      ]),
+      fuentes,
       candidatas,
       ...comun,
     };
