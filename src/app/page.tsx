@@ -1,9 +1,15 @@
 import { Badge } from "@/components/ui/badge";
 import { BotonAviso } from "@/components/BotonAviso";
-import { Buscador } from "@/components/Buscador";
+import { PrototipoFlujo } from "@/components/prototipo-flujo/PrototipoFlujo";
 import ficha from "../../ficha.json";
 
-export default function Home() {
+// PROTOTIPO (ticket 02): las variantes del flujo sustituyen al Buscador.
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const { variant } = await searchParams;
   return (
     <>
       <header className="mx-auto flex min-h-20 max-w-(--container-content) flex-wrap items-center justify-between gap-4 px-(--page-gutter) py-4">
@@ -21,13 +27,7 @@ export default function Home() {
         </Badge>
       </header>
 
-      <main
-        id="contenido"
-        tabIndex={-1}
-        className="mx-auto max-w-[760px] px-(--page-gutter) pt-8 pb-20 outline-none md:pt-12"
-      >
-        <Buscador />
-      </main>
+      <PrototipoFlujo inicial={typeof variant === "string" ? variant : "A"} />
 
       <footer className="p-2">
         <div className="flex flex-wrap items-center justify-between gap-6 rounded-[28px] px-(--page-gutter) py-12 [background:radial-gradient(80%_70%_at_50%_-12%,#ffe58f_0%,rgba(255,229,143,0)_70%),linear-gradient(180deg,#ffd34d_0%,var(--brand-yellow)_46%,var(--brand-orange)_100%)] md:px-12">

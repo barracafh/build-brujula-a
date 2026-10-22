@@ -20,11 +20,13 @@ export function FichaTramite({
   tx,
   enValenciano,
   onAbrir,
+  sinRelacionados = false,
 }: {
   tramite: Tramite;
   tx: Textos;
   enValenciano: boolean;
   onAbrir: (id: string) => void;
+  sinRelacionados?: boolean;
 }) {
   const principal = t.enlace_tramite ?? t.enlace_info;
   const relacionados = t.relacionados
@@ -157,7 +159,7 @@ export function FichaTramite({
         <Fuentes fuentes={fuentesDe(t)} />
       </div>
 
-      {relacionados.length > 0 && (
+      {!sinRelacionados && relacionados.length > 0 && (
         <section aria-labelledby="despues-titulo" className="pt-8">
           <h2
             id="despues-titulo"
