@@ -27,6 +27,8 @@ Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 
 ## Decisions so far
 
+- [Capacidades de Jev y HelmCode para clasificar](issues/01-capacidades-jev-helmcode.md): Jev clasifica con `choice` + `noul` de encaje + idioma en una llamada de ~0,3 s; la confianza sola no basta, HelmCode queda como respaldo y redactor sin confianza calibrada.
+
 ## Not yet specified
 
 - Textos de las plantillas fijas de la interfaz en castellano y valenciano.
