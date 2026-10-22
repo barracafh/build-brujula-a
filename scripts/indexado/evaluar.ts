@@ -69,9 +69,15 @@ console.log(`${total} preguntas, ${items.length} trámites\n`);
 for (const r of resultados)
   console.log(`${r.variante} ${r.consulta.padEnd(16)} top1 ${pct(r.top1).padStart(5)}  top3 ${pct(r.top3).padStart(5)}`);
 
-// Gana el mejor top 3, luego el mejor top 1; el resto de empates, la más simple
-// (sort es estable y resultados ya está en orden de simplicidad).
-const ganador = [...resultados].sort((a, b) => b.top3 - a.top3 || b.top1 - a.top1)[0];
+// Gana el mejor top 3, luego el mejor top 1; el resto de empates, la variante
+// más simple y, dentro de ella, sin instrucción.
+const ganador = [...resultados].sort(
+  (a, b) =>
+    b.top3 - a.top3 ||
+    b.top1 - a.top1 ||
+    VARIANTES.indexOf(a.variante) - VARIANTES.indexOf(b.variante) ||
+    Number(Boolean(a.prefijo)) - Number(Boolean(b.prefijo)),
+)[0];
 console.log(`\nGana ${ganador.variante} ${ganador.consulta}`);
 
 await escribirJson(`${DIR_CACHE}/evaluacion.json`, {
