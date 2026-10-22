@@ -8,12 +8,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { MAX_CARACTERES } from "@/lib/motor/contrato";
 import type { Candidata, Conversacion } from "./useConversacion";
 import { PAG, lang, type TextosFlujo } from "./textos";
+import { Dictar } from "./voz/Dictar";
 
 export const titular =
   "rounded-md text-[clamp(30px,5vw,48px)] leading-[1.1] tracking-[-0.02em] outline-none";
 
 // Caja de texto que envía un mensaje. Lleva siempre debajo el aviso de IA
-// (AI Act, art. 50.1), asociado con aria-describedby.
+// (AI Act, art. 50.1), asociado con aria-describedby, y al lado «Dictar»
+// (ticket 13): lo dictado se añade a la caja y se envía con el botón.
 export function Composer({
   c,
   t,
@@ -46,6 +48,29 @@ export function Composer({
     setTexto("");
   }
 
+  const dictar = (
+    <Dictar
+      t={t}
+      grande={grande}
+      deshabilitado={c.pensando}
+      alTexto={(tr) => {
+        setTexto((prev) =>
+          (prev.trim() ? `${prev.trimEnd()} ${tr.texto}` : tr.texto).slice(
+            0,
+            MAX_CARACTERES,
+          ),
+        );
+        if (tr.idioma) c.idiomaDetectado(tr.idioma);
+        // Foco a la caja con el cursor al final, para revisar antes de enviar.
+        requestAnimationFrame(() => {
+          const caja = document.getElementById(id) as HTMLTextAreaElement | null;
+          caja?.focus();
+          caja?.setSelectionRange(caja.value.length, caja.value.length);
+        });
+      }}
+    />
+  );
+
   const descripcion = [pista && `${id}-pista`, `${id}-ia`]
     .filter(Boolean)
     .join(" ");
@@ -58,7 +83,10 @@ export function Composer({
       >
         {etiqueta}
       </label>
-      <div className={cn(grande ? "grid gap-3" : "flex items-end gap-2")}>
+      {/* En móvil, la caja pequeña ocupa su línea y los botones bajan. */}
+      <div
+        className={cn(grande ? "grid gap-3" : "flex flex-wrap items-end gap-2")}
+      >
         <Textarea
           id={id}
           ref={refCaja}
@@ -79,10 +107,13 @@ export function Composer({
           aria-describedby={descripcion}
           className={cn(
             "text-base md:text-base",
-            grande ? "min-h-24 px-4 py-3 text-lg md:text-lg" : "min-h-11",
+            grande
+              ? "min-h-24 px-4 py-3 text-lg md:text-lg"
+              : "min-h-11 min-w-0 flex-1 max-sm:basis-full",
           )}
         />
-        <div>
+        {!grande && dictar}
+        <div className={cn(grande && "flex flex-wrap items-start gap-2")}>
           <Button
             type="submit"
             variant={principal ? "sunset" : "outline"}
@@ -92,6 +123,7 @@ export function Composer({
           >
             {grande ? t.buscar : t.enviar}
           </Button>
+          {grande && dictar}
         </div>
       </div>
       {pista && (
