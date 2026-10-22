@@ -77,7 +77,7 @@ fuentes-valencia.json ─► [1] Captura (Chrome) ─► [2] Estructuración (gl
 
 ### [4] Revisión por Claude (agente)
 
-- Claude, el agente de desarrollo y no el LLM del pipeline, compara cada ficha campo a campo con el texto capturado en `.cache/indexado/sede/<codigo>.json`.
+- Claude, el agente de desarrollo y no el LLM del pipeline, compara cada ficha campo a campo con el texto capturado en `.cache/indexado/sede/<codigo>.txt`.
   - Cada requisito, paso, documento y plazo tiene que estar respaldado por el texto. Lo que no lo esté se quita.
   - Lo que esté en la ficha y falte en la salida, se añade.
   - Se comprueba que `fuente` y `enlace_tramite` son la URL capturada.
