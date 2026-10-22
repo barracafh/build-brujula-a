@@ -271,25 +271,23 @@ function Inicio({
         avisosAparte
         className="mt-10"
       />
-      <Avisos t={t} id="consulta" className="mt-2" />
-      <div className="mt-6">
-        <p className="text-base text-(--text-secondary)">{t.ejemplos}</p>
-        <ul className="mt-3 flex flex-wrap gap-2">
-          {EJEMPLOS.map((ejemplo) => (
-            <li key={ejemplo}>
-              <Button
-                type="button"
-                variant="outline"
-                size="lg"
-                onClick={() => c.enviar(ejemplo)}
-                className="h-auto min-h-11 whitespace-normal"
-              >
-                {ejemplo}
-              </Button>
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* Sin título visible: «O prueba con un ejemplo» queda para lectores de pantalla. */}
+      <ul aria-label={t.ejemplos} className="mt-6 flex flex-wrap gap-2">
+        {EJEMPLOS.map((ejemplo) => (
+          <li key={ejemplo}>
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              onClick={() => c.enviar(ejemplo)}
+              className="h-auto min-h-11 whitespace-normal"
+            >
+              {ejemplo}
+            </Button>
+          </li>
+        ))}
+      </ul>
+      <Avisos t={t} id="consulta" className="mt-6" />
       <Recientes c={c} t={t} recientes={recientes} />
     </>
   );
