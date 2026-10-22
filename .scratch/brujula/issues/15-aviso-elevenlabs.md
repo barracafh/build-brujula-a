@@ -2,6 +2,7 @@
 
 Type: grilling
 Status: open
+Claimed: sí (sesión 22/10/2026)
 Blocked by: 11
 
 ## Question
