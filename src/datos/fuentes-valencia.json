@@ -1,0 +1,91 @@
+{
+  "origen": "https://www.valencia.es/cas/participacion/juntas-municipales-de-distrito/tramites-gestiones-y-servicios",
+  "consultado": "2026-10-22",
+  "items": [
+    {
+      "codigo": "TR.OT.15",
+      "nombre": "Emisión Bono Oro EMT",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/TR.OT.15?lang=1"
+    },
+    {
+      "codigo": "TR.OT.60",
+      "nombre": "Emisión del Bono EMT AMBTU",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/TR.OT.60?lang=1"
+    },
+    {
+      "codigo": "LA.AS.10",
+      "nombre": "Comunicaciones Ambientales de Actividad Inocua sin obras",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/LA.AS.10?lang=1"
+    },
+    {
+      "codigo": "LA.AC.65",
+      "nombre": "Declaración Responsable de Obras Tipo II y Comunicación de Actividad Inocua",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/LA.AC.65?lang=1"
+    },
+    {
+      "codigo": "VP.OC.30",
+      "nombre": "Contenedores de Obra con Declaración Responsable Tipo II o Comunicación Previa",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/VP.OC.30?lang=1"
+    },
+    {
+      "codigo": "LA.AI.10",
+      "nombre": "Comunicación de Cambio de Titularidad Actividad Inocua",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/LA.AI.10?lang=1"
+    },
+    {
+      "codigo": "LA.AI.90",
+      "nombre": "Denuncia molestias aire acondicionado Actividad Inocua",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/LA.AI.90?lang=1"
+    },
+    {
+      "codigo": "LA.OT.10",
+      "nombre": "Certificados sobre Actividad Inocua en local (antecedentes, cese o no ejercer actividad)",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/LA.OT.10?lang=1"
+    },
+    {
+      "codigo": "UR.LC.135",
+      "nombre": "Licencia de Obras Tipo II",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/UR.LC.135?lang=1"
+    },
+    {
+      "codigo": "UR.LC.140",
+      "nombre": "Declaración Responsable de Obra Tipo II",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/UR.LC.140?lang=1"
+    },
+    {
+      "codigo": "UR.LC.10",
+      "nombre": "Comunicación previa a la ejecución de Obras",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/UR.LC.10?lang=1"
+    },
+    {
+      "codigo": "VP.PU.55",
+      "nombre": "Licencia de publicidad",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/VP.PU.55?lang=1"
+    },
+    {
+      "codigo": "PC.OT.20",
+      "nombre": "Certificados de fe de vida",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/PC.OT.20?lang=1"
+    },
+    {
+      "codigo": "CU.US.10",
+      "nombre": "Solicitud de uso de las Salas de Exposiciones de las Juntas Municipales",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/CU.US.10?lang=1"
+    },
+    {
+      "codigo": "WEB_ASSET_CRG_0141",
+      "nombre": "Inscripción en el Registro Municipal de Entidades",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/WEB_ASSET_CRG_0141?lang=1"
+    },
+    {
+      "codigo": "WEB_ASSET_1_20170000428694",
+      "nombre": "Actualización de Datos en el Registro Municipal de Entidades",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/WEB_ASSET_1_20170000428694?lang=1"
+    },
+    {
+      "codigo": "PC.AE.50",
+      "nombre": "Comunicación anual de Datos al Registro Municipal de Entidades",
+      "url": "https://sede.valencia.es/sede/registro/procedimiento/PC.AE.50?lang=1"
+    }
+  ]
+}
