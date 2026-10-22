@@ -40,7 +40,14 @@ export function useEjemploEscrito(
     if (!(encontrada instanceof HTMLTextAreaElement)) return;
     const caja = encontrada;
 
-    const frases = [inicial, ...FRASES_CAJA];
+    // Cada visita arranca en una frase al azar y sigue en orden, para no
+    // repetir siempre la misma y conservar la alternancia de idiomas.
+    const salto = Math.floor(Math.random() * FRASES_CAJA.length);
+    const frases = [
+      inicial,
+      ...FRASES_CAJA.slice(salto),
+      ...FRASES_CAJA.slice(0, salto),
+    ];
     let frase = 0;
     let letras = inicial.length;
     let borrando = true;
