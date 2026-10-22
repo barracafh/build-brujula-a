@@ -116,8 +116,28 @@ Dominios del catálogo que **no** rastreamos: gva.es, sede.gva.es, labora.gva.es
     - El LLM no copió los costes de casi ninguna ficha; se añadieron en la revisión como un requisito «Coste: …». Todas las cifras finales están en el texto de la sede (comprobado con la misma validación del paso 3).
     - Registro de cambios por ficha: `docs/revision-valencia.md`.
 16. **Los resúmenes se guardan en `src/datos/resumenes.json` (37), no en `resumenes-catalogo.json`.** Un solo fichero para los de la organización y los de València: `embeber.ts` lee uno.
-17. **Índice: gana la variante D con la instrucción de Qwen3 delante de la pregunta.**
-    - Probamos A, C y D, cada una con y sin `Instruct: … Query: ` en la consulta. Con 40 preguntas ciegas, D con instrucción da top 3 del 100 % y top 1 del 83 %; ninguna otra llega al 100 % en el top 3. Tabla completa en `docs/index_specification.md`, sección 5.
-    - La instrucción mejora todas las variantes (A pasa de 93 % a 98 % en el top 3). Al consultar hay que ponerla delante: va en `vectores.json` como `instruccion_consulta`.
-    - Las frases de usuario (variante C) no entran en el índice. Se siguen usando como ejemplos en Jev (punto 11).
-    - Las preguntas las escribió un subagente que solo vio ids y títulos. Tres trámites de la organización no tienen pregunta (`bono-alquiler-joven`, `ayudas-comedor-escolar`, `xarxa-llibres`), y 40 preguntas son pocas: la diferencia entre variantes es de una o dos preguntas.
+17. **Índice: gana la variante D con la instrucción de Qwen3 delante de la pregunta (22/10/2026).**
+    - **Qué probamos.** Tres formas de convertir cada trámite en vector, y cada una con dos formas de convertir la pregunta:
+      - **A:** título + requisitos + documentación. Un vector por trámite.
+      - **D:** el `resumen_sencillo` delante del texto de A, como en Contextual Retrieval (punto 12). Un vector por trámite.
+      - **C:** el vector de A más uno por cada frase de usuario; el trámite puntúa con el mejor (punto 11). Seis vectores por trámite.
+      - La pregunta, tal cual o con la instrucción que recomienda Qwen3 delante: `Instruct: Given a citizen's question, retrieve the public administration procedure that answers it\nQuery: `.
+    - **Cómo lo medimos.** 40 preguntas ciegas (29 en castellano y 11 en valenciano) en `src/datos/pruebas-indice.json`, escritas por un subagente que solo vio ids y títulos. Contamos si el trámite correcto sale el primero (top 1) o entre los tres primeros (top 3).
+    - **Resultado:**
+
+      | Variante | Sin instrucción (top 1 / top 3) | Con instrucción (top 1 / top 3) |
+      |---|---|---|
+      | A | 75 % / 93 % | 83 % / 98 % |
+      | D | 78 % / 95 % | **83 % / 100 %** |
+      | C | 83 % / 98 % | 85 % / 98 % |
+
+    - **Por qué D con instrucción:**
+      - Es la única que no falla ninguna pregunta en el top 3. Para nosotros el top 3 es lo que cuenta: el buscador entrega varias candidatas y el chat elige o pregunta.
+      - C con instrucción acierta una más en el top 1, pero falla una en el top 3 y necesita seis vectores por trámite en lugar de uno.
+      - La instrucción mejora todas las variantes (A pasa del 93 % al 98 % en el top 3) y no cuesta nada: es texto delante de la pregunta.
+      - El resumen ayuda con las preguntas en lenguaje llano o en valenciano: D sin instrucción recupera la del contenedor de runa y C con instrucción falla la de la Renta Valenciana de Inclusión, que D acierta.
+    - **Consecuencias:**
+      - Al consultar hay que poner la instrucción delante de la pregunta: va en `vectores.json` como `instruccion_consulta`.
+      - Las frases de usuario no entran en el índice. Se siguen usando como ejemplos en Jev (punto 11).
+      - El orden de desempate quedó fijado así: mejor top 3, luego mejor top 1, luego la variante más simple (A, D, C) y, dentro de ella, sin instrucción.
+    - **Límites:** 40 preguntas son pocas, y entre variantes hay una o dos preguntas de diferencia. Tres trámites de la organización no tienen pregunta (`bono-alquiler-joven`, `ayudas-comedor-escolar`, `xarxa-llibres`). Si añadimos trámites, hay que repetir la prueba con `bun scripts/indexado/evaluar.ts`.
