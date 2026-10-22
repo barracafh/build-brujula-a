@@ -24,3 +24,7 @@ Decidido con el equipo en una sesión de grilling (22/10/2026). Datos del catál
 
 - La implementación de Saul (`src/components/FichaTramite.tsx`) ya sigue el plazo como sol, `enlace_tramite ?? enlace_info` y la nota; diverge en: la nota no va en tarjeta «Conviene saber» ni se sustituyen las del equipo, la acción sin trámite no baja a `outline` y los nombres de fuente no salen de una tabla. Comprobarlo contra esta resolución.
 - Las notas dirigidas al equipo hay que identificarlas entrada por entrada; hoy solo está confirmada la de la RVI.
+
+## Comments
+
+- 22/10/2026, después del cierre: en el prototipo de [Flujo consulta → aclaración → respuesta](02-flujo-consulta-aclaracion-respuesta.md), Miguel prefiere `requisitos_clave` y `documentacion` apiladas a todo el ancho, no lado a lado como dice esta resolución, y añade iconos y etiquetas mono a las tarjetas. Se concilia en [Tarjetas de la respuesta: lado a lado o apiladas](10-tarjetas-respuesta-apiladas.md); esta resolución no se toca hasta entonces.

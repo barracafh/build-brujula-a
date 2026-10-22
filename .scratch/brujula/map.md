@@ -27,6 +27,7 @@ Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 
 ## Decisions so far
 
+- [Flujo consulta → aclaración → respuesta](issues/02-flujo-consulta-aclaracion-respuesta.md): pantallas que se sustituyen con fundido, igual en escritorio y móvil; la aclaración surgida al afinar ofrece volver a la respuesta, y la respuesta lleva una barra fija para afinar.
 - [Capacidades de Jev y HelmCode para clasificar](issues/01-capacidades-jev-helmcode.md): Jev clasifica con `choice` + `noul` de encaje + idioma en una llamada de ~0,3 s; la confianza sola no basta, HelmCode queda como respaldo y redactor sin confianza calibrada.
 - [Anatomía de la respuesta compuesta](issues/03-anatomia-respuesta-compuesta.md): sol solo para el plazo si existe, `sunset` solo con `enlace_tramite`, `nota` literal en «Conviene saber», aviso arriba si no está verificada, fuentes con nombre escrito a mano.
 - [Contrato del motor](issues/04-contrato-motor.md): unión discriminada `respuesta | aclaracion | sin_coincidencia` con candidatas `{ id, confianza }`; aclaraciones redactadas por HelmCode con guardarraíl de tres capas y plantilla de respaldo; «sin coincidencia» siempre de plantilla; sin respaldo por palabras.
@@ -34,10 +35,9 @@ Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 
 ## Not yet specified
 
-- Textos de las plantillas fijas de la interfaz en castellano y valenciano.
+- Textos de las plantillas fijas de la interfaz en castellano y valenciano. Punto de partida: los del prototipo del flujo (`UI` en `src/components/prototipo-flujo/piezas.tsx`, rama `prototype/flujo-consulta`).
 - Prompt o configuración de cada proveedor (clasificación y redacción de aclaraciones).
 - Ruta propia de cada entrada: forma de la URL y qué se ve al entrar por ella sin consulta previa.
-- Accesibilidad del chat: gestión del foco, anuncio de mensajes nuevos y `prefers-reduced-motion`.
 
 ## Out of scope
 
