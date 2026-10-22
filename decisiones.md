@@ -154,7 +154,7 @@ Dominios del catálogo que **no** rastreamos: gva.es, sede.gva.es, labora.gva.es
       - Los criterios de Jev y la lista del prompt de HelmCode se construyen en cada consulta con los 10 candidatos, no con el catálogo entero.
       - Cada consulta hace una llamada más a HelmCode (el embedding de la pregunta). La pregunta no se guarda: su vector se descarta al responder (punto 6).
       - Si falla el embedding, el clasificador recibe los 37: es una lista corta y sigue funcionando.
-19. **El índice se usa como herramienta del agente: `buscarTramites(frase)` (22/10/2026).** Plan en `docs/plan-rag.md`, revisado por Codex.
+19. **El índice se usa como herramienta del agente: `buscarTramites(frase)` (22/10/2026).** Plan en `docs/plan-rag.md`, revisado por Codex dos veces: el plan y luego el código.
     - **Una sola llamada de red por búsqueda**, sin reintentos ante 429 y con un tiempo máximo de 3 s. Si falla o tarda, devuelve las 37 entradas sin ordenar y con un aviso, para que el agente siga funcionando (punto 18). Si es quien llama el que cancela, no se degrada: se cancela.
     - **Herramienta en formato de la API de OpenAI:** `definicion` va en `tools` y `responder(llamada)` devuelve el mensaje `role: "tool"`. `completar()` aún no admite herramientas: lo añade quien construya el agente.
     - **Mismo cálculo en la evaluación y en la app** (`src/lib/similitud.ts`), y la llamada de embeddings compartida con los scripts de indexado (`src/lib/embeddings.ts`): sin código duplicado.
