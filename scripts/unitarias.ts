@@ -1,4 +1,8 @@
+import { readFileSync } from "node:fs";
 import { parsearJev } from "../src/lib/jev";
+import { LIMITE_POR_DEFECTO, TOTAL, mejores } from "../src/lib/buscador";
+import { DIMENSIONES } from "../src/lib/embeddings";
+import { ordenar } from "../src/lib/similitud";
 import {
   decidirJev,
   detectarIdioma,
@@ -75,6 +79,51 @@ for (const [f, i] of [
   ["la casa de mi madre", "es"],
 ] as const)
   comprobar(`idioma «${f}» → ${i}`, detectarIdioma(f) === i);
+
+// Buscador (sin red)
+const leer = (ruta: string) => JSON.parse(readFileSync(new URL(`../${ruta}`, import.meta.url), "utf8"));
+const indice = leer("src/datos/vectores.json") as {
+  dimensiones: number;
+  items: { id: string; vectores: number[][] }[];
+};
+const normaOk = (v: number[]) => {
+  const n = Math.hypot(...v);
+  return v.length === DIMENSIONES && n > 0.999 && n < 1.001;
+};
+comprobar(
+  "vectores.json: dimensiones y normas",
+  indice.dimensiones === DIMENSIONES && indice.items.every((i) => i.vectores.every(normaOk)),
+);
+const idsIndice = indice.items.map((i) => i.id);
+const idsCatalogo = [
+  ...leer("datos/catalogo-tramites-ayudas.json").items,
+  ...leer("src/datos/catalogo-valencia.json").items,
+].map((i: { id: string }) => i.id);
+comprobar(
+  "ids de vectores.json = ids de los catálogos, sin repetidos",
+  new Set(idsIndice).size === idsIndice.length &&
+    new Set(idsCatalogo).size === idsCatalogo.length &&
+    idsIndice.length === idsCatalogo.length &&
+    idsIndice.every((id) => idsCatalogo.includes(id)),
+);
+const vectorDe = (id: string) => indice.items.find((i) => i.id === id)!.vectores[0];
+const vMulta = vectorDe("multa-dgt");
+const top = mejores(vMulta);
+comprobar("mejores(vector de multa-dgt)[0] es multa-dgt con similitud ≈ 1", top[0].id === "multa-dgt" && Math.abs(top[0].similitud - 1) < 0.001);
+comprobar("mejores: límite por defecto", top.length === LIMITE_POR_DEFECTO && LIMITE_POR_DEFECTO === 10);
+comprobar("mejores: límite 3", mejores(vMulta, 3).length === 3);
+comprobar("mejores: límite 0 → por defecto", mejores(vMulta, 0).length === 10);
+comprobar("mejores: límite -5 → 1", mejores(vMulta, -5).length === 1);
+comprobar("mejores: límite 999 → todos", mejores(vMulta, 999).length === 37 && TOTAL === 37);
+comprobar("mejores va de mayor a menor", top.every((c, i) => i === 0 || top[i - 1].similitud >= c.similitud));
+const orden = ordenar([1, 0], [
+  { id: "b", vectores: [[0.500001, 0]] },
+  { id: "a", vectores: [[0.500004, 0]] },
+]);
+comprobar("ordenar no redondea antes de ordenar", orden[0].id === "a");
+const t0 = performance.now();
+for (let i = 0; i < 1000; i++) mejores(vMulta);
+comprobar("mejores < 5 ms de media", (performance.now() - t0) / 1000 < 5);
 
 console.log(fallos ? `\n${fallos} fallos` : "\nTodo bien");
 if (fallos) process.exitCode = 1;
