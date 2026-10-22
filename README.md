@@ -1,3 +1,31 @@
+# Brújula · Asistente de trámites
+
+**Problema.** Quien se enfrenta a una administración no sabe cómo se llama su trámite: sabe que «le han echado del trabajo» o que «no llega a fin de mes». Buscar en las sedes exige conocer el nombre oficial.
+
+**Usuario.** Cualquier persona de la Comunitat Valenciana que describe su situación con sus palabras, en castellano o en valenciano, sin conocimientos administrativos.
+
+**Qué hemos hecho.**
+- Jev (TypeSafe System One) responde tres preguntas en una sola llamada (trámite, encaje en el catálogo, idioma) y unos umbrales deciden: respuesta directa, «¿Te refieres a…?» o fuera de catálogo.
+- Si Jev no está disponible o duda, un LLM de HelmCode elige un id del catálogo; como último recurso, coincidencia de palabras clave.
+- La ficha sale tal cual del catálogo público (`datos/`): la IA solo elige un id, nunca redacta contenido, plazos ni requisitos.
+- «Y después, ¿qué?»: trámites relacionados con enlace oficial y fuentes.
+- Interfaz en castellano y valenciano (el contenido oficial se mantiene en castellano).
+
+**Qué falta para producción.**
+- RGPD y contrato de encargado de tratamiento con TypeSafe (EE. UU.) y con HelmCode.
+- Ajustar los umbrales con frases reales de ciudadanos (`src/lib/clasificar.ts`).
+- Incorporar el nuevo enlace de la RVI (renta valenciana de inclusión).
+- Traducción revisada del contenido de las fichas.
+- Métricas de uso sin guardar el texto del usuario.
+
+**Variables.** `JEV_API_KEY` (opcional; sin ella se usa el LLM) y `HELMCODE_API_KEY`, `HELMCODE_MODEL`, `HELMCODE_BASE_URL`. Siempre en el servidor, en `.env.local`.
+
+**Cómo probar.**
+- `bun scripts/unitarias.ts` (determinista, sin red).
+- `bun scripts/probar.ts [jev|llm|palabras]` (evalúa un motor con `src/datos/pruebas.json`).
+
+---
+
 # Tu herramienta, lista para empezar
 
 Plantilla de cada equipo: Next.js y Tailwind, con rutas de servidor para llamar a la IA. La organización crea un repo por equipo a partir de esta carpeta, con los datos de su track, y lo conecta a su proyecto de Vercel. Este directorio tiene su propio `package.json` y `bun.lock`; no depende del workspace del evento.
