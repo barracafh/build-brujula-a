@@ -1,0 +1,27 @@
+// Nombre legible de cada dominio que aparece en `fuente` del catálogo
+// (ticket 03). Un dominio que no esté aquí se muestra tal cual.
+export const nombresFuentes: Record<string, string> = {
+  "clave.gob.es": "Cl@ve",
+  "dogv.gva.es": "Diari Oficial de la Generalitat Valenciana (DOGV)",
+  "labora.gva.es": "Labora",
+  "portal.edu.gva.es": "Conselleria de Educación (GVA)",
+  "portal.seg-social.gob.es": "Portal de la Seguridad Social",
+  "sede.agenciatributaria.gob.es": "Sede de la Agencia Tributaria",
+  "sede.dgt.gob.es": "Sede de la DGT",
+  "sede.gva.es": "Sede electrónica de la Generalitat Valenciana",
+  "sede.sepe.gob.es": "Sede del SEPE",
+  "sede.valencia.es": "Sede del Ayuntamiento de València",
+  "www.boe.es": "Boletín Oficial del Estado (BOE)",
+  "www.cnmc.es": "CNMC",
+  "www.correos.es": "Correos",
+  "www.dnielectronico.es": "DNI electrónico",
+  "www.gva.es": "Generalitat Valenciana",
+  "www.ine.es": "Instituto Nacional de Estadística (INE)",
+  "www.juntaelectoralcentral.es": "Junta Electoral Central",
+  "www.lamoncloa.gob.es": "La Moncloa",
+  "www.san.gva.es": "Conselleria de Sanidad (GVA)",
+  "www.sede.fnmt.gob.es": "Sede de la FNMT",
+  "www.seg-social.es": "Seguridad Social",
+  "www.sepe.es": "SEPE",
+  "www.valencia.es": "Ayuntamiento de València",
+};

@@ -11,6 +11,7 @@ Una spec implementable (`.scratch/brujula/spec.md`) de la pieza 1, centrada en l
 - La UX es la prioridad del equipo; el motor y el resto se tocan, pero al servicio de la UX.
 - Skills para cada sesión: `grilling` y `domain-modeling` en los tickets de conversación; `prototype` en los de prototipo.
 - Tracker local: tickets en `.scratch/brujula/issues/`.
+- Hard rule (AI Act, art. 50.1; `contexto.md` 7.6): cada caja de texto que envía un mensaje lleva debajo una etiqueta que dice que se habla con una IA, asociada con `aria-describedby`. Brújula nunca dictamina si alguien cumple los requisitos (eso la haría de alto riesgo, anexo III 5.a).
 
 Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 
@@ -27,17 +28,20 @@ Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 
 ## Decisions so far
 
+- [Flujo consulta → aclaración → respuesta](issues/02-flujo-consulta-aclaracion-respuesta.md): pantallas que se sustituyen con fundido, igual en escritorio y móvil; la aclaración surgida al afinar ofrece volver a la respuesta, y la respuesta lleva una barra fija para afinar.
 - [Capacidades de Jev y HelmCode para clasificar](issues/01-capacidades-jev-helmcode.md): Jev clasifica con `choice` + `noul` de encaje + idioma en una llamada de ~0,3 s; la confianza sola no basta, HelmCode queda como respaldo y redactor sin confianza calibrada.
 - [Anatomía de la respuesta compuesta](issues/03-anatomia-respuesta-compuesta.md): sol solo para el plazo si existe, `sunset` solo con `enlace_tramite`, `nota` literal en «Conviene saber», aviso arriba si no está verificada, fuentes con nombre escrito a mano.
 - [Contrato del motor](issues/04-contrato-motor.md): unión discriminada `respuesta | aclaracion | sin_coincidencia` con candidatas `{ id, confianza }`; aclaraciones redactadas por HelmCode con guardarraíl de tres capas y plantilla de respaldo; «sin coincidencia» siempre de plantilla; sin respaldo por palabras.
 - [Fuente del catálogo](issues/05-fuente-del-catalogo.md): interfaz asíncrona de servidor (`listar`, `obtener`); la implementación por defecto normaliza fuentes y notas; el catálogo es `datos/catalogo-tramites-ayudas.json`, no `ficha.json`.
+- [Accesibilidad del flujo por pantallas](issues/09-accesibilidad-flujo-pantallas.md): cada pantalla nueva lleva el foco a su `h1` y vuelve arriba; «Pensando…» es una región de estado fija y visible con la pantalla anterior `inert`; afinar sin cambio anuncia «Sigue siendo: <título>»; la barra de afinar devuelve el foco al cerrarse.
+- [Tarjetas de la respuesta: lado a lado o apiladas](issues/10-tarjetas-respuesta-apiladas.md): apiladas a todo el ancho, con etiquetas mono como `h2`, pastillas con icono sobre `bg-muted` y la nota en tarjeta visible antes de «Dónde se hace»; pendiente de que Nico lo ratifique.
+- [¿Jev es compatible con la regla 3?](issues/08-jev-y-regla-3.md): Jev se admite en producción con aviso aceptado en el primer uso y minimización de DNI, correos y teléfonos; pendiente de validar con un experto humano.
 
 ## Not yet specified
 
-- Textos de las plantillas fijas de la interfaz en castellano y valenciano.
+- Textos de las plantillas fijas de la interfaz en castellano y valenciano. Punto de partida: los del prototipo del flujo (`UI` en `src/components/prototipo-flujo/piezas.tsx`, rama `prototype/flujo-consulta`), más el anuncio «Sigue siendo: <título>» de [Accesibilidad del flujo por pantallas](issues/09-accesibilidad-flujo-pantallas.md).
 - Prompt o configuración de cada proveedor (clasificación y redacción de aclaraciones).
 - Ruta propia de cada entrada: forma de la URL y qué se ve al entrar por ella sin consulta previa.
-- Accesibilidad del chat: gestión del foco, anuncio de mensajes nuevos y `prefers-reduced-motion`.
 
 ## Out of scope
 
