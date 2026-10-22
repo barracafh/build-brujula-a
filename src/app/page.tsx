@@ -7,16 +7,7 @@ export default function Home() {
   return (
     <>
       <header className="mx-auto flex min-h-20 max-w-(--container-content) flex-wrap items-center justify-between gap-4 px-(--page-gutter) py-4">
-        <span className="inline-flex items-center gap-3 text-lg leading-tight font-semibold tracking-tight">
-          <span
-            aria-hidden="true"
-            className="grid size-9 shrink-0 place-items-center rounded-lg bg-brand font-mono text-xl text-white"
-          >
-            {ficha.icono}
-          </span>
-          {ficha.nombre}
-        </span>
-        <Badge variant="outline">
+        <Badge variant="outline" className="ml-auto">
           {ficha.datos === "reales" ? "Datos públicos" : "Datos simulados"}
         </Badge>
       </header>
