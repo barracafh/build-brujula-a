@@ -57,14 +57,14 @@ Los dos aciertan todas las paráfrasis, las que tienen faltas y las de varios tu
   Para el ticket 8, quedarse solo con HelmCode no cuesta precisión: cuesta tiempo de espera.
 - **Umbrales recomendados para Jev:**
   - **`encaja`, de 0,40 a 0,20.** Recupera 3 de los 4 fallos del catálogo, que tenían el trámite correcto con confianza de 0,99 o más pero un encaje de 0,23 a 0,33, y también «estic sense feina» (0,29). Las 9 consultas sin coincidencia que no son la inyección siguen fuera (encaje de 0,01 a 0,15). En las nuevas sube a 45 de 48, con las mismas 3 respuestas indebidas. El margen es estrecho: «vull renovar el passaport» saca 0,15.
-  - **`confianzaAlta` (0,85) y `confianzaMedia` (0,40) se quedan como están.** Jev da 0,96 o más cuando la consulta es clara y entre 0,60 y 0,68 en las ambiguas, así que cualquier valor de alta entre 0,70 y 0,95 da el mismo resultado.
+  - **`confianzaAlta` (0,85) y `confianzaMedia` (0,40) se quedan como están.** En los casos con respuesta esperada, Jev da 0,91 o más (0,96 o más salvo uno). En las ambiguas da entre 0,60 y 0,68, salvo las dos del IMV, que salen con 1,00. Por eso cualquier valor de alta entre 0,70 y 0,95 da el mismo resultado, y por eso ningún umbral frena esas dos respuestas indebidas.
   - **Subir `encaja` a 0,65 no compensa:** quita una respuesta indebida («no tengo dinero») a cambio de 3 aciertos.
 - **Tasa de respuestas directas incorrectas:** Jev, 3 de 16 (19 %); HelmCode, 4 de 16 (25 %); la cadena actual, 3 de 16 (19 %). Ninguno da un id equivocado.
 
 ### Para quien implemente
 
 - Aplicar el encaje recomendado es cambiar `encaja: 0.4` por `0.2` en `UMBRAL` de `src/lib/clasificar.ts`. Lo decide el equipo.
-- La pregunta de encaje de Jev (`instruccionesEncaja` en `src/lib/jev.ts`) solo lleva los títulos, en castellano, y no las frases de ejemplo. Por eso las consultas valencianas sacan encajes más bajos y las frases del catálogo también sirven para medirlo.
+- La pregunta de encaje de Jev (`instruccionesEncaja` en `src/lib/jev.ts`) solo lleva los títulos, en castellano, y no las frases de ejemplo. Por eso las frases del catálogo también sirven para medir el encaje. Los encajes bajos no dependen del idioma: en el catálogo, las frases valencianas sacan más que las castellanas (0,91 de media frente a 0,82), y los 4 fallos por encaje son frases en castellano.
 
 ### Sigue sin saberse
 
