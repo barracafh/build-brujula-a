@@ -39,6 +39,37 @@ export const textosFlujo = {
     buscarPag: "Buscar en administracion.gob.es",
     esEsta: (titulo: string) => `Es esta: ${titulo}.`,
     sigueSiendo: (titulo: string) => `Sigue siendo: ${titulo}`,
+    aviso: {
+      titulo: "Antes de empezar",
+      intro:
+        "Brújula usa servicios de inteligencia artificial de otras empresas para saber qué trámite buscas.",
+      puntos: [
+        "Lo que escribes va a Jev (TypeSafe, en EE. UU.) y a HelmCode (en la UE). TypeSafe puede conservarlo.",
+        "Si dictas, tu voz va a ElevenLabs (en EE. UU.), que guarda el audio y el texto, sin un plazo publicado.",
+        "Brújula no guarda nada de lo que escribes ni dices.",
+      ],
+      datos:
+        "No escribas ni digas datos personales: ni DNI, ni nombres, ni direcciones, ni teléfonos.",
+      aceptar: "Aceptar y seguir",
+      masInfo: "Más información",
+      envio:
+        "Qué se envía. El texto que escribes, después de que Brújula quite los DNI, NIE, correos y teléfonos. Si dictas, el audio tal cual: la voz no se puede limpiar antes de enviarla.",
+      finalidad:
+        "Para qué. Solo para saber qué trámite buscas. Los pasos, plazos y requisitos no los escribe la IA: salen del catálogo con su fuente oficial.",
+      jev: "Jev (TypeSafe), en EE. UU. Puede conservar el texto el tiempo que considere necesario, sin un plazo publicado. Declara que no entrena sus modelos con él.",
+      helmcode: "HelmCode, en la UE. Declara que no guarda el texto ni entrena con él.",
+      elevenlabs:
+        "ElevenLabs, en EE. UU. Guarda el audio y la transcripción, sin un plazo publicado.",
+      politica: (empresa: string) => `Política de privacidad de ${empresa}`,
+      contrato:
+        "Brújula es una herramienta experimental y no tiene un contrato de encargado del tratamiento con estas empresas.",
+      navegador:
+        "En tu navegador solo guardamos que has aceptado este aviso. Puedes retirarlo cuando quieras desde «Privacidad», al pie de la página.",
+      volver: "Volver",
+      retirar: "Retirar la aceptación",
+      retirada:
+        "Has retirado la aceptación. Brújula no enviará nada hasta que vuelvas a aceptar.",
+    },
   },
   va: {
     titular: "Quin tràmit necessites?",
@@ -76,6 +107,37 @@ export const textosFlujo = {
     buscarPag: "Cercar en administracion.gob.es",
     esEsta: (titulo: string) => `És este: ${titulo}.`,
     sigueSiendo: (titulo: string) => `Continua sent: ${titulo}`,
+    aviso: {
+      titulo: "Abans de començar",
+      intro:
+        "Brújula usa servicis d'intel·ligència artificial d'altres empreses per a saber quin tràmit busques.",
+      puntos: [
+        "El que escrius va a Jev (TypeSafe, als EUA) i a HelmCode (a la UE). TypeSafe pot conservar-ho.",
+        "Si dictes, la teua veu va a ElevenLabs (als EUA), que guarda l'àudio i el text, sense un termini publicat.",
+        "Brújula no guarda res del que escrius ni dius.",
+      ],
+      datos:
+        "No escrigues ni digues dades personals: ni DNI, ni noms, ni adreces, ni telèfons.",
+      aceptar: "Acceptar i continuar",
+      masInfo: "Més informació",
+      envio:
+        "Què s'envia. El text que escrius, després que Brújula en lleve els DNI, NIE, correus i telèfons. Si dictes, l'àudio tal qual: la veu no es pot netejar abans d'enviar-la.",
+      finalidad:
+        "Per a què. Només per a saber quin tràmit busques. Els passos, terminis i requisits no els escriu la IA: ixen del catàleg amb la seua font oficial.",
+      jev: "Jev (TypeSafe), als EUA. Pot conservar el text el temps que considere necessari, sense un termini publicat. Declara que no entrena els seus models amb ell.",
+      helmcode: "HelmCode, a la UE. Declara que no guarda el text ni entrena amb ell.",
+      elevenlabs:
+        "ElevenLabs, als EUA. Guarda l'àudio i la transcripció, sense un termini publicat.",
+      politica: (empresa: string) => `Política de privacitat de ${empresa}`,
+      contrato:
+        "Brújula és una eina experimental i no té un contracte d'encarregat del tractament amb estes empreses.",
+      navegador:
+        "Al teu navegador només guardem que has acceptat este avís. Pots retirar-ho quan vulgues des de «Privacitat», al peu de la pàgina.",
+      volver: "Tornar",
+      retirar: "Retirar l'acceptació",
+      retirada:
+        "Has retirat l'acceptació. Brújula no enviarà res fins que tornes a acceptar.",
+    },
   },
 } satisfies Record<Idioma, unknown>;
 
@@ -85,6 +147,14 @@ export const lang = (i: Idioma) => (i === "va" ? "ca" : "es");
 
 export const PAG =
   "https://administracion.gob.es/tramites-electronicos/resultados-actuaciones";
+
+// Políticas que enlaza «Más información» del aviso (ticket 15), comprobadas
+// el 22/10/2026.
+export const POLITICAS = {
+  TypeSafe: "https://typesafe.ai/legal/privacy-policy",
+  HelmCode: "https://helmcode.com/privacy",
+  ElevenLabs: "https://elevenlabs.io/privacy-policy",
+};
 
 export const EJEMPLOS = [
   "Me han echado del trabajo",
