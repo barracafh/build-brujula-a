@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { ruta } from "@/config/sitio";
 import type { RespuestaConsulta } from "@/lib/consulta";
-import type { Entrada, Resumen } from "@/lib/entrada";
+import type { Entrada, Fuente, Resumen } from "@/lib/entrada";
 import { MAX_TURNOS, type Idioma, type Turno } from "@/lib/motor/contrato";
 import { textosFlujo } from "./textos";
 
@@ -12,6 +12,13 @@ import { textosFlujo } from "./textos";
 // El historial vive solo aquí, en el navegador, y se manda en cada petición.
 
 export type Candidata = Resumen & { confianza: "alta" | "media" };
+
+// Un turno del chat de la ficha lleva además sus fuentes y las otras fichas
+// que nombra. Solo se muestran: al servidor se manda `rol` y `texto`.
+export type TurnoChat = Turno & {
+  fuentes?: Fuente[];
+  candidatas?: Candidata[];
+};
 
 export type Pantalla =
   | { tipo: "inicio" }
@@ -24,7 +31,7 @@ export type Pantalla =
 type Estado = {
   pantalla: Pantalla;
   vez: number; // sube con cada sustitución: foco al h1 y arriba
-  historial: Turno[];
+  historial: TurnoChat[];
   respuesta: Entrada | null; // la última, para «Volver a» desde una aclaración
   consulta: string; // lo último que escribió el ciudadano, para «Tu consulta»
   idioma: Idioma;
@@ -87,17 +94,27 @@ export function useConversacion() {
     setEstado((prev) => {
       const e = prev.idiomaManual ? prev : { ...prev, idioma: r.idioma };
       const tx = textosFlujo[e.idioma];
-      const decir = (texto: string): Turno[] => [
+      const decir = (texto: string): TurnoChat[] => [
         ...e.historial,
         { rol: "asistente", texto },
       ];
       const viendoRespuesta = e.pantalla.tipo === "respuesta" && e.respuesta;
 
-      if (r.tipo === "contestacion") {
-        // TODO(frontend): chat de la ficha (docs/CHAT.md). Esta pantalla no
-        // manda `entradaAbierta`, así que hoy no llega aquí.
-        return { ...e, historial: decir(r.texto), anuncio: r.texto };
-      }
+      // Chat de la ficha (docs/CHAT.md): la respuesta se queda en pantalla.
+      if (r.tipo === "contestacion")
+        return {
+          ...e,
+          historial: [
+            ...e.historial,
+            {
+              rol: "asistente",
+              texto: r.texto,
+              fuentes: r.fuentes,
+              candidatas: r.candidatas,
+            },
+          ],
+          anuncio: r.texto,
+        };
 
       if (r.tipo === "respuesta") {
         // Afinar que confirma la misma entrada: no se sustituye nada.
@@ -150,10 +167,15 @@ export function useConversacion() {
   function enviar(texto: string) {
     const limpio = texto.trim();
     if (!limpio || enCurso.current) return;
-    const historial = [
+    const historial: TurnoChat[] = [
       ...estado.historial,
       { rol: "ciudadano", texto: limpio } satisfies Turno,
     ].slice(-MAX_TURNOS);
+    // Con una ficha en pantalla, la pregunta va al chat de esa ficha.
+    const entradaAbierta =
+      estado.pantalla.tipo === "respuesta"
+        ? estado.pantalla.entrada.id
+        : undefined;
     setBorrador(limpio);
     reintento.current = () => enviar(limpio);
     pedir(
@@ -161,7 +183,10 @@ export function useConversacion() {
         const res = await fetch(ruta("/api/consulta"), {
           method: "POST",
           headers: { "content-type": "application/json" },
-          body: JSON.stringify({ historial }),
+          body: JSON.stringify({
+            historial: historial.map(({ rol, texto }) => ({ rol, texto })),
+            entradaAbierta,
+          }),
           signal: senal,
         });
         if (!res.ok) throw new Error(String(res.status));

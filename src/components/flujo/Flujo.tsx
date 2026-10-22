@@ -461,7 +461,7 @@ function BarraAfinar({
 
   return (
     <section
-      aria-label={t.afinar}
+      aria-label={t.preguntar}
       className="sticky top-2 z-30 mt-6 rounded-xl bg-background px-4 py-3 shadow-[0_8px_24px_rgb(0_0_0/0.08)] ring-1 ring-foreground/10"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -478,7 +478,7 @@ function BarraAfinar({
           onClick={() => setAbierta((a) => !a)}
           className="min-h-11"
         >
-          {abierta ? t.ocultar : t.afinar}
+          {abierta ? t.ocultar : t.preguntar}
         </Button>
       </div>
       {abierta && (
@@ -492,10 +492,20 @@ function BarraAfinar({
                   "rounded-xl px-4 py-3 text-base [overflow-wrap:anywhere]",
                   turno.rol === "ciudadano"
                     ? "ml-8 justify-self-end bg-muted"
-                    : "mr-4 ring-1 ring-foreground/10",
+                    : "mr-4 grid gap-4 ring-1 ring-foreground/10",
                 )}
               >
-                {turno.texto}
+                {/* Las respuestas del chat las redacta una IA (AI Act, art. 50.2). */}
+                <p
+                  className="whitespace-pre-line"
+                  data-generado-con-ia={turno.fuentes ? "" : undefined}
+                >
+                  {turno.texto}
+                </p>
+                {!!turno.candidatas?.length && (
+                  <BotonesCandidatas c={c} t={t} candidatas={turno.candidatas} />
+                )}
+                {!!turno.fuentes?.length && <Fuentes fuentes={turno.fuentes} />}
               </li>
             ))}
           </ol>
@@ -503,8 +513,8 @@ function BarraAfinar({
             c={c}
             t={t}
             id="afinar-barra"
-            etiqueta={t.afinar}
-            pista={t.afinarPista}
+            etiqueta={t.preguntar}
+            pista={t.preguntarPista}
             refCaja={refCaja}
             onEscape={() => setAbierta(false)}
           />

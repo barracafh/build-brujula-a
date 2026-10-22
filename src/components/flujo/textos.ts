@@ -28,6 +28,9 @@ export const textosFlujo = {
     ninguna: "Ninguna de estas",
     afinar: "Afina tu consulta",
     afinarPista: "Añade detalles o corrige lo que has dicho.",
+    preguntar: "Pregunta sobre este trámite",
+    preguntarPista:
+      "Responde una IA con las fuentes oficiales. Puede tardar hasta 40 segundos.",
     ocultar: "Ocultar",
     conversacion: "Conversación",
     volverA: "Volver a",
@@ -119,6 +122,9 @@ export const textosFlujo = {
     ninguna: "Cap d'estos",
     afinar: "Afina la teua consulta",
     afinarPista: "Afig detalls o corregix el que has dit.",
+    preguntar: "Pregunta sobre este tràmit",
+    preguntarPista:
+      "Respon una IA amb les fonts oficials. Pot tardar fins a 40 segons.",
     ocultar: "Amagar",
     conversacion: "Conversa",
     volverA: "Tornar a",
