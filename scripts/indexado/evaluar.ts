@@ -3,6 +3,7 @@
 // instrucción delante de la pregunta. Escribe src/datos/vectores.json con la
 // combinación ganadora.
 //   bun scripts/indexado/evaluar.ts
+import { ordenar } from "../../src/lib/similitud";
 import {
   DIMENSIONES,
   DIR_CACHE,
@@ -30,14 +31,9 @@ const CONSULTAS = [
 ];
 
 const vectoresDe = (item: Item, v: Variante) => (v === "C" ? [item.A, ...item.frases] : [item[v]]);
-const producto = (a: number[], b: number[]) => a.reduce((s, x, i) => s + x * b[i], 0);
 
-function ranking(consulta: number[], items: Item[], v: Variante) {
-  return items
-    .map((item) => ({ id: item.id, puntos: Math.max(...vectoresDe(item, v).map((x) => producto(consulta, x))) }))
-    .sort((a, b) => b.puntos - a.puntos)
-    .map((r) => r.id);
-}
+const ranking = (consulta: number[], items: Item[], v: Variante) =>
+  ordenar(consulta, items.map((item) => ({ id: item.id, vectores: vectoresDe(item, v) }))).map((r) => r.id);
 
 const { items } = await leerJson<Variantes>(RUTA_VARIANTES);
 const pruebas = await leerJson<Prueba[]>("src/datos/pruebas-indice.json");
