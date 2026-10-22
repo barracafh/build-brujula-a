@@ -32,10 +32,12 @@ Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 - [Anatomía de la respuesta compuesta](issues/03-anatomia-respuesta-compuesta.md): sol solo para el plazo si existe, `sunset` solo con `enlace_tramite`, `nota` literal en «Conviene saber», aviso arriba si no está verificada, fuentes con nombre escrito a mano.
 - [Contrato del motor](issues/04-contrato-motor.md): unión discriminada `respuesta | aclaracion | sin_coincidencia` con candidatas `{ id, confianza }`; aclaraciones redactadas por HelmCode con guardarraíl de tres capas y plantilla de respaldo; «sin coincidencia» siempre de plantilla; sin respaldo por palabras.
 - [Fuente del catálogo](issues/05-fuente-del-catalogo.md): interfaz asíncrona de servidor (`listar`, `obtener`); la implementación por defecto normaliza fuentes y notas; el catálogo es `datos/catalogo-tramites-ayudas.json`, no `ficha.json`.
+- [Accesibilidad del flujo por pantallas](issues/09-accesibilidad-flujo-pantallas.md): cada pantalla nueva lleva el foco a su `h1` y vuelve arriba; «Pensando…» es una región de estado fija y visible con la pantalla anterior `inert`; afinar sin cambio anuncia «Sigue siendo: <título>»; la barra de afinar devuelve el foco al cerrarse.
+- [Tarjetas de la respuesta: lado a lado o apiladas](issues/10-tarjetas-respuesta-apiladas.md): apiladas a todo el ancho, con etiquetas mono como `h2`, pastillas con icono sobre `bg-muted` y la nota en tarjeta visible antes de «Dónde se hace»; pendiente de que Nico lo ratifique.
 
 ## Not yet specified
 
-- Textos de las plantillas fijas de la interfaz en castellano y valenciano. Punto de partida: los del prototipo del flujo (`UI` en `src/components/prototipo-flujo/piezas.tsx`, rama `prototype/flujo-consulta`).
+- Textos de las plantillas fijas de la interfaz en castellano y valenciano. Punto de partida: los del prototipo del flujo (`UI` en `src/components/prototipo-flujo/piezas.tsx`, rama `prototype/flujo-consulta`), más el anuncio «Sigue siendo: <título>» de [Accesibilidad del flujo por pantallas](issues/09-accesibilidad-flujo-pantallas.md).
 - Prompt o configuración de cada proveedor (clasificación y redacción de aclaraciones).
 - Ruta propia de cada entrada: forma de la URL y qué se ve al entrar por ella sin consulta previa.
 

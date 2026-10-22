@@ -28,3 +28,4 @@ Decidido con el equipo en una sesión de grilling (22/10/2026). Datos del catál
 ## Comments
 
 - 22/10/2026, después del cierre: en el prototipo de [Flujo consulta → aclaración → respuesta](02-flujo-consulta-aclaracion-respuesta.md), Miguel prefiere `requisitos_clave` y `documentacion` apiladas a todo el ancho, no lado a lado como dice esta resolución, y añade iconos y etiquetas mono a las tarjetas. Se concilia en [Tarjetas de la respuesta: lado a lado o apiladas](10-tarjetas-respuesta-apiladas.md); esta resolución no se toca hasta entonces.
+- 22/10/2026: [Tarjetas de la respuesta: lado a lado o apiladas](10-tarjetas-respuesta-apiladas.md) sustituye la línea de jerarquía sobre `requisitos_clave` y `documentacion` lado a lado: van apiladas, con etiquetas mono como `h2` e iconos. Se decidió sin Nico y está pendiente de que lo ratifique.
