@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build --webpack",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "probar:buscador": "bun --preload ./scripts/sin-server-only.ts scripts/probar-buscador.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",
