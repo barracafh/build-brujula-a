@@ -160,6 +160,22 @@ Gana **D con instrucción**: es la única sin fallos en el top 3. C con instrucc
 
 En total, menos de 50 llamadas, una sola vez.
 
-## 7. Pendiente
+## 7. Uso en la app
 
-- Usar `vectores.json` en la búsqueda de la app.
+Cuatro piezas (plan completo en `docs/plan-rag.md`):
+
+| Archivo | Qué hace |
+|---|---|
+| `src/lib/similitud.ts` | Cálculo puro de similitud y orden. Lo comparten `evaluar.ts` y el buscador. |
+| `src/lib/embeddings.ts` | Una llamada a `/embeddings` de HelmCode, validada y normalizada. La usan la app y `scripts/indexado/comun.ts`. |
+| `src/lib/buscador.ts` | `buscar(frase, { limite })`: pone `instruccion_consulta` delante, convierte la frase en vector y devuelve los ids más parecidos con su similitud. |
+| `src/lib/herramientas/buscar-tramites.ts` | Herramienta del agente (`server-only`): `buscarTramites(frase)`, `definicion` para `tools` y `responder(tool_call)`. |
+
+```ts
+const { candidatos } = await buscarTramites("me han echado del trabajo");
+// 10 candidatos: id, título, tipo, organismo, administración y similitud
+```
+
+Si el embedding falla o tarda más de 3 s, devuelve las 37 entradas sin similitud y con `aviso`.
+
+Pruebas: `bun scripts/unitarias.ts` (sin red) y `bun run probar:buscador` (7 llamadas a la API: precisión con las 40 preguntas, velocidad y herramienta). Resultado del 22/10/2026: top 1 82,5 %, top 3 y top 10 100 %, mediana 151–174 ms por búsqueda.
