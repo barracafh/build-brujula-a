@@ -55,6 +55,12 @@ export const textosFlujo = {
       sinSoporte:
         "Este navegador no permite dictar. Puedes escribir tu consulta.",
     },
+    recientes: "Trámites que has consultado",
+    recientesPista:
+      "Se guardan solo en este navegador. No guardamos lo que escribes, solo el trámite que abriste.",
+    borrarRecientes: "Borrar historial",
+    recientesBorrados:
+      "Historial borrado. No queda ningún trámite guardado en este navegador.",
     aviso: {
       titulo: "Antes de empezar",
       intro:
@@ -80,11 +86,11 @@ export const textosFlujo = {
       contrato:
         "Brújula es una herramienta experimental y no tiene un contrato de encargado del tratamiento con estas empresas.",
       navegador:
-        "En tu navegador solo guardamos que has aceptado este aviso. Puedes retirarlo cuando quieras desde «Privacidad», al pie de la página.",
+        "En tu navegador guardamos que has aceptado este aviso y los últimos trámites que has abierto, nunca lo que escribes. Puedes borrar los trámites en la pantalla de inicio y retirar la aceptación cuando quieras desde «Privacidad», al pie de la página.",
       volver: "Volver",
       retirar: "Retirar la aceptación",
       retirada:
-        "Has retirado la aceptación. Brújula no enviará nada hasta que vuelvas a aceptar.",
+        "Has retirado la aceptación y hemos borrado los trámites guardados en este navegador. Brújula no enviará nada hasta que vuelvas a aceptar.",
     },
   },
   va: {
@@ -139,6 +145,12 @@ export const textosFlujo = {
       sinSoporte:
         "Este navegador no permet dictar. Pots escriure la teua consulta.",
     },
+    recientes: "Tràmits que has consultat",
+    recientesPista:
+      "Es guarden només en este navegador. No guardem el que escrius, només el tràmit que vas obrir.",
+    borrarRecientes: "Esborrar l'historial",
+    recientesBorrados:
+      "Historial esborrat. No queda cap tràmit guardat en este navegador.",
     aviso: {
       titulo: "Abans de començar",
       intro:
@@ -164,11 +176,11 @@ export const textosFlujo = {
       contrato:
         "Brújula és una eina experimental i no té un contracte d'encarregat del tractament amb estes empreses.",
       navegador:
-        "Al teu navegador només guardem que has acceptat este avís. Pots retirar-ho quan vulgues des de «Privacitat», al peu de la pàgina.",
+        "Al teu navegador guardem que has acceptat este avís i els últims tràmits que has obert, mai el que escrius. Pots esborrar els tràmits en la pantalla d'inici i retirar l'acceptació quan vulgues des de «Privacitat», al peu de la pàgina.",
       volver: "Tornar",
       retirar: "Retirar l'acceptació",
       retirada:
-        "Has retirat l'acceptació. Brújula no enviarà res fins que tornes a acceptar.",
+        "Has retirat l'acceptació i hem esborrat els tràmits guardats en este navegador. Brújula no enviarà res fins que tornes a acceptar.",
     },
   },
 } satisfies Record<Idioma, unknown>;

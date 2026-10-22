@@ -7,7 +7,8 @@ import { useSyncExternalStore } from "react";
 // deja guardarla, dura lo que la pestaña y se vuelve a pedir en cada visita.
 // Sube la versión de la clave cada vez que cambie el texto del aviso: es lo
 // único que hace que quien ya aceptó vuelva a verlo.
-const CLAVE = "brujula-aviso-v1";
+// v2: el aviso cuenta que también se guardan los trámites abiertos.
+const CLAVE = "brujula-aviso-v2";
 
 let enMemoria = false;
 const oyentes = new Set<() => void>();

@@ -176,7 +176,8 @@ export function useConversacion() {
     );
   }
 
-  // Abrir una candidata no llama al motor: solo trae la entrada.
+  // Abrir una candidata no llama al motor: solo trae la entrada. Desde los
+  // trámites recientes no hay consulta escrita: «Tu consulta» es el título.
   function elegir(c: Resumen) {
     reintento.current = () => elegir(c);
     pedir(
@@ -199,6 +200,7 @@ export function useConversacion() {
             },
           ].slice(-MAX_TURNOS),
           respuesta: entrada,
+          consulta: e.consulta || c.titulo,
         })),
       fallar,
     );
