@@ -9,7 +9,7 @@ El backend está hecho; la interfaz del chat la construye el frontend.
 
 - `historial`: los turnos del chat, como en el flujo de pantallas (máximo `MAX_TURNOS`, cada texto hasta `MAX_CARACTERES`, el último del ciudadano).
 - `entradaAbierta`: obligatorio para el chat. Si no es un id del catálogo → 400.
-- Tarda de 5 a 30 s (varias llamadas a la IA). Mostrar «pensando» y permitir cancelar. La ruta corta a los 45 s → 502.
+- Tarda de 5 a 40 s (varias llamadas a la IA; con glm5.3-flash, una pregunta sobre otro trámite ronda los 30 s). Mostrar «pensando» y permitir cancelar. La ruta corta a los 45 s → 502.
 
 ## Respuesta
 
@@ -25,6 +25,9 @@ El backend está hecho; la interfaz del chat la construye el frontend.
 - El aviso de que responde una IA y el de la Ley de IA bajo el campo de texto.
 - Dónde vive el chat (al lado de la ficha o debajo).
 
-## Pendiente
+## Cómo encuentra otros trámites
 
-- La búsqueda de otros trámites con el RAG (`buscar_tramites`, `src/lib/rag.ts`). Hasta entonces, el chat solo encuentra otras entradas por su id (la lista del catálogo va en el prompt).
+- Si la pregunta trata de otro trámite o de una situación nueva, el chat llama una vez a `buscar_tramites` (el índice semántico, `src/lib/herramientas/buscar-tramites.ts`), elige entre los ids que devuelve y lee su ficha con `consultar_contexto` antes de dar datos.
+- Si duda entre dos, pregunta; si ninguno encaja, lo dice y enlaza el Punto de Acceso General.
+- Las dudas sobre la ficha abierta no buscan: van directas a `consultar_contexto`.
+- Prueba: `bun run probar:agente` (con `HELMCODE_MODEL=glm5.3-flash` para el modelo publicado).

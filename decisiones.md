@@ -160,3 +160,11 @@ Dominios del catálogo que **no** rastreamos: gva.es, sede.gva.es, labora.gva.es
     - **Mismo cálculo en la evaluación y en la app** (`src/lib/similitud.ts`), y la llamada de embeddings compartida con los scripts de indexado (`src/lib/embeddings.ts`): sin código duplicado.
     - **`server-only` solo en la herramienta.** Bun no resuelve ese paquete, así que las pruebas lo sustituyen con `scripts/sin-server-only.ts`.
     - **Resultado:** top 3 y top 10 = 100 % en las 40 preguntas; unos 150–200 ms por búsqueda.
+20. **El chat de la ficha usa `buscar_tramites` como herramienta (22/10/2026).**
+    - **Cómo:** el loop del agente (`src/lib/motor/agente.ts`) ofrece `consultar_contexto` y `buscar_tramites` (la `definicion` del punto 19) y contesta cada llamada con `responder(llamada, signal)`. Como mucho 4 vueltas; la última, sin herramientas.
+    - **El prompt ya no lleva la lista del catálogo.** El modelo solo conoce los ids que devuelve la búsqueda (más la abierta y sus `relacionados`); `consultar_contexto` rechaza cualquier otro. Así elige entre los candidatos del índice y no entre 37 nombres.
+    - **Una búsqueda por mensaje, en código:** una segunda llamada a `buscar_tramites` en el mismo mensaje devuelve un error al modelo y no llega a HelmCode.
+    - **Las dudas sobre la ficha abierta no buscan.** Se resuelven con `consultar_contexto` sin id: buscar ahí gastaría una llamada a HelmCode sin aportar nada.
+    - **Candidatas para el botón «Abrir»:** las fichas que consultó y, de las devueltas, las que el texto nombra por su título. Nunca las 10 devueltas.
+    - **Respaldo de cifras y enlaces (`sinRespaldo`):** los títulos y organismos devueltos cuentan como material, igual que la URL del Punto de Acceso General para el caso «ninguno encaja».
+    - **Resultado con glm5.3-flash:** las 3 frases de `bun run probar:agente` (voto por correo, despido y empadronarse en valenciano) hacen una sola búsqueda y terminan en el trámite correcto; los 11 escenarios de `scripts/probar-chat.ts` siguen pasando. Tarda unos 30–36 s por pregunta sobre otro trámite, cerca del corte de 45 s de la ruta.
