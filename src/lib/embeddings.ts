@@ -27,11 +27,12 @@ export async function embeber(
   return vectores.map(normalizar);
 }
 
-const valido = (v: unknown): v is number[] =>
-  Array.isArray(v) &&
-  v.length >= DIMENSIONES &&
-  v.every(Number.isFinite) &&
-  v.some((x) => x !== 0);
+// Se valida lo que se usa: los primeros DIMENSIONES valores, con norma > 0.
+const valido = (v: unknown): v is number[] => {
+  if (!Array.isArray(v) || v.length < DIMENSIONES) return false;
+  const corto = v.slice(0, DIMENSIONES);
+  return corto.every(Number.isFinite) && corto.some((x) => x !== 0);
+};
 
 function normalizar(v: number[]): number[] {
   const corto = v.slice(0, DIMENSIONES);
