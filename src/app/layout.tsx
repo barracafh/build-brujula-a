@@ -20,8 +20,13 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
+  // Extensiones como LanguageTool añaden atributos a <html> antes de hidratar.
   return (
-    <html lang="es" className={`${geist.variable} ${geistMono.variable}`}>
+    <html
+      lang="es"
+      className={`${geist.variable} ${geistMono.variable}`}
+      suppressHydrationWarning
+    >
       <body>
         <a
           href="#contenido"
