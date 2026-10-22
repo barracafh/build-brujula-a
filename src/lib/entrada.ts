@@ -22,6 +22,24 @@ export type Entrada = {
   relacionados: string[];
 };
 
+// Campos de la ficha que se traducen al valenciano (decisiones.md, punto 23).
+export const CAMPOS_TRADUCIBLES = [
+  "titulo",
+  "organismo",
+  "administracion",
+  "requisitos_clave",
+  "pasos",
+  "documentacion",
+  "plazo",
+  "nota",
+] as const;
+export type Traduccion = Pick<Entrada, (typeof CAMPOS_TRADUCIBLES)[number]>;
+
+// Lo que reciben la interfaz y /api/entradas: la entrada y su traducción
+// automática sin revisar (null → se muestra en castellano). El catálogo y el
+// agente nunca la ven.
+export type EntradaConTraduccion = Entrada & { va: Traduccion | null };
+
 // Lo que necesita un botón de candidata en la aclaración.
 export type Resumen = Pick<Entrada, "id" | "tipo" | "titulo" | "organismo">;
 

@@ -4,12 +4,14 @@ import {
   FileText,
   Info,
   Landmark,
+  Languages,
   ListChecks,
   TriangleAlert,
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Entrada } from "@/lib/entrada";
+import type { EntradaConTraduccion } from "@/lib/entrada";
+import { enIdioma } from "@/lib/traduccion";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -39,19 +41,23 @@ function dominio(url: string) {
 }
 
 export function RespuestaCompuesta({
-  entrada: e,
+  entrada: entradaConTraduccion,
   idioma,
   refTitular,
 }: {
-  entrada: Entrada;
+  entrada: EntradaConTraduccion;
   idioma: IdiomaRespuesta;
   refTitular?: Ref<HTMLHeadingElement>;
 }) {
   const tx = textosRespuesta[idioma];
+  const { entrada: e, traducida } = enIdioma(entradaConTraduccion, idioma);
+  // Las fechas, el audio y el id se sacan siempre de la ficha castellana.
+  const { va: _va, ...original } = entradaConTraduccion;
+  const lc = traducida ? "ca" : "es";
   const conTramite = e.enlace_tramite !== null;
   const enlace = e.enlace_tramite ?? e.enlace_info;
-  const fechas = fechasAbiertas(e);
-  const relativo = enlaceRelativo(e, idioma);
+  const fechas = fechasAbiertas(original);
+  const relativo = enlaceRelativo(original, idioma, e);
 
   return (
     <article
@@ -69,10 +75,20 @@ export function RespuestaCompuesta({
               {tx.marcaSinVerificar}
             </Badge>
           )}
-          {idioma === "va" && (
-            <Badge variant="outline" className="font-mono">
-              {tx.contenidoCastellano}
+          {traducida ? (
+            <Badge
+              variant="outline"
+              className="h-auto max-w-full min-w-0 whitespace-normal"
+            >
+              <Languages aria-hidden="true" />
+              {tx.traduccionAutomatica}
             </Badge>
+          ) : (
+            idioma === "va" && (
+              <Badge variant="outline" className="font-mono">
+                {tx.contenidoCastellano}
+              </Badge>
+            )
           )}
         </div>
         {/* Recibe el foco por código al sustituir la pantalla (ticket 09):
@@ -80,16 +96,31 @@ export function RespuestaCompuesta({
         <h1
           ref={refTitular}
           tabIndex={-1}
-          lang="es"
+          lang={lc}
           className="mt-3 text-[clamp(30px,5vw,44px)] leading-[1.08] tracking-[-0.02em] [overflow-wrap:anywhere] outline-none"
         >
           {e.titulo}
         </h1>
-        <p className="mt-3 text-base text-(--text-secondary)" lang="es">
+        <p className="mt-3 text-base text-(--text-secondary)" lang={lc}>
           {e.organismo} · {e.administracion}
         </p>
         {/* La key lo desmonta, y lo para, al cambiar de entrada o de idioma. */}
-        <Escuchar key={`${e.id}.${idioma}`} id={e.id} idioma={idioma} tx={tx} />
+        <Escuchar
+          key={`${original.id}.${idioma}`}
+          id={original.id}
+          idioma={idioma}
+          tx={tx}
+          nota={traducida ? tx.audioCastellano : undefined}
+        />
+        {traducida && (
+          <p className="mt-4 flex gap-3 rounded-xl px-5 py-4 text-base ring-1 ring-border">
+            <Languages
+              aria-hidden="true"
+              className="mt-1 size-5 shrink-0 text-(--text-secondary)"
+            />
+            {tx.avisoTraduccion}
+          </p>
+        )}
         {!e.verificado && (
           <p className="mt-4 flex gap-3 rounded-xl px-5 py-4 text-base ring-1 ring-destructive/40">
             <TriangleAlert
@@ -106,7 +137,7 @@ export function RespuestaCompuesta({
           <h2 className={cn("mb-4 text-(--text-secondary)", etiqueta)}>
             {tx.pasos}
           </h2>
-          <ol className="grid gap-5" lang="es">
+          <ol className="grid gap-5" lang={lc}>
             {e.pasos.map((paso, i) => (
               <li
                 key={i}
@@ -134,7 +165,7 @@ export function RespuestaCompuesta({
           >
             <Cabecera icono={CalendarClock} titulo={tx.plazo} sobre="sol" />
             <p
-              lang="es"
+              lang={lc}
               className="text-xl leading-snug font-medium [overflow-wrap:anywhere]"
             >
               {e.plazo}
@@ -177,16 +208,18 @@ export function RespuestaCompuesta({
           icono={ListChecks}
           titulo={tx.requisitos}
           items={e.requisitos_clave}
+          lang={lc}
         />
         <TarjetaLista
           icono={FileText}
           titulo={tx.documentacion}
           items={e.documentacion}
+          lang={lc}
         />
         {e.nota && (
           <Card render={<section />} className={cn(tarjeta, "bg-muted")}>
             <Cabecera icono={Info} titulo={tx.convieneSaber} sobre="muted" />
-            <p lang="es" className="min-w-0 [overflow-wrap:anywhere]">
+            <p lang={lc} className="min-w-0 [overflow-wrap:anywhere]">
               {e.nota}
             </p>
           </Card>
@@ -199,7 +232,7 @@ export function RespuestaCompuesta({
       >
         <div className="min-w-0 flex-[1_1_260px]">
           <Cabecera icono={Landmark} titulo={tx.dondeSeHace} sobre="blanco" />
-          <p className="mt-4 text-lg leading-[1.35] font-medium" lang="es">
+          <p className="mt-4 text-lg leading-[1.35] font-medium" lang={lc}>
             {e.organismo}
           </p>
           <p className="mt-1 font-mono text-sm [overflow-wrap:anywhere] text-(--text-secondary)">
@@ -277,16 +310,18 @@ function TarjetaLista({
   icono,
   titulo,
   items,
+  lang,
 }: {
   icono: LucideIcon;
   titulo: string;
   items: string[];
+  lang: string;
 }) {
   if (items.length === 0) return null;
   return (
     <Card render={<section />} className={cn(tarjeta, "bg-muted")}>
       <Cabecera icono={icono} titulo={titulo} sobre="muted" />
-      <ul className="grid list-disc gap-2 pl-5" lang="es">
+      <ul className="grid list-disc gap-2 pl-5" lang={lang}>
         {items.map((item, i) => (
           <li key={i} className="min-w-0 [overflow-wrap:anywhere]">
             {item}

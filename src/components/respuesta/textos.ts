@@ -20,6 +20,10 @@ export const textosRespuesta = {
     marcaSinVerificar: "Sin verificar",
     sinVerificar: "Información sin verificar: compruébala en la sede oficial.",
     contenidoCastellano: "Contenido oficial en castellano",
+    traduccionAutomatica: "Traducción automática sin revisar",
+    avisoTraduccion:
+      "Esta ficha se ha traducido automáticamente y nadie la ha revisado. El texto oficial, en castellano, es el de la fuente enlazada.",
+    audioCastellano: "El audio lee el contenido en castellano.",
     escuchar: "Escuchar",
     pausar: "Pausar",
     escucharRespuesta: "Escuchar la respuesta",
@@ -52,6 +56,10 @@ export const textosRespuesta = {
     marcaSinVerificar: "Sense verificar",
     sinVerificar: "Informació sense verificar: comprova-la en la seu oficial.",
     contenidoCastellano: "Contingut oficial en castellà",
+    traduccionAutomatica: "Traducció automàtica sense revisar",
+    avisoTraduccion:
+      "Esta fitxa s'ha traduït automàticament i ningú l'ha revisada. El text oficial, en castellà, és el de la font enllaçada.",
+    audioCastellano: "L'àudio llig el contingut en castellà.",
     escuchar: "Escoltar",
     pausar: "Pausar",
     escucharRespuesta: "Escoltar la resposta",

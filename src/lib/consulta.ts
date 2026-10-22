@@ -1,5 +1,5 @@
 import type { Candidata, Idioma, Turno } from "./motor/contrato";
-import type { Entrada, Fuente, Resumen } from "./entrada";
+import type { EntradaConTraduccion, Fuente, Resumen } from "./entrada";
 
 // Lo que intercambian la interfaz y POST /api/consulta. Solo tipos.
 
@@ -12,7 +12,7 @@ type Comun = { idioma: Idioma };
 type CandidataResumida = Resumen & Pick<Candidata, "confianza">;
 
 export type RespuestaConsulta =
-  | ({ tipo: "respuesta"; entrada: Entrada } & Comun)
+  | ({ tipo: "respuesta"; entrada: EntradaConTraduccion } & Comun)
   | ({
       tipo: "aclaracion";
       texto: string; // redactado con IA o de plantilla

@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { ruta } from "@/config/sitio";
 import type { RespuestaConsulta } from "@/lib/consulta";
-import type { Entrada, Fuente, Resumen } from "@/lib/entrada";
+import type { EntradaConTraduccion, Fuente, Resumen } from "@/lib/entrada";
 import { MAX_TURNOS, type Idioma, type Turno } from "@/lib/motor/contrato";
 import { textosFlujo } from "./textos";
 
@@ -24,7 +24,7 @@ export type Pantalla =
   | { tipo: "inicio" }
   | { tipo: "aclaracion"; texto: string; candidatas: Candidata[]; ronda: number }
   | { tipo: "cierre"; candidatas: Candidata[] }
-  | { tipo: "respuesta"; entrada: Entrada }
+  | { tipo: "respuesta"; entrada: EntradaConTraduccion }
   | { tipo: "sin_coincidencia"; texto: string }
   | { tipo: "error" };
 
@@ -32,7 +32,7 @@ type Estado = {
   pantalla: Pantalla;
   vez: number; // sube con cada sustitución: foco al h1 y arriba
   historial: TurnoChat[];
-  respuesta: Entrada | null; // la última, para «Volver a» desde una aclaración
+  respuesta: EntradaConTraduccion | null; // la última, para «Volver a» desde una aclaración
   consulta: string; // lo último que escribió el ciudadano, para «Tu consulta»
   idioma: Idioma;
   idiomaManual: boolean;
@@ -211,7 +211,7 @@ export function useConversacion() {
           signal: senal,
         });
         if (!res.ok) throw new Error(String(res.status));
-        return (await res.json()) as Entrada;
+        return (await res.json()) as EntradaConTraduccion;
       },
       (entrada) =>
         setEstado((e) => ({

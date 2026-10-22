@@ -168,3 +168,36 @@ Dominios del catálogo que **no** rastreamos: gva.es, sede.gva.es, labora.gva.es
     - **Candidatas para el botón «Abrir»:** las fichas que consultó y, de las devueltas, las que el texto nombra por su título. Nunca las 10 devueltas.
     - **Respaldo de cifras y enlaces (`sinRespaldo`):** los títulos y organismos devueltos cuentan como material, igual que la URL del Punto de Acceso General para el caso «ninguno encaja».
     - **Resultado con glm5.3-flash:** las 3 frases de `bun run probar:agente` (voto por correo, despido y empadronarse en valenciano) hacen una sola búsqueda y terminan en el trámite correcto; los 11 escenarios de `scripts/probar-chat.ts` siguen pasando. Tarda unos 30–36 s por pregunta sobre otro trámite, cerca del corte de 45 s de la ruta.
+21. **Preguntas en valenciano: primero medir, y de momento no indexamos en valenciano (22/10/2026).** Plan completo en `docs/valenciano_specification.md`.
+    - **Medida previa** (índice actual, variante D con instrucción; las preguntas de cada idioma son distintas, así que es solo una pista):
+      - castellano (29): top 1 86 %, top 3 100 %, distancia media entre el 1.º y el 2.º 0,137;
+      - valenciano (11): top 1 73 %, top 3 100 %, distancia 0,087.
+      - En valenciano el correcto sigue entre los 3 primeros, pero el modelo distingue peor el 1.º del 2.º.
+    - **Cómo se mide bien:** se traducen al valenciano las preguntas castellanas de prueba (120 de `evaluacion.json` y 29 de `pruebas-indice.json`) con HelmCode (NaN es la misma API), en lotes y con caché. Así cada pregunta se compara con su traducción, en embeddings, Jev y LLM: aciertos, decisión, idioma detectado y velocidad (mediana y p95). Una persona que hable valenciano revisa una muestra.
+    - **Por qué probablemente no hace falta indexar en valenciano:** el índice no elige el trámite, solo pasa 10 candidatos al clasificador (punto 18), y en valenciano el correcto ya llega siempre al top 3.
+    - **Dónde está el riesgo real:** en los umbrales de Jev. `encaja` cambia con el idioma (ticket 06) y los umbrales salieron sobre todo de casos en castellano.
+    - **Criterio:** si con el índice actual el top 3 en valenciano no baja más de 5 puntos respecto al castellano y el top 10 sigue al 100 %, no se indexa en valenciano. Si baja más, la opción preferida es indexar en los dos idiomas (dos vectores por trámite, 74 en total, sin coste en velocidad).
+    - **Descartado:** traducir la pregunta al castellano antes de buscar. Añade alrededor de 1 s por consulta.
+22. **Medido: no hace falta indexar en valenciano (22/10/2026).** Cierra el punto 21.
+    - **Cómo:** `deepseek-v4-flash` (API de NaN/HelmCode) tradujo al valenciano los textos de la variante D de los 37 trámites y las 29 preguntas castellanas de `pruebas-indice.json`. Ninguna traducción quedó marcada para revisión (cifras, siglas y longitud). Scripts en `scripts/valenciano/` (rama `evaluacion-valenciano`).
+    - **Resultados** (top 1 / top 3 / top 10):
+
+      | Índice | Preguntas es (29) | va traducidas (29) | va originales (11) |
+      |---|---|---|---|
+      | ES (el actual) | 86 / 100 / 100 % | 86 / 100 / 100 % | 73 / 100 / 100 % |
+      | VA | 90 / 100 / 100 % | 86 / 100 / 100 % | 73 / 91 / 100 % |
+      | ES+VA | 90 / 100 / 100 % | 86 / 100 / 100 % | 73 / 91 / 100 % |
+
+    - **La misma pregunta en los dos idiomas acierta igual con el índice actual:** 26 de 29 quedan en la misma posición, 2 bajan un puesto y 1 sube. La bajada del punto 21 venía de que las 11 preguntas originales en valenciano son más difíciles, no del idioma.
+    - **Indexar en valenciano no mejora las preguntas en valenciano** y con las originales empeora el top 3 (100 → 91 %). ES+VA da lo mismo que VA: para una pregunta en valenciano siempre gana el vector en valenciano.
+    - **Velocidad igual:** el embedding de la pregunta tarda unos 190 ms de mediana en castellano y 180 ms en valenciano.
+    - **Decisión:** se queda el índice en castellano. Pendiente: medir Jev y el LLM con las preguntas traducidas (sección 5.2 de la especificación).
+23. **Las fichas se muestran en valenciano cuando la consulta está en valenciano, con aviso de traducción sin revisar (22/10/2026).** Plan en `docs/plan-fichas-valenciano.md`, revisado por Codex.
+    - **Se busca en castellano y solo cambia lo que se muestra.** El índice, Jev y el agente siguen trabajando con las fichas en castellano (punto 22). Si el idioma de la consulta es `va` (el de Jev o, si Jev falla, el del LLM), la interfaz enseña la traducción. El ciudadano puede cambiarlo con el botón de idioma.
+    - **Se traduce una vez, no en cada consulta:** `bun run traducir:fichas` traduce con `deepseek-v4-flash` los 8 campos que se leen (título, organismo, administración, requisitos, pasos, documentación, plazo y nota) y los guarda en `src/datos/catalogo-va.json`. Las URLs, los ids y las fuentes no se traducen.
+    - **No da tiempo a revisarlas:** cada ficha traducida lleva la etiqueta «Traducció automàtica sense revisar» y un aviso de que el texto oficial, en castellano, es el de la fuente enlazada. `<Fuentes />` sigue enlazando la página oficial.
+    - **Si la traducción no cuadra, se muestra en castellano.** `validarTraduccion` (`src/lib/traduccion.ts`) compara campo a campo y elemento a elemento: las mismas claves, los mismos nulos, el mismo número de elementos en cada lista, las mismas cifras, meses, días hábiles o naturales, URLs y códigos de procedimiento.
+    - **Traducciones viejas:** cada ficha traducida guarda la huella del castellano del que salió. Si la ficha cambia en el catálogo, la huella no coincide y se muestra en castellano hasta volver a traducir.
+    - **El agente nunca ve la traducción:** se añade en las rutas (`/api/consulta` y `/api/entradas/[id]`), no en el catálogo.
+    - **El audio y las fechas del calendario salen del castellano.** El audio pregenerado está en castellano y lo dice debajo del botón.
+    - **Siguen en castellano:** las candidatas de la aclaración, los recientes y «Volver a».

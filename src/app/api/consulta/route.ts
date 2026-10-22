@@ -1,3 +1,4 @@
+import { conTraduccion } from "@/lib/traducciones";
 import { catalogo } from "@/lib/fuente-catalogo";
 import { minimizar } from "@/lib/minimizar";
 import { motor } from "@/lib/motor";
@@ -68,7 +69,7 @@ async function completar(r: Resultado): Promise<RespuestaConsulta | null> {
     return { tipo: r.tipo, texto: r.texto, idioma: r.idioma };
   if (r.tipo === "respuesta") {
     const entrada = await catalogo.obtener(r.candidata.id);
-    return entrada ? { tipo: r.tipo, entrada, idioma: r.idioma } : null;
+    return entrada ? { tipo: r.tipo, entrada: conTraduccion(entrada), idioma: r.idioma } : null;
   }
   if (r.tipo === "contestacion")
     return {

@@ -14,6 +14,8 @@ import { componer, pasaGuardarrail } from "../src/lib/motor/componer";
 import { leerHelmcode } from "../src/lib/motor/helmcode";
 import { candidatasJev } from "../src/lib/motor/jev";
 import { plantillas } from "../src/lib/motor/plantillas";
+import { enIdioma, huella, validarTraduccion } from "../src/lib/traduccion";
+import type { EntradaConTraduccion, Traduccion } from "../src/lib/entrada";
 
 let fallos = 0;
 function comprobar(nombre: string, ok: boolean) {
@@ -160,6 +162,53 @@ comprobar("Guardarraíl: enlace no pasa", !pasaGuardarrail("¿Has mirado HTTPS:/
 comprobar("Guardarraíl: más de 280 caracteres no pasa", !pasaGuardarrail(`¿${"a".repeat(280)}?`, []));
 const voto = getTramite("voto-por-correo")!.titulo;
 comprobar("Guardarraíl: los dígitos del título citado no cuentan", pasaGuardarrail(`¿Te refieres a «${voto}»?`, [voto]));
+
+// Fichas en valenciano
+const esT: Traduccion = {
+  titulo: "Ayuda de 1,50 € al mes",
+  organismo: "Generalitat Valenciana",
+  administracion: "Autonómica",
+  requisitos_clave: ["Residir en Valencia", "Pedirlo antes del 15 de noviembre"],
+  pasos: ["Entra en https://sede.gva.es", "Presenta la solicitud en 15 días hábiles"],
+  documentacion: ["DNI"],
+  plazo: "15 días hábiles",
+  nota: null,
+};
+const vaT: Traduccion = {
+  titulo: "Ajuda d'1,50 € al mes",
+  organismo: "Generalitat Valenciana",
+  administracion: "Autonòmica",
+  requisitos_clave: ["Residir a València", "Demanar-ho abans del 15 de novembre"],
+  pasos: ["Entra a https://sede.gva.es", "Presenta la sol·licitud en 15 dies hàbils"],
+  documentacion: ["DNI"],
+  plazo: "15 dies hàbils",
+  nota: null,
+};
+const conVa = (va: unknown) => validarTraduccion(esT, va);
+comprobar("validarTraduccion: traducción correcta → []", conVa(vaT).length === 0);
+comprobar("validarTraduccion: 1,50 → 150 falla", conVa({ ...vaT, titulo: "Ajuda de 150 € al mes" }).length > 0);
+comprobar("validarTraduccion: noviembre → desembre falla", conVa({ ...vaT, requisitos_clave: [vaT.requisitos_clave[0], "Demanar-ho abans del 15 de desembre"] }).length > 0);
+comprobar("validarTraduccion: hábiles → naturals falla", conVa({ ...vaT, plazo: "15 dies naturals" }).length > 0);
+comprobar("validarTraduccion: lista con un elemento menos falla", conVa({ ...vaT, pasos: [vaT.pasos[0]] }).length > 0);
+comprobar("validarTraduccion: URL distinta falla", conVa({ ...vaT, pasos: ["Entra a https://sede.gva.es/otra", vaT.pasos[1]] }).length > 0);
+comprobar("validarTraduccion: plazo null en es y texto en va falla", validarTraduccion({ ...esT, plazo: null }, vaT).length > 0);
+comprobar("validarTraduccion: clave que falta falla", conVa(Object.fromEntries(Object.entries(vaT).filter(([k]) => k !== "plazo"))).length > 0);
+comprobar("validarTraduccion: clave de más falla", conVa({ ...vaT, enlace_tramite: "https://x.es" }).length > 0);
+comprobar("validarTraduccion: no objeto falla", conVa("hola").length > 0 && conVa(null).length > 0 && conVa([]).length > 0);
+comprobar("huella: estable", huella(esT) === huella({ ...esT }));
+comprobar("huella: cambia con una coma", huella(esT) !== huella({ ...esT, pasos: ["Entra en https://sede.gva.es,", esT.pasos[1]] }));
+const baseE = { ...getTramite("voto-por-correo")! } as unknown as EntradaConTraduccion;
+const entVa = { ...baseE, va: { ...campos0(baseE), titulo: "Títol en valencià" } } as EntradaConTraduccion;
+function campos0(e: EntradaConTraduccion): Traduccion {
+  return { titulo: e.titulo, organismo: e.organismo, administracion: e.administracion, requisitos_clave: e.requisitos_clave, pasos: e.pasos, documentacion: e.documentacion, plazo: e.plazo, nota: e.nota };
+}
+const iva = enIdioma(entVa, "va");
+comprobar("enIdioma: va con traducción → traducida, id y URLs originales", iva.traducida && iva.entrada.titulo === "Títol en valencià" && iva.entrada.id === baseE.id && iva.entrada.enlace_tramite === baseE.enlace_tramite);
+const ies = enIdioma(entVa, "es");
+comprobar("enIdioma: es → original sin clave va", !ies.traducida && ies.entrada.titulo === baseE.titulo && !("va" in ies.entrada));
+comprobar("enIdioma: va null → original", !enIdioma({ ...baseE, va: null }, "va").traducida);
+const intruso = enIdioma({ ...entVa, va: { ...entVa.va!, enlace_tramite: "https://malo.es" } as Traduccion }, "va");
+comprobar("enIdioma: clave de más en va no cambia el enlace", intruso.entrada.enlace_tramite === baseE.enlace_tramite);
 
 console.log(fallos ? `\n${fallos} fallos` : "\nTodo bien");
 if (fallos) process.exitCode = 1;

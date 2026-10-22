@@ -21,10 +21,12 @@ export function Escuchar({
   id,
   idioma,
   tx,
+  nota,
 }: {
   id: string;
   idioma: IdiomaRespuesta;
   tx: TextosRespuesta;
+  nota?: string;
 }) {
   const pista = pistas[id]?.[idioma];
   const refAudio = useRef<HTMLAudioElement | null>(null);
@@ -81,7 +83,9 @@ export function Escuchar({
         size="lg"
         aria-pressed={sonando}
         aria-label={
-          sonando ? tx.pausarRespuesta : `${tx.escucharRespuesta}, ${duracion(total)}`
+          sonando
+            ? tx.pausarRespuesta
+            : `${tx.escucharRespuesta}, ${duracion(total)}${nota ? `. ${nota}` : ""}`
         }
         onClick={pulsar}
         className="min-h-11"
@@ -98,6 +102,9 @@ export function Escuchar({
           </span>
         )}
       </Button>
+      {nota && (
+        <span className="mt-2 text-base text-(--text-secondary)">{nota}</span>
+      )}
       {/* Siempre en el DOM para que el error se anuncie al aparecer. */}
       <span role="status" className="text-sm text-(--text-secondary)">
         {error && <span className="mt-2 block">{tx.audioError}</span>}

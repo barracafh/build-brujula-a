@@ -11,7 +11,9 @@
     "build": "next build --webpack",
     "typecheck": "tsc --noEmit",
     "probar:buscador": "bun --preload ./scripts/sin-server-only.ts scripts/probar-buscador.ts",
-    "probar:agente": "bun --preload ./scripts/sin-server-only.ts scripts/probar-agente.ts"
+    "probar:agente": "bun --preload ./scripts/sin-server-only.ts scripts/probar-agente.ts",
+    "traducir:fichas": "bun --preload ./scripts/sin-server-only.ts scripts/traducir-fichas.ts",
+    "probar:fichas-va": "bun --preload ./scripts/sin-server-only.ts scripts/probar-fichas-va.ts"
   },
   "dependencies": {
     "@base-ui/react": "1.8.0",

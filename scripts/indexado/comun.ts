@@ -2,6 +2,9 @@
 import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { DIMENSIONES, MODELO_EMBEDDINGS, embeber as embeberLote } from "../../src/lib/embeddings";
+import { cifras } from "../../src/lib/traduccion";
+
+export { cifras };
 
 export const DIR_CACHE = ".cache/indexado";
 export const DIR_SEDE = `${DIR_CACHE}/sede`;
@@ -75,17 +78,6 @@ export function extraerJson<T>(respuesta: string): T {
   if (inicio < 0 || fin < inicio) throw new Error("La respuesta no trae JSON");
   return JSON.parse(limpio.slice(inicio, fin + 1)) as T;
 }
-
-// Cifras de un texto («3 meses», «5,00 €», «65%»), para comprobar que el LLM
-// no ha inventado ninguna. Se comparan sin separadores de miles ni decimales cero
-// y con coma decimal: «6.010,12» y «6010,12» son la misma; «1,50» y «150», no.
-export const cifras = (texto: string): string[] =>
-  (texto.match(/\d+(?:[.,]\d+)*/g) ?? []).map((n) =>
-    n
-      .replace(/[.,]00$/, "")
-      .replace(/[.,](?=\d{3}(?:[.,]|$))/g, "")
-      .replace(".", ","),
-  );
 
 export function cifrasInventadas(salida: string, fuente: string): string[] {
   const validas = new Set(cifras(fuente));

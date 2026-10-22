@@ -90,7 +90,13 @@ export function calcularPlazo(desde: string, p: PlazoRelativo): string | null {
 // Plazo que cuenta desde una fecha de cada persona, contado desde hoy. La nota
 // del evento dice desde cuándo y cómo se contó, y que si esa fecha fue antes el
 // plazo termina antes. Sin calendario para algún día contado, no hay enlace.
-export function enlaceRelativo(e: Entrada, idioma: IdiomaRespuesta) {
+// `e` es la ficha castellana (el plazo se reconoce por su texto literal);
+// `mostrada`, la que ve el ciudadano, quizá traducida.
+export function enlaceRelativo(
+  e: Entrada,
+  idioma: IdiomaRespuesta,
+  mostrada: Entrada = e,
+) {
   const p = plazoRelativo(e);
   if (!p) return undefined;
   const h = hoy();
@@ -104,7 +110,7 @@ export function enlaceRelativo(e: Entrada, idioma: IdiomaRespuesta) {
   const nota = `${tx.contadoDesdeHoy}, ${fechaCorta(h)}. ${p.siAntes[idioma]} ${cuenta}`;
   return {
     que: p.que[idioma],
-    href: enlaceGoogleCalendar(e, { fecha, que: p.que }, idioma, nota),
+    href: enlaceGoogleCalendar(mostrada, { fecha, que: p.que }, idioma, nota),
   };
 }
 

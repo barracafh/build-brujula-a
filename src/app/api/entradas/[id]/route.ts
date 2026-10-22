@@ -1,6 +1,7 @@
 import { catalogo } from "@/lib/fuente-catalogo";
+import { conTraduccion } from "@/lib/traducciones";
 
-// GET → Entrada (src/lib/entrada.ts). Para abrir una candidata elegida en la
+// GET → EntradaConTraduccion (src/lib/entrada.ts). Para abrir una candidata elegida en la
 // aclaración sin volver a llamar al motor.
 export async function GET(
   _req: Request,
@@ -8,6 +9,6 @@ export async function GET(
 ) {
   const entrada = await catalogo.obtener((await params).id);
   return entrada
-    ? Response.json(entrada)
+    ? Response.json(conTraduccion(entrada))
     : Response.json({ error: "No existe." }, { status: 404 });
 }

@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Fuentes } from "@/components/Fuentes";
 import { RespuestaCompuesta } from "@/components/respuesta/RespuestaCompuesta";
-import type { Entrada, Resumen } from "@/lib/entrada";
+import type { EntradaConTraduccion, Resumen } from "@/lib/entrada";
 import {
   Avisos,
   BotonesCandidatas,
@@ -380,7 +380,7 @@ function VolverA({
 }: {
   c: Conversacion;
   t: TextosFlujo;
-  entrada: Entrada;
+  entrada: EntradaConTraduccion;
 }) {
   return (
     <div>

@@ -1,0 +1,991 @@
+{
+  "modelo": "deepseek-v4-flash",
+  "generado": "2026-10-22T19:52:29.418Z",
+  "revisado": false,
+  "items": {
+    "prestacion-desempleo": {
+      "huella": "38a3a2f8",
+      "titulo": "Sol·licitar la prestació per desocupació (atur)",
+      "organismo": "Servicio Público de Empleo Estatal (SEPE)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Estar en situació legal de desocupació (acomiadament, fi de contracte, etc.)",
+        "Tindre cotitzat el període mínim exigit i no estar en situació d'incompatibilitat",
+        "Estar inscrit com a demandant d'ocupació en el servei d'ocupació autonòmic (en la Comunitat Valenciana, Labora)",
+        "Persones de fora de la UE/EEE: residir legalment a Espanya"
+      ],
+      "pasos": [
+        "Inscriure's com a demandant d'ocupació en Labora",
+        "Opcional: calcular la prestació amb el simulador del SEPE",
+        "Presentar la sol·licitud en línia en la seu del SEPE amb certificat digital, DNIe o Cl@ve (o la presol·licitud si no es té identificació electrònica)",
+        "Aportar la documentació que indique el justificant final de la sol·licitud",
+        "Consultar l'estat en l'Àrea Personal del SEPE"
+      ],
+      "documentacion": [
+        "DNI/NIE (estrangers no UE: targeta de residència i passaport)",
+        "La documentació addicional que indique el justificant al final del tràmit"
+      ],
+      "plazo": "15 dies des de l'endemà de la situació legal de desocupació (RD 625/1985, art. 21). El SEPE els computa com a dies hàbils. Si es presenta fora de termini es perden els dies de retard.",
+      "nota": null
+    },
+    "subsidio-desempleo": {
+      "huella": "48bf327b",
+      "titulo": "Subsidi per desocupació (nivell assistencial)",
+      "organismo": "Servicio Público de Empleo Estatal (SEPE)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Estar en desocupació i inscrit com a demandant d'ocupació",
+        "No disposar de rendes suficients; es pot calcular de manera individual o per unitat familiar i acreditar amb declaració responsable",
+        "Des de la reforma (RDL 2/2024, en vigor des de novembre de 2024) poden accedir-hi també menors de 45 anys sense responsabilitats familiars, entre altres col·lectius"
+      ],
+      "pasos": [
+        "Mantindre la inscripció com a demandant d'ocupació en Labora",
+        "Sol·licitar el subsidi en la seu del SEPE (Cl@ve, certificat o DNIe) o amb presol·licitud",
+        "Renovar el subsidi cada trimestre"
+      ],
+      "documentacion": [
+        "DNI/NIE",
+        "Declaració responsable de rendes",
+        "La documentació que indique el justificant de la sol·licitud"
+      ],
+      "plazo": null,
+      "nota": "Quantia segons La Moncloa (2024): 95 % de l'IPREM els 6 primers mesos, 90 % els 6 següents i 80 % la resta. S'elimina el mes d'espera després d'esgotar l'atur. Existeix el Complement d'Ajuda a l'Ocupació per a compatibilitzar-lo amb un treball. No hem pogut confirmar en una web oficial el termini actual de sol·licitud després de la reforma."
+    },
+    "inscripcion-demandante-labora": {
+      "huella": "149f5d4f",
+      "titulo": "Inscriure's com a demandant d'ocupació (apuntar-se a l'atur en Labora)",
+      "organismo": "Labora, Servei Valencià d'Ocupació i Formació",
+      "administracion": "Generalitat Valenciana",
+      "requisitos_clave": [
+        "Residir en la Comunitat Valenciana i tindre 16 anys complits",
+        "Nacionalitat espanyola, UE/EEE o Suïssa (i els seus familiars); resta de persones estrangeres, amb accés reconegut al mercat de treball",
+        "Voluntària, excepte per a cobrar prestació o subsidi per desocupació: llavors és obligatòria i hi ha 15 dies hàbils des de la fi de l'última relació laboral",
+        "La inscripció i la renovació de la demanda les gestiona Labora (no el SEPE)"
+      ],
+      "pasos": [
+        "En línia: «primera inscripció en línia» en Punt Labora (puntlabora.gva.es) amb certificat digital o Cl@ve, adjuntant una foto o un escaneig del NIF/NIE per les dos cares",
+        "Presencial: demanar cita prèvia («cita prèvia 1a inscripció») en la web o l'app GVA Punt Labora o en el 012 (963 866 000), i acudir a l'Espai Labora que corresponga al domicili",
+        "Guardar el DARDE (Document d'Alta i Renovació de la Demanda d'Ocupació), que indica la data de renovació",
+        "Renovar en eixa data (app o web Punt Labora amb el PIN del DARDE o firma ACCV, 012 o punts Punt Labora); si no es renova, la demanda causa baixa"
+      ],
+      "documentacion": [
+        "NIF o NIE (les dos cares)",
+        "Permís de residència, en el cas de persones estrangeres no comunitàries",
+        "Amb cita prèvia presencial: també un document que acredite el domicili de residència"
+      ],
+      "plazo": "Tot l'any. Si es va a demanar prestació o subsidi per desocupació, 15 dies hàbils des de la fi de l'última relació laboral",
+      "nota": "Cita prèvia per a inscriure's: https://sede.gva.es/es/detall-tramit?id_proc=G14988 (demana DNI/NIE, data de naixement, nom, codi postal i mòbil). Si les cites superen el termini de 15 dies per a demanar la prestació, cal anar directament a l'Espai Labora. Tots els servicis de Labora són gratuïts. Comprovat en la seu de la GVA el 18/10/2026."
+    },
+    "alta-padron-valencia": {
+      "huella": "fc7295ee",
+      "titulo": "Empadronar-se o canviar de domicili en el Padró de València",
+      "organismo": "Servei de Padró Municipal",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Residir habitualment a València (arribant d'un altre municipi o de l'estranger) o canviar de domicili dins de la ciutat",
+        "Ser major d'edat o menor emancipat; els menors no emancipats s'inscriuen a través dels seus pares o representants",
+        "Tots els tràmits de padró són gratuïts"
+      ],
+      "pasos": [
+        "En línia: Seu Electrònica, procediment PA.GP.11, 'Iniciar tràmit', identificar-se i signar, emplenar el formulari i adjuntar documents",
+        "Presencial: demanar cita prèvia (web, 010 o 962 081 104) i acudir amb originals a l'Oficina del Padró (Plaça de l'Ajuntament, entrada per Periodista Azzati, 2), a l'Oficina d'Atenció Ciutadana de Tabacalera o a una Junta Municipal",
+        "Seguir la sol·licitud en la Carpeta Ciutadana"
+      ],
+      "documentacion": [
+        "Document d'identitat en vigor (DNI; ciutadans UE: certificat de registre, passaport o document nacional; resta: targeta de residència o passaport)",
+        "Habitatge en propietat: escriptura, nota simple del Registre (3 mesos) o rebut de l'IBI al teu nom",
+        "Habitatge en lloguer: contracte vigent de més de 6 mesos signat per totes les parts i amb referència cadastral, més l'últim rebut o transferència del lloguer (últims 2 mesos)",
+        "Habitatge alié: imprés 'Autorització d'inscripció en un habitatge alié' signat pel titular i còpia del seu document d'identitat",
+        "Menors: llibre de família o certificat de naixement i models segons la custòdia"
+      ],
+      "plazo": "Resolució en un màxim de 3 mesos; el silenci és positiu",
+      "nota": null
+    },
+    "certificado-empadronamiento": {
+      "huella": "36982530",
+      "titulo": "Certificat o volant d'empadronament (València)",
+      "organismo": "Servei de Padró Municipal",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Ser major d'edat i estar empadronat a València",
+        "Tipus: individual, individual històric, familiar (convivència) i d'habitatge",
+        "Gratuït"
+      ],
+      "pasos": [
+        "Immediat: Seu Electrònica amb certificat digital o DNIe (procediment PA.CE.10)",
+        "Sense certificat digital: formulari web de valencia.es; s'envia per correu postal o email després de comprovacions (no és immediat)",
+        "Per telèfon: 010",
+        "Per a baixes, persones difuntes o altres casos: procediment PA.CE.15"
+      ],
+      "documentacion": [
+        "NIF/NIE/passaport del sol·licitant",
+        "Per al familiar: dades de cada persona empadronada en el domicili"
+      ],
+      "plazo": null,
+      "nota": null
+    },
+    "cambio-domicilio-dgt": {
+      "huella": "790fab6d",
+      "titulo": "Canvi de domicili en la DGT (carnet de conduir i vehicles)",
+      "organismo": "Dirección General de Tráfico (DGT)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Comunicar la nova adreça a la DGT en un termini de 15 dies",
+        "Per telèfon, la DGT comprova que el nou domicili coincidix amb el del padró (INE); convé empadronar-se abans",
+        "El domicili fiscal de cada vehicle és un tràmit separat (es pot fer des del mateix servei)",
+        "Gratuït"
+      ],
+      "pasos": [
+        "Empadronar-se en el nou domicili",
+        "En línia amb Cl@ve o certificat en el servei 'Canvi d'adreça' de la seu DGT, o en l'app miDGT (Ajustos > Dades personals > Domicili de notificació)",
+        "Alternatives: telèfon 060, Jefatura Provincial amb cita prèvia, o Punt d'Accés General per a canviar el domicili en diversos organismes alhora",
+        "Canviar també el domicili fiscal dels vehicles"
+      ],
+      "documentacion": [
+        "Identificació amb Cl@ve o certificat digital (en línia)",
+        "Presencial: imprés de sol·licitud (model 03) i document d'identitat"
+      ],
+      "plazo": "15 dies des del canvi de domicili",
+      "nota": null
+    },
+    "renovacion-dni": {
+      "huella": "6f0bb085",
+      "titulo": "Renovar el DNI (cita prèvia)",
+      "organismo": "Policia Nacional (Ministeri de l'Interior)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Es pot renovar en els últims 180 dies de vigència",
+        "Presència física obligatòria, amb cita prèvia",
+        "Si s'ha perdut o robat, presentar abans la denúncia"
+      ],
+      "pasos": [
+        "Demanar cita prèvia en citapreviadnie.es",
+        "Opcional: pagar la taxa en línia i aportar el justificant en demanar la cita (també es pot pagar en l'oficina en efectiu o amb targeta)",
+        "Acudir a l'oficina d'expedició amb la documentació"
+      ],
+      "documentacion": [
+        "DNI actual",
+        "Fotografia recent en color de 32 x 26 mm, fons blanc (no cal si l'oficina té cabina automàtica i no hi ha canvi de dades)",
+        "Si heu canviat de domicili: certificat o volant d'empadronament de menys de 3 mesos (no cal si no us oposau a la consulta electrònica i portau almenys 2 mesos empadronat)",
+        "Si han canviat les vostres dades de filiació: certificat del Registre Civil"
+      ],
+      "plazo": null,
+      "nota": "L'import de la taxa està en la pàgina de taxes de dnielectronico.es."
+    },
+    "vida-laboral": {
+      "huella": "80091234",
+      "titulo": "Obtindre l'informe de vida laboral",
+      "organismo": "Tresoreria General de la Seguretat Social (Import@ss)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Haver estat d'alta en la Seguretat Social en algun moment",
+        "No inclou períodes a l'estranger ni servei militar"
+      ],
+      "pasos": [
+        "Entrar en Import@ss > 'Informe de la seua vida laboral' > 'Consultar vida laboral'",
+        "Identificar-se amb Cl@ve Permanent, Cl@ve Mòbil, DNIe, certificat electrònic o via SMS",
+        "Sense identificació electrònica: opció 'Cap dels anteriors' (dades personals, selfie i foto del document) o 'Rebre informe en el meu domicili'",
+        "Descarregar el PDF (complet o d'un període)"
+      ],
+      "documentacion": [
+        "DNI/NIE i telèfon mòbil o identificació electrònica"
+      ],
+      "plazo": null,
+      "nota": null
+    },
+    "identificacion-digital": {
+      "huella": "ff62ce45",
+      "titulo": "Obtindre identificació digital: registre en Cl@ve o certificat digital FNMT",
+      "organismo": "Cl@ve (Govern d'Espanya) / Fàbrica Nacional de Moneda i Timbre (FNMT)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Cl@ve bàsic: registre en línia amb videoidentificació automàtica o amb carta d'invitació (no val per a tots els tràmits)",
+        "Cl@ve avançat: videoidentificació revisada per un empleat públic, amb certificat/DNIe, o presencial en oficina de registre",
+        "Certificat FNMT: sol·licitud en línia i acreditació d'identitat en oficina (algunes amb cita), per videoidentificació o amb l'app mòbil"
+      ],
+      "pasos": [
+        "Cl@ve: triar mètode de registre en clave.gob.es; en acabar arriba un SMS de benvinguda i es pot usar l'app Cl@ve (Cl@ve Mòbil) o activar Cl@ve Permanent",
+        "Certificat FNMT: 1) configuració prèvia de l'ordinador; 2) sol·licitud en línia (rebeu un codi per correu electrònic); 3) acreditar identitat en una oficina amb eixe codi; 4) descarregar el certificat aprox. una hora després i fer una còpia de seguretat"
+      ],
+      "documentacion": [
+        "DNI/NIE",
+        "Telèfon mòbil",
+        "Codi de sol·licitud (certificat FNMT)"
+      ],
+      "plazo": null,
+      "nota": null
+    },
+    "declaracion-renta": {
+      "huella": "d2c2df8f",
+      "titulo": "Declaració de la renda (IRPF) i esborrany",
+      "organismo": "Agencia Estatal de Administración Tributaria (AEAT)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Identificació amb certificat electrònic, Cl@ve Móvil, número de referència o eIDAS",
+        "En declaració conjunta, també NIF i referència o Cl@ve Móvil del cònjuge",
+        "Els beneficiaris de l'Ingrés Mínim Vital han de presentar declaració"
+      ],
+      "pasos": [
+        "Obtindre el número de referència o usar Cl@ve/certificat",
+        "Accedir al servei de tramitació d'esborrany/declaració (Renta WEB / Renta DIRECTA)",
+        "Revisar les dades fiscals, modificar si cal i presentar",
+        "També per telèfon o de manera presencial amb cita (oficines de l'AEAT i entitats amb conveni)"
+      ],
+      "documentacion": [
+        "NIF",
+        "IBAN per a devolució o domiciliació",
+        "Número de referència o identificació electrònica"
+      ],
+      "plazo": "Campanya de la Renda 2025: del 8 d'abril al 30 de juny de 2026 (domiciliació fins al 25 de juny). A data 17/10/2026 el termini ordinari està tancat; la campanya de 2026 s'obrirà en 2027 (dates no publicades).",
+      "nota": null
+    },
+    "tarjeta-sanitaria-sip": {
+      "huella": "705db292",
+      "titulo": "Alta en el SIP i targeta sanitària (Comunitat Valenciana)",
+      "organismo": "Conselleria de Sanitat",
+      "administracion": "Generalitat Valenciana",
+      "requisitos_clave": [
+        "Residir en la Comunitat Valenciana (empadronament) o ser no resident amb dret a l'assistència del sistema valencià",
+        "L'empadronament es comprova d'ofici llevat d'oposició; si t'hi opous, has de portar el certificat d'empadronament al centre de salut",
+        "Gratuït i obert tot l'any"
+      ],
+      "pasos": [
+        "Sol·licitar l'alta en línia amb certificat digital o Cl@ve en el tràmit telemàtic SIP-ALTA",
+        "Recollir la targeta individual o el document d'inclusió en el centre de salut que et corresponga per domicili",
+        "Dubtes: telèfon 012 (o 963 866 000)"
+      ],
+      "documentacion": [
+        "Dades personals (data de naixement, sexe, nacionalitat) i temps d'estada",
+        "Certificat d'empadronament només si t'hi opous a la consulta d'ofici"
+      ],
+      "plazo": null,
+      "nota": null
+    },
+    "cita-medica-gva": {
+      "huella": "0bb4b918",
+      "titulo": "Demanar cita prèvia en el centre de salut (atenció primària)",
+      "organismo": "Conselleria de Sanitat",
+      "administracion": "Generalitat Valenciana",
+      "requisitos_clave": [
+        "Tindre targeta SIP / estar donat d'alta en el sistema sanitari valencià"
+      ],
+      "pasos": [
+        "Web: secció Cita prèvia del Portal del Pacient",
+        "App GVA +Salut",
+        "Telèfon 012 (o +34 96 386 60 00), de dilluns a divendres de 8 a 19 h",
+        "Consultar i anul·lar cites pendents en el Portal del Pacient"
+      ],
+      "documentacion": [
+        "Número de targeta SIP"
+      ],
+      "plazo": null,
+      "nota": null
+    },
+    "voto-por-correo": {
+      "huella": "ffe921e1",
+      "titulo": "Sol·licitar el vot per correu (Eleccions Generals del 29 de novembre de 2026)",
+      "organismo": "Correus / Oficina del Cens Electoral (INE)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Electors residents a Espanya (i residents a l'estranger que estiguen temporalment a Espanya)",
+        "Una vegada acceptada la sol·licitud, no es pot votar en la mesa electoral",
+        "Tràmit personal; només s'admet representant per malaltia o incapacitat"
+      ],
+      "pasos": [
+        "Sol·licitar-lo en línia en Correus amb DNIe o certificat digital ('SOL·LICITAR VOT'), o en qualsevol oficina de Correus amb document d'identitat",
+        "Rebre la documentació electoral al domicili indicat (del 9 al 22 de novembre)",
+        "Entregar el vot en una oficina de Correus, com a certificat (sense cost), des que es rep la documentació fins al 25 de novembre"
+      ],
+      "documentacion": [
+        "DNI, passaport o permís de conduir en vigor",
+        "En línia: DNIe o certificat digital acceptat",
+        "Si entrega una altra persona el vot: autorització escrita, fotocòpia del document del votant i document de l'autoritzat"
+      ],
+      "plazo": "Sol·licitud del 6 d'octubre al 19 de novembre de 2026; entrega del vot fins al 25 de novembre de 2026",
+      "nota": "Són eleccions a Corts Generals (Congrés i Senat), no autonòmiques. Els residents temporalment a l'estranger tenen termini de sol·licitud del 6 al 31 d'octubre. Qui viu a l'estranger (CERA) no ho sol·licita: rep la documentació d'ofici i vota en el seu consolat del 21 al 26 de novembre o envia el vot per correu al consolat fins al 24 de novembre."
+    },
+    "multa-dgt": {
+      "huella": "4ba0eba9",
+      "titulo": "Pagar una multa de trànsit de la DGT",
+      "organismo": "Direcció General de Trànsit (DGT)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Comprovar qui et multa: DGT, comunitat autònoma o ajuntament (les multes de la Policia Local de València es paguen a l'Ajuntament, no a la DGT)",
+        "Descompte del 50 % si pagues en 20 dies naturals des de l'endemà de la notificació; pagar amb descompte suposa renunciar a al·legar",
+        "La DGT no contempla ajornament ni fraccionament de multes",
+        "Si la multa és ferma i no es paga, passa a l'Agència Tributària amb un recàrrec del 20 %"
+      ],
+      "pasos": [
+        "Tindre a mà el número d'expedient i la data de notificació",
+        "Pagar en línia (amb Cl@ve o sense certificat), en l'aplicació miDGT (Les meues multes > Pendents), per telèfon 060, en CaixaBank o en Correus",
+        "Si vols recórrer, presentar al·legació o recurs en la seu de la DGT (perds el descompte)"
+      ],
+      "documentacion": [
+        "Número d'expedient",
+        "Data de notificació",
+        "Targeta, Bizum o efectiu (només CaixaBank o Correus)"
+      ],
+      "plazo": "20 dies naturals per a pagar amb el 50 % de descompte",
+      "nota": "Al·legacions o recursos: https://sede.dgt.gob.es/es/multas/presentacion-de-alegacion-o-recurso-a-una-multa/"
+    },
+    "ingreso-minimo-vital": {
+      "huella": "b290a688",
+      "titulo": "Ingrés Mínim Vital (IMV)",
+      "organismo": "Institut Nacional de la Seguretat Social (INSS)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Residència legal i efectiva a Espanya de forma continuada durant almenys l'any anterior (amb excepcions, p. ex. víctimes de violència de gènere o tracta)",
+        "Vulnerabilitat econòmica: ingressos mensuals de la llar almenys 10 € per davall de la renda garantida; límit de patrimoni exclòs l'habitatge habitual",
+        "Edat mínima general de 23 anys (excepcions: víctimes de violència de gènere o tracta des de 18, joves extutelats de 18 a 22, pares de menors)",
+        "La unitat de convivència ha d'existir des d'almenys 6 mesos abans"
+      ],
+      "pasos": [
+        "Comprovar amb el simulador en imv.seg-social.es",
+        "Sol·licitar en línia en la seu de la Seguretat Social (hi ha via sense certificat digital)",
+        "Aportar documentació si la Seguretat Social la requerix",
+        "Presentar la declaració de la renda anual una vegada concedit"
+      ],
+      "documentacion": [
+        "DNI/NIE dels membres de la llar",
+        "La que requerisca l'INSS (servei de presentació de documentació acreditativa)"
+      ],
+      "plazo": "Es pot sol·licitar en qualsevol moment",
+      "nota": "Quantia 2026 per a una persona adulta sola: 733,60 €/mes (més en llars amb més membres). Telèfon d'informació: 020."
+    },
+    "complemento-ayuda-infancia": {
+      "huella": "bddbbe33",
+      "titulo": "Complement d'Ajuda per a la Infància (CAPI) de l'IMV",
+      "organismo": "Instituto Nacional de la Seguridad Social (INSS)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Llar amb menors que complisca els requisits generals de l'IMV",
+        "Ingressos inferiors al 300 % de la renda garantida i patrimoni inferior al 150 % dels límits de l'IMV",
+        "Es pot concedir encara que no es tinga dret a l'IMV",
+        "Incompatible amb l'assignació per fill a càrrec sense discapacitat o amb discapacitat inferior al 33 %"
+      ],
+      "pasos": [
+        "Usar el simulador en imv.seg-social.es ('Iniciar sol·licitud'), que indica si podries tindre dret només al complement",
+        "Presentar una sol·licitud d'IMV (servix per a demanar el complement sol o junt amb l'IMV)",
+        "Presentar la declaració de la renda anual"
+      ],
+      "documentacion": [
+        "DNI/NIE dels membres de la llar",
+        "La que requerisca l'INSS"
+      ],
+      "plazo": null,
+      "nota": "Quanties per fill i mes publicades per la Seguretat Social: menors de 3 anys 115 €; de 3 a 6 anys 80,50 €; de 6 a 18 anys 57,50 €. Per a mares treballadores amb fills menors de 3 anys hi ha a més la deducció per maternitat de l'IRPF (AEAT, model 140): https://sede.agenciatributaria.gob.es/Sede/ciudadanos-familias-personas-discapacidad/deducciones-relacionadas-hijos-descendientes/deduccion-maternidad.html"
+    },
+    "renta-valenciana-inclusion": {
+      "huella": "ccb8bb3a",
+      "titulo": "Renda Valenciana d'Inclusió (RVI)",
+      "organismo": "Conselleria de Serveis Socials, Família i Infància (direcció general competent en RVI; els serveis socials municipals informen i fan el diagnòstic)",
+      "administracion": "Generalitat Valenciana",
+      "requisitos_clave": [
+        "Estar empadronat a la Comunitat Valenciana 15 mesos continuats abans de sol·licitar, o 5 anys en els últims 10 (sense mínim per a protecció internacional, víctimes de tracta o explotació sexual i víctimes de violència sobre la dona o intrafamiliar)",
+        "Edat mínima de 23 anys; de 23 a 30, haver viscut de manera independent els 2 anys anteriors (amb excepcions); de 18 a 22, només en supòsits concrets",
+        "No estar d'alta laboral",
+        "Ingressos de la unitat de convivència almenys 10 € per davall de la quantia màxima (793,80 €/mes per a una persona) i sense patrimoni suficient",
+        "Haver sol·licitat abans les prestacions a les quals es tinga dret, inclòs l'Ingrés Mínim Vital",
+        "Situació de vulnerabilitat social acreditada amb el diagnòstic dels serveis socials i signatura de l'acord d'inclusió"
+      ],
+      "pasos": [
+        "Informar-se en els serveis socials municipals del teu barri o en el 012",
+        "Presentar la sol·licitud (amb declaració responsable i acord d'inclusió), preferentment per via telemàtica, o en els serveis socials o en el registre de l'ajuntament",
+        "Els serveis socials emeten el diagnòstic de vulnerabilitat (màxim 1 mes) i la Generalitat resol",
+        "Duració inicial de 6 anys; després, renovació cada 3 anys"
+      ],
+      "documentacion": [
+        "No cal aportar allò que l'Administració puga consultar si ho autoritzes",
+        "La resta, segons indique la fitxa del procediment o els serveis socials"
+      ],
+      "plazo": null,
+      "nota": "La Llei 2/2026 deroga la Llei 19/2017 des del 20/10/2026 i el procediment nou encara no està publicat en la seu de la Generalitat. Mentrestant, pregunta en els serveis socials del teu ajuntament o crida al 012. Qui ja cobra la RVI la manté amb almenys la mateixa quantia. La resolució tarda fins a 5 mesos i, sense resposta, es considera desestimada."
+    },
+    "bono-social-electrico": {
+      "huella": "3a2c6ebc",
+      "titulo": "Bo social elèctric",
+      "organismo": "Ministeri per a la Transició Ecològica / comercialitzadores de referència (informació CNMC)",
+      "administracion": "Estat",
+      "requisitos_clave": [
+        "Persona física, subministrament en l'habitatge habitual, potència contractada de 10 kW o menys",
+        "Tindre o passar a la tarifa PVPC amb una comercialitzadora de referència",
+        "Ser consumidor vulnerable: renda per davall del llindar (1,5 vegades l'IPREM ajustat per membres), família nombrosa, pensionista amb pensió mínima o beneficiari de l'IMV",
+        "Descomptes: 42,5 % (vulnerable), 57,5 % (vulnerable sever); en risc d'exclusió social atés pels serveis socials no es paga la factura i no es pot tallar el subministrament"
+      ],
+      "pasos": [
+        "Contractar el PVPC amb una comercialitzadora de referència (si no es té)",
+        "Demanar el formulari de sol·licitud a la comercialitzadora de referència i enviar-lo amb la documentació (telèfon, correu, email o oficina)",
+        "La comercialitzadora respon en 10 dies hàbils",
+        "Dura 2 anys i es renova automàticament si es mantenen les condicions"
+      ],
+      "documentacion": [
+        "Formulari de sol·licitud",
+        "NIF/NIE del titular i dels membres de la llar",
+        "Certificat d'empadronament (individual o col·lectiu)",
+        "Llibre de família o certificats del Registre Civil",
+        "Títol de família nombrosa o justificant de l'IMV, si escau",
+        "Certificats de circumstàncies especials (discapacitat, violència de gènere, dependència...) si escau"
+      ],
+      "plazo": "Es pot sol·licitar en qualsevol moment; s'aplica des del cicle de facturació en què es rep la sol·licitud completa",
+      "nota": "Els percentatges de descompte són els del Reial Decret llei 7/2026 citats per la CNMC; poden canviar amb noves pròrrogues. No hi ha seu única: se sol·licita a la comercialitzadora de referència (la CNMC llista les 8 amb els seus contactes)."
+    },
+    "bono-alquiler-joven": {
+      "huella": "3028b4f0",
+      "titulo": "Bo de Lloguer Jove (convocatòria 2026, Comunitat Valenciana)",
+      "organismo": "Vicepresidència Primera i Conselleria d'Habitatge, Ocupació, Joventut i Igualtat (Serveis Territorials d'Habitatge)",
+      "administracion": "Generalitat Valenciana",
+      "requisitos_clave": [
+        "Ser major d'edat i tindre fins a 35 anys inclosos en el moment de sol·licitar (tots els titulars del contracte)",
+        "Ser titular, o estar en condicions de firmar, un contracte de lloguer o cessió d'habitatge o habitació a la Comunitat Valenciana, d'almenys un any, com a residència habitual i estar empadronat en ella (no són vàlids subarrendaments, lloguer turístic ni un ús distint de l'habitatge)",
+        "Tindre una font regular d'ingressos i rendes anuals de fins a 3 vegades l'IPREM (4 vegades si conviuen dos joves que poden ser beneficiaris, 5 si són tres o més)",
+        "Lloguer màxim a València ciutat: 900 €/mes (habitatge) o 450 €/mes (habitació)",
+        "No ser propietari d'un habitatge a Espanya ni tindre parentiu de primer o segon grau amb l'arrendador",
+        "Quantia: 250 €/mes durant 24 mensualitats des de gener de 2025 (o des de l'inici del contracte si és posterior); concurrència competitiva per nivell d'ingressos"
+      ],
+      "pasos": [
+        "Comprovar si hi ha convocatòria oberta en la seu de la Generalitat (G110699)",
+        "Presentar la sol·licitud telemàtica amb certificat digital o Cl@ve; sense certificat, omplir el formulari en línia, imprimir el justificant i registrar-lo signat (preferentment en el Servei Territorial d'Habitatge de València, C/ Gregorio Gea, 27, amb cita prèvia)",
+        "Consultar els llistats provisionals en la seu (avís per SMS) i esmenar en 10 dies hàbils si cal",
+        "Justificar després els pagaments del lloguer"
+      ],
+      "documentacion": [
+        "Sol·licitud amb declaració responsable",
+        "Contracte de lloguer o cessió complet i signat, amb referència cadastral (o compromís d'aportar-lo en 2 mesos des de la concessió)",
+        "Acreditació de la font regular d'ingressos (contracte de treball o alta censal)",
+        "Justificants de pagament del lloguer des de l'1 de gener de 2025 (o des de l'inici del contracte)",
+        "Certificat col·lectiu o volant únic d'empadronament",
+        "Imprés de domiciliació bancària si és la primera ajuda de la Generalitat o canvia el compte"
+      ],
+      "plazo": "Convocatòria 2026: del 24 d'agost a l'11 de setembre de 2026 (15 dies hàbils des de l'extracte del DOGV n.º 10434 de 21/08/2026). A 18/10/2026 el termini de sol·licitud està TANCAT; continua oberta l'aportació de documentació per a qui ja va sol·licitar. Resolució en 3 mesos des de la publicació; sense resposta, s'entén desestimada",
+      "nota": "Bases: Resolució de 18/08/2026 (DOGV n.º 10434 de 21/08/2026). Correccions d'errors: DOGV n.º 10440 (31/08/2026) i n.º 10457 (23/09/2026). És compatible amb l'IMV i amb la RVI llevat que la RVI incloga complement de lloguer. Comprovat en la seu i el DOGV el 18/10/2026."
+    },
+    "ayudas-comedor-escolar": {
+      "huella": "1d63b6af",
+      "titulo": "Ajudes de menjador escolar (curs 2026-2027)",
+      "organismo": "Conselleria d'Educació, Cultura i Universitats",
+      "administracion": "Generalitat Valenciana",
+      "requisitos_clave": [
+        "Alumnat de centres públics i concertats de la Comunitat Valenciana",
+        "Ajudes assistencials segons la renda familiar de 2025: límits de 25.293 € (2 membres), 34.332 € (3), 40.773 € (4), 45.572 € (5), 49.196 € (6), 52.780 € (7), 56.348 € (8) i 3.561 € més per cada membre addicional",
+        "No haver presentat la declaració de la renda obligatòria és causa de denegació",
+        "Es puntua per renda per càpita i circumstàncies socials (màxim 20 punts)"
+      ],
+      "pasos": [
+        "Si sol·licitares el curs passat i uses ITACA Web Família: descarregar l'esborrany precarregat, revisar-lo, signar-lo i entregar-lo en el centre",
+        "Si no: demanar l'imprés (annex I) en el centre educatiu i entregar-lo amb la documentació",
+        "Una sol·licitud per centre (si hi ha diversos fills en el mateix col·legi, una sola)"
+      ],
+      "documentacion": [
+        "Document d'identitat",
+        "Documents que acrediten la composició familiar, la renda i les circumstàncies socials"
+      ],
+      "plazo": "Des de l'endemà de la publicació (DOGV, 1 de juliol de 2026) fins al final del període de formalització de matrícula; si canvia de centre, durant la matrícula en el nou. Incorporacions sobrevingudes: 10 dies hàbils des de la matrícula. A 17/10/2026 el termini ordinari està tancat.",
+      "nota": "Import: fins a 4,35 €/dia (Infantil, Primària i ESO), 5,54 € (educació especial). No és un tràmit en línia: s'entrega en el centre."
+    },
+    "xarxa-llibres": {
+      "huella": "86fd0644",
+      "titulo": "Programa Banc de Llibres (curs 2026-2027)",
+      "organismo": "Conselleria d'Educació, Cultura i Universitats",
+      "administracion": "Generalitat Valenciana",
+      "requisitos_clave": [
+        "Alumnat de Primària, Educació Especial, ESO, FP de grau bàsic o Batxillerat matriculat en 2026-2027 en un centre de la Generalitat, concertat o d'una corporació local participant",
+        "Haver tornat el lot complet de llibres del curs 2025-2026 (llevat de qui entra en 1r de Primària; en 1r i 2n de Primària el centre pot eximir per ser material no reutilitzable)",
+        "Només ho demanen els qui no van participar en 2025-2026: qui ja participava continua dins llevat de renúncia",
+        "L'alumnat de centres singulars o específics d'Educació Especial participa d'ofici",
+        "Compromís d'ús responsable i de tornar-ho tot al final del curs; si falta material, cal reposar-lo"
+      ],
+      "pasos": [
+        "Descarregar el formulari de sol·licitud de participació (web de la Conselleria o fitxa G112587 de la seu)",
+        "Omplir-lo, signar-lo i entregar-lo en el centre escolar (en el centre del curs 2025-2026; qui entra en 1r de Primària, en el de 2026-2027)",
+        "Seguir les instruccions del centre per a recollir i tornar els lots"
+      ],
+      "documentacion": [
+        "Formulari de sol·licitud de participació signat per la persona responsable legal de l'alumne",
+        "Lot complet de llibres del curs anterior tornat en el centre"
+      ],
+      "plazo": "Des del 18 de juny fins al 10 de novembre de 2026, inclòs (Resolució d'11 de juny de 2026, DOGV n.º 10386 de 17/06/2026). A 18/10/2026 el termini està OBERT",
+      "nota": "No és un tràmit en línia: s'entrega en el centre. La seu i la Conselleria ho anomenen «Programa Banc de Llibres»."
+    },
+    "CU.US.10": {
+      "huella": "6984d60e",
+      "titulo": "Sol·licitar l'ús de les sales d'exposicions de les Juntes Municipals",
+      "organismo": "Juntes Municipals de Districte",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Poden sol·licitar-ho les persones que acrediten interés a fer ús de les Sales d'Exposicions.",
+        "Ha d'acreditar-se que l'activitat puga resultar d'interés general.",
+        "El control i la vigilància i la neteja diària i final van a càrrec de les persones o entitat autoritzades, que responen dels deterioraments i han de deixar la sala com estava.",
+        "Les publicacions i catàlegs van a càrrec de l'interessat i han de mencionar la col·laboració de l'Ajuntament i la Junta; les despeses de l'acte són de qui exposa."
+      ],
+      "pasos": [
+        "Es recomana consultar prèviament la data amb la Junta de Districte corresponent.",
+        "Demanar cita prèvia per a l'atenció presencial en les Juntes de Districte per la web municipal o el telèfon 010; en Pobles, pels telèfons indicats.",
+        "Presentar la instància de sol·licitud o el formulari en línia amb firma digital.",
+        "Adjuntar la documentació indicada i, si és possible, una mostra de l'obra artística.",
+        "Presentar i signar la sol·licitud.",
+        "Imprimir i guardar el justificant; consultar o aportar documentació en Carpeta Ciutadana."
+      ],
+      "documentacion": [
+        "Instància de sol·licitud per a la utilització de les sales d'exposicions de les Juntes Municipals, indicant l'objecte de l'exposició i les dates previstes.",
+        "A ser possible, una mostra de l'obra artística que es pretén exposar.",
+        "En línia: formulari de sol·licitud."
+      ],
+      "plazo": "Com a mínim un mes abans de la data que es demana; convé consultar abans la data amb la Junta de Districte. Si no hi ha resposta, s'entén denegada (silenci desestimatori). La fitxa de la seu dona dos terminis de resolució diferents: 3 mesos i «no aplica».",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22. La fitxa de la seu dona dos terminis màxims de resolució diferents (3 mesos i «no aplica»)."
+    },
+    "LA.AC.65": {
+      "huella": "c83fba41",
+      "titulo": "Declaració responsable d'obres d'habilitació o reforma per a comerç o activitat innòcua",
+      "organismo": "Ajuntament de València",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Poden presentar-ho la persona interessada o el seu representant legal.",
+        "Obres per a implantar activitats innòcues que complisquen totes les condicions de l'Annex III de la Ley 6/2014 i no estiguen sotmeses a autorització ambiental integrada, llicència ambiental o declaració responsable ambiental.",
+        "Obres per a activitats comercials minoristes incloses en l'annex de la Ley 12/2012, realitzades en establiments permanents i amb superfície útil d'exposició i venda al públic no superior a 750 metres quadrats.",
+        "En activitats innòcues és preceptiu l'informe urbanístic municipal previ de compatibilitat.",
+        "En activitats comercials minoristes no és preceptiu l'informe urbanístic municipal previ de compatibilitat.",
+        "Si l'activitat requereix autorització o comunicació sectorial, el titular ha d'acreditar haver complit abans la tramitació sectorial.",
+        "Cost: taxa d'actuacions urbanístiques segons el pressupost de l'obra (140,90 € fins a 6.010,12 €; més en trams superiors) i Impost de Construccions, Instal·lacions i Obres (ICIO) del 4% del pressupost d'execució material."
+      ],
+      "pasos": [
+        "Ingressar la taxa per actuacions urbanístiques amb caràcter previ a la declaració responsable i l'Impost sobre Construccions, Instal·lacions i Obres.",
+        "Presentar la comunicació d'activitat innòcua i la declaració responsable d'obres tipus II amb la documentació indicada.",
+        "Si es fa en seu electrònica, identificar-se i signar electrònicament, emplenar el formulari, adjuntar la documentació i presentar i signar la sol·licitud.",
+        "Una vegada finalitzades les obres, aportar el certificat de compliment de normativa emés per tècnic competent.",
+        "Per a l'inici de l'activitat, presentar el model normalitzat de comunicació d'activitat innòcua o declaració responsable per al títol habilitant en normativa de comerç.",
+        "Guardar el justificant de presentació i, si escau, consultar o aportar documentació en la Carpeta Ciutadana."
+      ],
+      "documentacion": [
+        "Model de declaració responsable emplenat per la persona interessada o representant legal, juntament amb la documentació indicada.",
+        "Autoliquidació i justificant de pagament de la taxa d'actuacions urbanístiques i autoliquidació i justificant de pagament de l'Impost de Construccions, Instal·lacions i Obres (ICIO).",
+        "Memòria tècnica de les obres subscrita per tècnic/a competent; en el cas d'habilitació de local, memòria tècnica de l'activitat amb documentació gràfica.",
+        "Pressupost desglossat i total amb detall de l'IVA i plànols definitoris de l'actuació, de l'estat actual i del reformat.",
+        "Estudi bàsic de seguretat i salut i estudis de gestió de residus i demolició; declaració responsable de personal tècnic competent si no s'aporta documentació visada.",
+        "Certificat de compliment de normativa emés per tècnic competent una vegada finalitzades les obres; model normalitzat de comunicació d'activitat innòcua o declaració responsable per a l'inici de l'activitat."
+      ],
+      "plazo": "Se sol·licita en qualsevol moment previ a l'execució de l'obra i inici de l'activitat subjecta a comunicació o declaració responsable; termini màxim de resolució: no aplica.",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "LA.AI.10": {
+      "huella": "ea0862f8",
+      "titulo": "Canviar de titular una activitat innòcua amb llicència o comunicació a València",
+      "organismo": "Ajuntament de València",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "L'establiment ha de comptar amb llicència d'obertura d'activitat innòcua (peticions anteriors a l'11 d'agost de 2006) o comunicació d'activitat innòcua amb acusament de recepció.",
+        "L'activitat ha de ser de caràcter comercial, industrial o de serveis.",
+        "Poden sol·licitar-ho persones físiques, jurídiques, comunitats de béns i altres entitats sense personalitat jurídica interessades a exercir l'activitat.",
+        "La nova persona titular passa a ser titular d'un establiment que ja compta amb la preceptiva llicència."
+      ],
+      "pasos": [
+        "Sol·licitar cita prèvia per a l'atenció presencial en les Juntes de Districte per la web municipal o telefonant al 010.",
+        "En les Juntes municipals de Pobles, sol·licitar cita telefonant als telèfons indicats.",
+        "Presentar la sol·licitud presencialment o iniciar la sol·licitud en línia en la Seu Electrònica amb firma digital.",
+        "Emplenar el formulari.",
+        "Adjuntar la documentació indicada.",
+        "Presentar i signar la sol·licitud i guardar o imprimir el justificant."
+      ],
+      "documentacion": [
+        "Imprés de sol·licitud degudament emplenat, amb identificació clara del sol·licitant i de l'emplaçament de l'activitat, indicant la referència cadastral.",
+        "Si el sol·licitant o el cedent és una societat: escriptura de constitució i escriptura de poders que acredite la representació de qui signa la instància.",
+        "Si el sol·licitant o el cedent és una comunitat de béns: contracte de constitució; si és el sol·licitant, han de subscriure la instància tots els comuners o qui ostente la seua representació legal.",
+        "Document de cessió de drets sobre l'activitat, subscrit per l'anterior titular i pel nou titular.",
+        "Còpia de la llicència d'obertura o document de presa en consideració de la comunicació d'activitat objecte de cessió, o indicar el número d'expedient.",
+        "En cas de defunció de l'anterior titular: testament, escriptura de partició d'herència i renúncia de les altres persones hereues a favor de la nova titular; o certificat de defunció, certificat d'Últimes Voluntats, declaració judicial o notarial de les persones hereues i renúncia."
+      ],
+      "plazo": "Se sol·licita com a mínim un mes abans de passar a exercir l'activitat la nova persona titular; el termini màxim de resolució és de 3 mesos.",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "LA.AI.90": {
+      "huella": "2c19bf1b",
+      "titulo": "Denunciar molèsties d'aire condicionat en locals comercials i oficines",
+      "organismo": "Ajuntament de València",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Poden sol·licitar-ho persones físiques, jurídiques, comunitats de béns, comunitats de persones propietàries i altres entitats sense personalitat jurídica que es vegen afectades.",
+        "Ha de tractar-se de mal funcionament d'aparells d'aire condicionat col·locats en locals comercials o oficines subjectes al règim de comunicació ambiental en el terme municipal de València.",
+        "Les molèsties han de ser indegudes i produir-se pel funcionament d'algun aparell d'aire condicionat en un local subjecte al règim d'activitat innòcua.",
+        "Es pot denunciar si l'aparell supera els nivells de soroll, produeix vibracions, aboca aire calent o fred o goteja al carrer, o si la unitat exterior està en un pati interior o en façana sense permís, sobresurt més de 40 cm de la façana o està a menys de 3 metres de la vorera."
+      ],
+      "pasos": [
+        "Sol·licitar cita prèvia si el tràmit es farà presencialment en una Junta de Districte.",
+        "Iniciar la sol·licitud en línia prement \"Iniciar tràmit\" i identificar-se i signar electrònicament.",
+        "Tindre preparada la documentació que calga adjuntar.",
+        "Emplenar el formulari.",
+        "Adjuntar, si escau, la documentació indicada.",
+        "Presentar i signar la sol·licitud; es podrà imprimir i guardar el justificant."
+      ],
+      "documentacion": [
+        "Instància de sol·licitud d'inspecció d'aparells d'aire o formulari de sol·licitud d'inspecció d'aparells d'aire en línia.",
+        "Identificació clara de la persona sol·licitant i de l'immoble objecte de denúncia, així com de l'activitat que s'està exercint.",
+        "Si la denunciant és una societat: escriptura de constitució de la societat i escriptura de poders de representació.",
+        "Si la denunciant és una Comunitat de Béns: contracte constitutiu de la Comunitat de Béns; la instància la subscriuen tots els membres o qui acredite la seua representació.",
+        "Si s'actua en representació d'una persona física distinta del/de la sol·licitant: poders de representació."
+      ],
+      "plazo": "Se presenta des que es produïxen les molèsties. La fitxa de la seu dona dos terminis de resolució diferents: 3 mesos i «no s'aplica».",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22. La fitxa de la seu dona dos terminis màxims de resolució diferents (3 mesos i «no s'aplica»)."
+    },
+    "LA.AS.10": {
+      "huella": "84c2d55b",
+      "titulo": "Comunicar una activitat innòcua per a obrir un establiment a València",
+      "organismo": "Ajuntament de València",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Pot sol·licitar-ho tota persona física, jurídica, comunitat de béns i altres entitats sense personalitat jurídica interessada en l'obertura d'un establiment per a activitats subjectes a comunicació d'activitat innòcua a València.",
+        "L'activitat no ha de ser susceptible d'afectar la seguretat ni de produir efectes negatius sobre la salut o el medi ambient.",
+        "L'activitat no ha d'estar sotmesa a autorització ambiental integrada, llicència ambiental o declaració responsable ambiental, conforme a la Ley 6/2014.",
+        "És preceptiu l'informe urbanístic municipal previ de compatibilitat; el procediment és consecutiu i la comunicació ha d'anar precedida de la seua sol·licitud.",
+        "Si l'activitat requereix autorització o comunicació sectorial, el titular ha d'acreditar haver complimentat abans eixa tramitació sectorial.",
+        "Si es requereixen obres subjectes a declaració responsable, s'ha de presentar amb caràcter previ la declaració responsable d'obres d'habilitació o reforma per a activitat de comerç o activitat innòcua.",
+        "No serveix per a activitats d'espectacles públics, recreatives o establiments públics (Ley 14/2010)."
+      ],
+      "pasos": [
+        "Sol·licitar l'informe urbanístic municipal de compatibilitat; ha d'emetre's en el termini d'un mes des de la seua sol·licitud.",
+        "Si l'informe no s'emet en eixe termini, presentar la comunicació indicant la data en què es va sol·licitar.",
+        "Si correspon, acreditar abans la tramitació sectorial i presentar prèviament la declaració responsable d'obres.",
+        "Presentar la comunicació d'activitat innòcua acompanyada de la documentació indicada.",
+        "En la seu electrònica, emplenar el formulari, adjuntar la documentació, revisar les dades, signar i presentar la sol·licitud.",
+        "Una vegada presentada, es podrà iniciar l'activitat, sense perjuí de les facultats de comprovació, control i inspecció."
+      ],
+      "documentacion": [
+        "Certificat de compliment de normativa emés per tècnica/o competent en què conste que l'activitat s'ajusta a la normativa vigent que li siga d'aplicació.",
+        "Certificat de compatibilitat urbanística favorable o justificant de la seua sol·licitud amb més d'un mes d'antelació, llevat que la verificació la realitze una OCA o entitat col·laboradora inscrita en el registre de la Generalitat.",
+        "Declaració responsable que es disposa de l'autorització preceptiva per la normativa sectorial per a l'exercici de l'activitat.",
+        "Memòria tècnica de l'activitat subscrita per tècnic/a competent, amb descripció del local, les instal·lacions i l'activitat.",
+        "En cas de no aportar-se la documentació visada, declaració responsable de personal tècnic competent.",
+        "Requeriments de la instal·lació respecte dels serveis públics essencials."
+      ],
+      "plazo": "Se sol·licita en qualsevol moment previ a l'inici de l'activitat; l'informe urbanístic de compatibilitat ha d'emetre's en el termini d'un mes des de la seua sol·licitud i el termini màxim de resolució no s'aplica.",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "LA.OT.10": {
+      "huella": "7d3f9387",
+      "titulo": "Certificat sobre si un local té o ha tingut activitat: antecedents, cessament o no activitat",
+      "organismo": "Ajuntament de València",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Hi ha tres certificats: d'antecedents d'una activitat, de cessament d'activitat (es demana sobretot per a Hisenda) i de no existència d'activitat (per a donar d'alta la llum o l'aigua en el local).",
+        "Poden sol·licitar-ho persones físiques, jurídiques, comunitats de béns, de propietaris i altres entitats sense personalitat jurídica interessades.",
+        "La sol·licitud d'antecedents o de cessament ha d'expressar clarament les dades de l'immoble i de l'anterior titular."
+      ],
+      "pasos": [
+        "Sol·licitar cita prèvia si es farà el tràmit presencialment en Juntes de Districte.",
+        "Iniciar la sol·licitud en línia amb signatura digital.",
+        "Identificar-se i signar electrònicament segons els sistemes de signatura de la Seu Electrònica.",
+        "Preparar la documentació que calga adjuntar.",
+        "Emplenar el formulari i adjuntar la documentació indicada.",
+        "Presentar i signar la sol·licitud i imprimir o guardar el justificant."
+      ],
+      "documentacion": [
+        "Instància de sol·licitud general per a demanar el certificat d'antecedents d'existència d'activitat.",
+        "Còpia del poder i exhibició de l'original per a coteig si se sol·licita en nom de persona jurídica o d'interessat distint del sol·licitant.",
+        "Fotocòpia de l'escriptura de constitució i dels poders de representació si el sol·licitant és una societat.",
+        "Còpia del contracte constitutiu de la comunitat de béns i signatura de tots els comuners o de qui acredite la seua representació.",
+        "Per al cessament d'activitat, la mateixa documentació del cas d'antecedents d'existència d'activitat.",
+        "Per a la no existència d'activitat, instància de sol·licitud de no exercir cap activitat i còpia del butlletí d'instal·lació per a la companyia subministradora."
+      ],
+      "plazo": "Es pot demanar en qualsevol moment. La fitxa de la seu dona dos terminis de resolució diferents: 3 mesos i «no s'aplica».",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22. La fitxa de la seu dona dos terminis màxims de resolució diferents (3 mesos i «no s'aplica»)."
+    },
+    "PC.AE.10": {
+      "huella": "8f0ff3c5",
+      "titulo": "Inscriure una associació en el Registre Municipal d'Entitats de València",
+      "organismo": "Servei de Descentralització",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Poden inscriure's les entitats l'objecte de les quals siga la defensa, el foment o la millora dels interessos generals o sectorials del veïnat del municipi.",
+        "En particular, associacions veïnals de barri o districte, de pares i mares d'alumnes, culturals, esportives, recreatives, juvenils, empresarials, professionals i similars.",
+        "Que no tinguen ànim de lucre.",
+        "Que els seus Estatuts contemplen un funcionament democràtic.",
+        "Que el seu domicili social es trobe a la Ciutat de València.",
+        "Estar inscrites en el Registre General d'Associacions de la Comunitat Valenciana o altres registres públics."
+      ],
+      "pasos": [
+        "Iniciar el tràmit en línia en la Seu Electrònica amb firma digital.",
+        "Identificar-se i firmar electrònicament segons els sistemes de firma de la Seu.",
+        "Tindre preparada la documentació que calga adjuntar.",
+        "Emplenar el formulari.",
+        "Adjuntar, si escau, la documentació indicada.",
+        "Presentar i firmar la sol·licitud."
+      ],
+      "documentacion": [
+        "Certificat d'inscripció en el Registre General d'Associacions de la Comunitat Valenciana o altres registres públics.",
+        "Certificat de la Secretària de l'Entitat amb la relació nominal de les persones que constitueixen la Junta Directiva.",
+        "Certificat de la Secretària de l'Entitat on conste el domicili social de l'Associació a la ciutat de València o còpia del CIF.",
+        "Estatuts de l'associació."
+      ],
+      "plazo": "En qualsevol moment, després d'inscriure's en el registre autonòmic i abans de demanar subvencions o ús de béns municipals. Termini màxim de resolució: 3 mesos; si no hi ha resposta, s'entén concedida (silenci estimatori).",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "PC.AE.40": {
+      "huella": "7ac2e552",
+      "titulo": "Actualitzar les dades d'una entitat en el Registre Municipal d'Entitats de València",
+      "organismo": "Servei de Descentralització",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Estar inscrites en el Registre Municipal d'Entitats.",
+        "Poden sol·licitar-ho les entitats inscrites en el RMEC o la persona física o jurídica representant en nom de l'entitat.",
+        "S'ha de realitzar en línia amb firma digital."
+      ],
+      "pasos": [
+        "Iniciar el tràmit en línia amb firma digital.",
+        "Preparar la documentació que calga adjuntar.",
+        "Emplenar el formulari.",
+        "Adjuntar, si escau, la documentació indicada.",
+        "Presentar i firmar la sol·licitud.",
+        "Imprimir i guardar un justificant de presentació."
+      ],
+      "documentacion": [
+        "Estatuts modificats (si és el cas).",
+        "Còpia de l'acta acreditativa de la modificació.",
+        "Certificat de la secretaria de l'entitat en el qual consten les dades objecte de la modificació.",
+        "Annex 1. Noves dades de l'entitat de la sol·licitud d'actualització de dades en el registre municipal d'entitats."
+      ],
+      "plazo": "Dins del mes següent al canvi de dades. Termini màxim de resolució: 3 mesos; si no hi ha resposta, s'entén concedida (silenci estimatori).",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "PC.AE.50": {
+      "huella": "700000e8",
+      "titulo": "Comunicar cada any les dades d'una entitat al Registre Municipal d'Entitats",
+      "organismo": "Servei de Descentralització",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Estar inscrites en el Registre Municipal d'Entitats.",
+        "Estan obligades a presentar la comunicació anual totes les entitats inscrites en el Registre Municipal d'Entitats.",
+        "S'ha de realitzar en línia amb firma digital.",
+        "Si no es presenta, l'entitat pot ser donada de baixa en el Registre."
+      ],
+      "pasos": [
+        "Iniciar el tràmit en la Seu Electrònica.",
+        "Identificar-se i firmar electrònicament.",
+        "Tindre preparada la documentació que calga adjuntar.",
+        "Emplenar el formulari.",
+        "Adjuntar la documentació indicada.",
+        "Presentar i firmar la sol·licitud i guardar el justificant."
+      ],
+      "documentacion": [
+        "Còpia del pressupost anual.",
+        "Programa anual d'activitats.",
+        "Certificat de la secretaria de l'entitat en el qual consta el nombre de persones associades."
+      ],
+      "plazo": "Entre el mes d'octubre i gener de cada exercici econòmic; termini màxim de resolució: No s'aplica; silenci administratiu: No procedeix.",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "PC.OT.20": {
+      "huella": "016d34ee",
+      "titulo": "Obtindre un certificat de fe de vida a València",
+      "organismo": "Juntes Municipals de Districte i Servici de Descentralització i Participació Ciutadana",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Persones que cobren una pensió de jubilació/viduvetat d'un país membre de la UE o a l'estranger.",
+        "Ser residents a València.",
+        "Se'ls requerix acreditar, des del país pagador de la pensió, que estan vives.",
+        "És requisit indispensable que es persone la persona interessada.",
+        "No es certifica l'estat civil; en el seu cas, es remet al Registre Civil o al Consolat corresponent."
+      ],
+      "pasos": [
+        "Sol·licitar cita prèvia per la web municipal o telefonant al 010; en les Juntes municipals de Pobles, pels telèfons indicats.",
+        "Acudir a les Juntes Municipals de Districte amb el DNI o NIE en vigor i els documents que haja de complimentar el personal funcionari competent.",
+        "Presentar l'ofici/carta del país pagador de la pensió perquè l'emplene el personal funcionari competent.",
+        "Si no està el secretari/a de la Junta, acudir al Servici de Descentralització i Participació Ciutadana."
+      ],
+      "documentacion": [
+        "D.N.I. o N.I.E. en vigor.",
+        "Ofici/carta del país pagador de la pensió per a emplenar pel personal funcionari competent."
+      ],
+      "plazo": "No hi ha termini per a sol·licitar-lo; el termini màxim de resolució no s'aplica i el silenci administratiu no procedix.",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "TR.OT.15": {
+      "huella": "ed879a88",
+      "titulo": "Demanar el Bo Oro de l'autobús urbà de València",
+      "organismo": "Empresa Municipal de Transports (EMT) i Juntes Municipals de l'Ajuntament de València",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Persones majors de 65 anys amb residència legal a Espanya i empadronades com a mínim des dels sis mesos anteriors a la sol·licitud a la ciutat de València.",
+        "Persones menors de 65 anys perceptores de pensió per jubilació, viduvetat, orfandat o incapacitat permanent, amb residència legal a Espanya i empadronades com a mínim des dels sis mesos anteriors a la sol·licitud en el terme municipal de València.",
+        "Persones menors de 65 anys amb discapacitat reconeguda del 65% o superior, amb residència legal a Espanya i empadronades com a mínim des dels sis mesos anteriors a la sol·licitud en el terme municipal de València.",
+        "Les pensions han de ser atorgades per la Seguretat Social espanyola; les similars d'altres Estats no donen dret.",
+        "Cost: 3,00 € pel carnet (una sola vegada) més l'Abonament Anual, que es paga per trimestres fins al 31 de desembre: 20,00 € en el 1r trimestre, 15,00 € en el 2n, 10,00 € en el 3r i 5,00 € en el 4t. Duplicat: 5,00 €."
+      ],
+      "pasos": [
+        "Sol·licitar cita prèvia per la web municipal o telefonant al telèfon 010; en Juntes de Districte de Pobles, pels telèfons indicats.",
+        "Personar-se en la Junta Municipal corresponent, una vegada constatat que es reunixen els requisits, per a l'entrega en el mateix moment del Bo Oro.",
+        "Abonar l'import de 3,00 € i satisfer l'import de l'Abonament Anual en les oficines d'Atenció al Client d'EMT i en els punts de venda autoritzats.",
+        "Per a activar el Bo Oro, a partir de la data que s'indique cada any, exhibir el nou carnet i el DNI i abonar l'abonament anual en les oficines d'EMT i punts de venda autoritzats.",
+        "En cas de pèrdua, robatori o deteriorament, personar-se en l'Oficina Central d'Atenció al Client d'EMT, C/ Mendoza 5, per a sol·licitar duplicat amb la còpia del DNI, NIE o Passaport.",
+        "Abonar 5,00 € pel duplicat; s'activarà el Bo Anual vigent fins al 31 de desembre sense cap cost per a la persona titular."
+      ],
+      "documentacion": [
+        "DNI o NIE o passaport en vigor.",
+        "Certificat oficial original i actualitzat de la pensió que es percep, en el cas de menors de 65 anys perceptors de pensió.",
+        "Certificat oficial original i actualitzat del grau de discapacitat, en el cas de persones amb discapacitat igual o superior al 65%.",
+        "Còpia del DNI, NIE o passaport per a sol·licitar duplicat en cas de pèrdua, robatori o deteriorament."
+      ],
+      "plazo": "La primera sol·licitud o renovació es demana des que es complisquen els requisits i l'activació a partir de la data que s'indique cada any; el termini màxim de resolució és de 3 mesos i el silenci administratiu és estimatori.",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "TR.OT.60": {
+      "huella": "93f1fb4d",
+      "titulo": "Traure el carnet i abonament anual EMT ambTU per a viatjar en autobús urbà de València",
+      "organismo": "EMT València (Empresa Municipal de Transports) i les Juntes Municipals de Districte de l'Ajuntament de València",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Estar en edat laboral, és a dir, tindre entre 16 i 65 anys.",
+        "Tindre residència legal a Espanya i estar empadronat en el terme municipal de València com a mínim des dels sis mesos anteriors a la sol·licitud.",
+        "No superar els límits de renda familiar: ingressos totals inferiors a l'IPREM vigent.",
+        "En el cas de famílies es computen els ingressos d'ambdós cònjuges i a l'IPREM se li suma el coeficient 0,5 pel cònjuge i 0,3 per cada fill o filla menor de 16 anys.",
+        "Dones que acrediten ser víctimes de violència de gènere i els seus fills i filles menors, amb independència de la seua situació laboral, recursos econòmics, situació administrativa o període d'empadronament.",
+        "Persones d'entre 14 i 16 anys el pare o la mare de les quals ja tinga el carnet EMT ambTU.",
+        "Persones empadronades com a mínim des dels sis mesos anteriors en les pedanies del Sud de València, amb independència de la seua situació laboral i recursos econòmics.",
+        "Cost: 3 € d'activació del carnet (una sola vegada) més l'Abonament Anual; duplicat, 5 €. La fitxa fixa l'Abonament Anual en 10 € «per a l'any 2025»."
+      ],
+      "pasos": [
+        "Sol·licitar cita prèvia en la web municipal o telefonant al telèfon 010; en Pobles del Sud, Pobles del Nord i Pobles de Benimàmet i Beniferri es demana pels seus telèfons propis.",
+        "Personar-se en la Junta Municipal corresponent una vegada constatat que es reunixen els requisits, on s'entrega el carnet EMT ambTU en el mateix moment.",
+        "Abonar l'import de 3 € per una sola vegada, llevat de l'expedició de duplicats.",
+        "Satisfer l'Abonament Anual en les oficines d'Atenció al Client d'EMT i en els punts de venda autoritzats, exhibint el nou carnet i el DNI, NIE o passaport.",
+        "En cas de pèrdua, personar-se en l'Oficina Central d'Atenció al Client d'EMT València (c/ Mendoza, 5) i sol·licitar el duplicat amb còpia del DNI o NIE, abonant l'import corresponent."
+      ],
+      "documentacion": [
+        "Formulari de sol·licitud degudament complimentat i signat.",
+        "DNI, NIE o Passaport en vigor (original i fotocòpia de l'anvers i el revers).",
+        "Certificat de renda o certificat de no tindre l'obligació de presentar-la emés per l'Agència Tributària (original); si hi ha cònjuge, d'ambdós.",
+        "En cas de divorci, certificat o sentència judicial que acredite eixa situació; si la declaració és conjunta, certificat de renda individual de la persona sol·licitant.",
+        "Per a descendents d'entre 14 i 16 anys el progenitor dels quals siga beneficiari: el seu DNI i llibre de família.",
+        "Per a persones majors de 16 anys que convisquen amb son pare i/o sa mare: certificat de renda del pare, de la mare o d'ambdós."
+      ],
+      "plazo": "La primera sol·licitud o renovació es demana des que es complisquen els requisits en la Junta Municipal corresponent; el carnet s'activa a partir de la data que s'indique cada any, i el termini màxim de resolució és de 3 mesos.",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22. Sense verificar: La fitxa de la seu mescla 2025 i 2026: cita la normativa de 2026 però fixa l'Abonament Anual (10 €) i la vigència per a 2025. Confirmar l'import en la seu."
+    },
+    "UR.LC.135": {
+      "huella": "dcfd0f58",
+      "titulo": "Declarar obres de reforma o rehabilitació de façanes, cobertes i mitgeres en edificis no protegits",
+      "organismo": "Ajuntament de València",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Declaracions responsables d'obres de mera reforma que no suposen alteració estructural de l'edifici ni afecten elements catalogats o en tràmit de catalogació, i les de manteniment de l'edificació.",
+        "Declaracions responsables en edificis no catalogats situats en àmbits patrimonialment protegits sense transcendència patrimonial.",
+        "Declaracions responsables per a reforma o rehabilitació d'una façana d'edificis no catalogats.",
+        "Pot sol·licitar-ho la persona interessada o el seu representant, acreditant la representació.",
+        "No s'admet pròrroga excepte paralització per força major o justa causa; l'ocupació temporal per a bastides requereix llicència o resolució d'ocupació del domini públic.",
+        "Cost: taxa d'actuacions urbanístiques segons el pressupost de l'obra (140,90 € fins a 6.010,12 €; més en trams superiors) i Impost de Construccions, Instal·lacions i Obres (ICIO) del 4% del pressupost d'execució material."
+      ],
+      "pasos": [
+        "Ingressar la taxa per actuacions urbanístiques amb caràcter previ a la presentació de la declaració responsable.",
+        "Presentar la sol·licitud de declaració responsable degudament emplenada amb la documentació assenyalada.",
+        "Ingressar l'Impost sobre Construccions, Instal·lacions i Obres en el termini d'un mes des de la notificació de la llicència.",
+        "Si es fa en línia, punxar «Iniciar tràmit», identificar-se i firmar electrònicament, emplenar el formulari i adjuntar la documentació.",
+        "Confirmar les dades, firmar i presentar la sol·licitud.",
+        "Per a tràmits presencials en Juntes de Districte, sol·licitar cita prèvia per la web municipal o telefonant al telèfon 010; en Juntes de Pobles, pels telèfons indicats."
+      ],
+      "documentacion": [
+        "Imprés de Declaració responsable degudament emplenat, amb identificació clara del sol·licitant i de l'emplaçament de les obres i referència cadastral.",
+        "Document que acredite la representació en cas que el sol·licitant siga distint de la persona interessada.",
+        "Autoliquidació i justificant de pagament de la taxa d'actuacions urbanístiques.",
+        "Autoliquidació i justificant de pagament de l'Impost de Construccions, Instal·lacions i Obres (ICIO).",
+        "Memòria tècnica, pressupost desglossat i total amb detall de l'IVA, estudi bàsic de seguretat i salut, estudi de gestió de residus i documentació tècnica dels mitjans auxiliars.",
+        "Plànols de planta i secció de la ubicació en via pública, si hi ha ocupació, i nomenament del Director/a Tècnic/a signat digitalment; si no s'aporta documentació visada, declaració responsable de personal tècnic competent."
+      ],
+      "plazo": "La declaració responsable pot iniciar-se de manera immediata si es presenta tota la documentació necessària; el termini màxim de resolució és de 3 mesos i l'ICIO es paga en el termini d'un mes des de la notificació de la llicència.",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "UR.LC.140": {
+      "huella": "933536d0",
+      "titulo": "Declaració responsable per a obres de manteniment o reforma en habitatge o element comú (edifici no catalogat)",
+      "organismo": "Ajuntament de València",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Poden ser obres que afecten l'estructura sense substituir o reposar elements estructurals principals, l'aspecte exterior i interior, o de mera reforma sense alteració estructural ni afecció a elements catalogats, així com obres de manteniment i en edificis no catalogats en àmbits patrimonialment protegits sense transcendència patrimonial.",
+        "Les persones físiques poden triar mitjans electrònics o presencials; els subjectes obligats han de relacionar-se per la seu electrònica.",
+        "Es presenta sempre abans de començar les obres.",
+        "Cost: taxa d'actuacions urbanístiques segons el pressupost de l'obra (140,90 € fins a 6.010,12 €; més en trams superiors) i Impost de Construccions, Instal·lacions i Obres (ICIO) del 4% del pressupost d'execució material, tots dos abans de presentar la declaració."
+      ],
+      "pasos": [
+        "Ingressar la taxa per actuacions urbanístiques abans de presentar la declaració responsable.",
+        "Ingressar l'Impost sobre Construccions, Instal·lacions i Obres abans de presentar la declaració responsable.",
+        "Presentar la declaració responsable d'obres emplenada amb la documentació assenyalada.",
+        "Si es fa en seu electrònica, emplenar el formulari i adjuntar la documentació requerida.",
+        "Revisar les dades, firmar i presentar la sol·licitud.",
+        "Consultar i descarregar una còpia en Carpeta Ciutadana o aportar documentació addicional o la requerida."
+      ],
+      "documentacion": [
+        "Obres de manteniment d'habitatge, elements comuns, façana o coberta sense risc de caiguda de més de 2 metres: memòria descriptiva detallada de les obres.",
+        "Model de Declaració responsable emplenat per la persona interessada o representant legal (si és presencial) o formulari de la seu electrònica.",
+        "Autoliquidació i justificant de pagament de la taxa d'actuacions urbanístiques.",
+        "Autoliquidació i justificant de pagament de l'Impost de Construccions, Instal·lacions i Obres (ICIO).",
+        "Memòria descriptiva detallada de les obres a realitzar i pressupost desglossat i total, indicant detall de l'IVA.",
+        "Per a canvi de distribució, superposició de paviments, reparació d'elements constructius o estructurals secundaris o modificació general d'instal·lacions: memòria tècnica, justificació del CTE i d'habitabilitat, plànols, estudi bàsic de seguretat i salut, estudi de gestió de residus, nomenament de direcció tècnica i declaració de personal tècnic competent si no hi ha visat.",
+        "Per a fusteries exteriors: declaració de manteniment de les característiques formals i estètiques; per a cates o assajos: declaració de la persona interessada."
+      ],
+      "plazo": "Es presenta sempre abans de l'inici de les obres; el termini màxim de resolució no s'aplica.",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "VP.OC.30": {
+      "huella": "56d60029",
+      "titulo": "Sol·licitar un contenidor de runes en la via pública per a una obra",
+      "organismo": "L'oficina que va tramitar la llicència o la declaració d'obres (Servici de Llicències Urbanístiques, de Disciplina Urbanística, d'Activitats o Junta Municipal de Districte)",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Poden sol·licitar-ho persones físiques o jurídiques, comunitats de béns o de propietaris i altres entitats sense personalitat jurídica que siguen titulars d'una llicència d'obres o hagen presentat declaració responsable o comunicació prèvia d'obres i necessiten retirar runes amb un contenidor.",
+        "El contenidor s'instal·larà en la zona permesa més pròxima a l'obra, preferentment en la calçada i en zona d'estacionament permés, sense sobresortir ni entorpir el trànsit; si no és possible, en voreres entre alcorcs i amb vorera mínima de 3,00 metres.",
+        "En carrers sense estacionament permés i vorera inferior a 3,00 metres no es permet davant de l'immoble; s'usaran sacs normalitzats d'1 m3 o un contenidor en la cantonada o xamfrà més pròxim si hi ha aparcament.",
+        "En carrers per als vianants es respectaran les bandes lliures per als vianants i es mantindrà lliure un carril per a emergències i accés a la propietat.",
+        "En calçada, el contenidor portarà elements reflectants de longitud mínima 50 cm i amplària 10 cm, es col·locarà a 0,20 m de la vorera i no podrà ocupar el carril de circulació.",
+        "La superfície de suport es protegirà amb palastre de 10 mm d'espessor com a mínim; no es col·locarà sobre tapes de servicis, boques d'incendis, alcorcs ni elements urbanístics, i en finalitzar la jornada laboral es taparà per a evitar pols, eixida de materials o depòsit de residus.",
+        "Cost: taxa d'ocupació de 0,31 € per m² o fracció i dia, que es paga en sol·licitar el contenidor."
+      ],
+      "pasos": [
+        "Sol·licitar el contenidor com a instal·lació auxiliar en la mateixa oficina que va tramitar la llicència, ordre d'execució, declaració responsable o comunicació prèvia d'obres.",
+        "Si la tramitació correspon a una Junta Municipal de Districte, demanar cita prèvia per la web municipal o telefonant al telèfon 010.",
+        "Realitzar l'ingrés de la taxa per utilització privativa o aprofitament especial de béns de domini públic municipal amb mercaderies, materials de construcció i altres instal·lacions anàlogues.",
+        "Presentar l'imprés de comunicació d'ocupació de la via pública amb contenidor de recollida de runes juntament amb la documentació indicada.",
+        "Si es fa en línia, iniciar la sol·licitud amb firma digital, emplenar el formulari i adjuntar la documentació requerida.",
+        "Presentar i firmar la sol·licitud i guardar el justificant de presentació."
+      ],
+      "documentacion": [
+        "Instància de comunicació d'ocupació de la via pública amb contenidor de recollida de runes degudament emplenada.",
+        "Identificació clara de la persona sol·licitant i de l'emplaçament de les obres, indicant la referència cadastral.",
+        "Còpia de la llicència, declaració responsable o comunicació prèvia d'obres o dades identificatives d'aquesta (número d'expedient o similar).",
+        "Justificant acreditatiu d'haver realitzat l'ingrés previ de la taxa corresponent i autoliquidació completa per al pagament de la Taxa d'Ocupació de via pública per elements auxiliars.",
+        "Plànol o croquis a mà alçada que grafique l'ocupació que es pretén i els elements de mobiliari urbà afectats.",
+        "Si és societat, escriptura de constitució i escriptura de poders; si és comunitat de béns, constitució de la comunitat i firma de tots els comuners o de qui ostente la representació legal."
+      ],
+      "plazo": "Ha de sol·licitar-se sempre abans de la col·locació del contenidor; l'ingrés de la taxa s'efectua en sol·licitar el contenidor i el termini màxim de resolució és de 3 mesos.",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22."
+    },
+    "VP.PU.55": {
+      "huella": "0b9e77ed",
+      "titulo": "Sol·licitar llicència per a instal·lar publicitat a València amb lones, rètols, banderoles o pancartes",
+      "organismo": "Servici municipal de control de la publicitat (Ajuntament de València)",
+      "administracion": "Ajuntament de València",
+      "requisitos_clave": [
+        "Poden ser titulars de la llicència les persones físiques o jurídiques que realitzen directament les activitats comercials, industrials o de servici a què es referixen els elements publicitaris.",
+        "També poden ser titulars les persones físiques o jurídiques que de manera habitual i professional es dediquen a l'activitat publicitària i estiguen incloses en la matrícula de l'Impost sobre Activitats Econòmiques i inscrites en els registres públics que corresponguen.",
+        "En pancartes i banderoles també poden sol·licitar-la les candidatures de partits polítics que concórreguen a les eleccions i els titulars de museus o edificis públics.",
+        "S'ha de complir la normativa urbanística i la Llei de Patrimoni Cultural Valencià respecte dels centres històrics i immobles protegits.",
+        "Les banderoles s'han de retirar en concloure el període electoral o l'esdeveniment i com a màxim en dos mesos des de la seua instal·lació; les pancartes no han de pertorbar la circulació ni causar danys i la seua part inferior no pot situar-se a menys de cinc metres sobre la calçada.",
+        "Per als rètols en terrat es necessita autorització expressa de la comunitat de propietaris i que l'edifici no estiga en situació de Fora d'Ordenació Substantiva.",
+        "Cost: rètols de locals comercials que només identifiquen l'establiment, 47,08 €; rètols en coronació i lones en bastides, taxa segons el pressupost, i les lones paguen a més 14,33 € a l'any per metre quadrat (un 50% més si són lluminoses)."
+      ],
+      "pasos": [
+        "Abonar la taxa corresponent.",
+        "Presentar la sol·licitud acompanyada de la documentació indicada.",
+        "Si se sol·licita en línia, identificar-se i firmar electrònicament, omplir el formulari i adjuntar la documentació requerida.",
+        "Presentar i firmar la sol·licitud, i guardar o imprimir el justificant de presentació.",
+        "Consultar o aportar documentació addicional des de la Carpeta Ciutadana.",
+        "Si es fa presencialment en Juntes de Districte, sol·licitar cita prèvia per la web municipal o telefonant al telèfon 010; en Pobles, telefonar als telèfons indicats."
+      ],
+      "documentacion": [
+        "Instància emplenada, amb identificació clara del sol·licitant i de l'immoble i indicant la referència catastral.",
+        "Justificant de l'ingrés previ de la taxa corresponent i carta de pagament de les taxes o preus públics liquidats segons l'ordenança fiscal.",
+        "Autorització de la propietat de l'edifici, local o parcel·la i, si escau, acord de la comunitat de propietaris.",
+        "Si és societat, escriptura de constitució i escriptura de poders que acrediten la representació de qui firma; si és comunitat de béns, constitució i firma de tots els comuners o del seu representant legal.",
+        "Fotografies en color de grandària mínima 13 x 18 centímetres i, quan escaiga, projecte tècnic visat i projecte específic d'instal·lacions elèctriques.",
+        "Quan escaiga, acreditació d'inscripció en el Registre municipal d'Empreses Publicitàries i pòlissa d'assegurança de responsabilitat civil."
+      ],
+      "plazo": "Un mes abans de la col·locació, com a mínim. Si no hi ha resposta, s'entén denegada (silenci desestimatori). La fitxa de la seu dona dos terminis de resolució diferents: 3 mesos i «no aplica».",
+      "nota": "Revisat per IA contra la fitxa oficial el 2026-10-22. La fitxa de la seu dona dos terminis màxims de resolució diferents (3 mesos i «no aplica»)."
+    }
+  }
+}
