@@ -82,7 +82,7 @@ fuentes-valencia.json ─► [1] Captura (Chrome) ─► [2] Estructuración (gl
   - Lo que esté en la ficha y falte en la salida, se añade.
   - Se comprueba que `fuente` y `enlace_tramite` son la URL capturada.
 - Si la ficha supera la revisión, se marca `verificado: true` y en `nota`: «Revisado por IA contra la ficha oficial el AAAA-MM-DD». Si queda alguna duda, `verificado: false` y la duda en `nota`. La app la trata como no verificada.
-- Claude deja en `.cache/indexado/revision.md` qué ha cambiado en cada ficha.
+- Claude deja en `docs/revision-valencia.md` qué ha cambiado en cada ficha.
 - El resultado es `src/datos/catalogo-valencia.json`, con la misma cabecera que el catálogo de la organización (`version`, `ambito`, `aviso`, `items`).
 
 ### [5] Embeddings
@@ -97,7 +97,7 @@ fuentes-valencia.json ─► [1] Captura (Chrome) ─► [2] Estructuración (gl
 | C | A + un vector por cada `frase_usuario`; el trámite puntúa con el mejor | 1 + N |
 | D | `resumen_sencillo` + texto de A (resumen delante, como Contextual Retrieval) | 1 |
 
-- Para los 21 de la organización, `resumen_sencillo` se genera igual: 21 llamadas al LLM. Se guarda en `src/datos/resumenes-catalogo.json` sin tocar `datos/`.
+- Para los 21 de la organización, `resumen_sencillo` se genera igual: 21 llamadas al LLM. Los 37 resúmenes se guardan en `src/datos/resumenes.json` sin tocar `datos/`.
 
 ## 4. Dónde se guarda
 
@@ -106,8 +106,10 @@ src/datos/fuentes-valencia.json     entrada: 16 URLs                         se 
 .cache/indexado/sede/*.txt          texto capturado                          NO se sube (.gitignore)
 .cache/indexado/fichas/*.json       salida del LLM sin revisar               NO se sube
 src/datos/catalogo-valencia.json    16 fichas revisadas                      se sube
-src/datos/resumenes-catalogo.json   resumen_sencillo de los 21 de la org.    se sube
-src/datos/vectores.json             vectores A, C y D de los 37              se sube (~1–2 MB)
+src/datos/resumenes.json            resumen_sencillo de los 37               se sube
+.cache/indexado/variantes.json      vectores A, C y D de los 37              NO se sube
+src/datos/vectores.json             vectores de la variante ganadora         se sube (~1 MB)
+docs/revision-valencia.md           cambios de la revisión por Claude        se sube
 ```
 
 Forma de `vectores.json`:
@@ -116,10 +118,11 @@ Forma de `vectores.json`:
 {
   "modelo": "qwen3-embedding",
   "dimensiones": 1536,
-  "generado": "2026-10-22T21:00:00Z",
+  "variante": "D",
+  "instruccion_consulta": "Instruct: ...\nQuery: ",
+  "generado": "2026-10-22T19:49:00Z",
   "items": [
-    { "id": "UR.LC.140", "origen": "valencia",
-      "A": [ ... ], "D": [ ... ], "C": [[ ... ], [ ... ]] }
+    { "id": "UR.LC.140", "origen": "valencia", "vectores": [[ ... ]] }
   ]
 }
 ```
@@ -128,9 +131,23 @@ No se guarda nada de lo que escribe el ciudadano. La clave de la IA solo está e
 
 ## 5. Evaluación (para elegir la variante)
 
-- Alguien del equipo escribe 20–30 preguntas **sin mirar `frases_usuario` ni el catálogo**, con su respuesta esperada: `{ frase, esperado, idioma }`. Se guardan en `src/datos/pruebas-indice.json`.
+- 40 preguntas (29 en castellano y 11 en valenciano) con su respuesta esperada: `{ frase, esperado, idioma }`, en `src/datos/pruebas-indice.json`. Las escribió un subagente que solo vio los ids y los títulos, sin `frases_usuario` ni el resto de la ficha. Tres trámites de la organización no tienen pregunta: `bono-alquiler-joven`, `ayudas-comedor-escolar` y `xarxa-llibres`.
 - `src/datos/pruebas.json` no sirve para esto: repite frases literales del catálogo.
-- Métrica: acierto en el top 1 y en el top 3 para A, C y D. Gana la mejor en el top 3; si hay empate, la más simple (A).
+- Métrica: acierto en el top 1 y en el top 3 para A, C y D, cada una con y sin la instrucción de Qwen3 delante de la pregunta (`Instruct: … Query: `). Gana la mejor en el top 3; si hay empate, la mejor en el top 1; si sigue el empate, la más simple (A, D, C; sin instrucción antes que con ella).
+- Al consultar, la pregunta del ciudadano lleva delante `instruccion_consulta` si no es `null`, y el trámite puntúa con el mejor de sus `vectores` (producto escalar; están normalizados).
+
+### Resultado (22/10/2026, 40 preguntas ciegas)
+
+| Variante | Consulta | Top 1 | Top 3 |
+|---|---|---|---|
+| A | sin instrucción | 75 % | 93 % |
+| D | sin instrucción | 78 % | 95 % |
+| C | sin instrucción | 83 % | 98 % |
+| A | con instrucción | 83 % | 98 % |
+| **D** | **con instrucción** | **83 %** | **100 %** |
+| C | con instrucción | 85 % | 98 % |
+
+Gana **D con instrucción**: es la única sin fallos en el top 3. C con instrucción acierta una más en el top 1, pero falla una en el top 3 y necesita seis vectores por trámite.
 
 ## 6. Consumo de la clave compartida
 
@@ -145,4 +162,4 @@ En total, menos de 50 llamadas, una sola vez.
 
 ## 7. Pendiente
 
-- Escribir las preguntas de evaluación (sección 5).
+- Usar `vectores.json` en la búsqueda de la app.
