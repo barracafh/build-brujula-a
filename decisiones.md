@@ -135,7 +135,7 @@ Dominios del catálogo que **no** rastreamos: gva.es, sede.gva.es, labora.gva.es
       - Es la única que no falla ninguna pregunta en el top 3. Para nosotros el top 3 es lo que cuenta: el buscador entrega varias candidatas y el chat elige o pregunta.
       - C con instrucción acierta una más en el top 1, pero falla una en el top 3 y necesita seis vectores por trámite en lugar de uno.
       - La instrucción mejora todas las variantes (A pasa del 93 % al 98 % en el top 3) y no cuesta nada: es texto delante de la pregunta.
-      - El resumen ayuda con las preguntas en lenguaje llano o en valenciano: D sin instrucción recupera la del contenedor de runa y C con instrucción falla la de la Renta Valenciana de Inclusión, que D acierta.
+      - El resumen ayuda con las preguntas en lenguaje llano: sin instrucción, D acierta en el top 3 las del certificado de empadronamiento («un papel del ayuntamiento que diga que vivo aquí») y la del Ingreso Mínimo Vital, que A falla. Con instrucción, D acierta la de la Renta Valenciana de Inclusión en valenciano, que C falla.
     - **Consecuencias:**
       - Al consultar hay que poner la instrucción delante de la pregunta: va en `vectores.json` como `instruccion_consulta`.
       - Las frases de usuario no entran en el índice. Se siguen usando como ejemplos en Jev (punto 11).
