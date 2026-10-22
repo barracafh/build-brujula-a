@@ -97,11 +97,11 @@ export function FichaTramite({
         </ol>
       </section>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
+      <div className="grid gap-3">
         {/* Una sola tarjeta con el sol por vista: el plazo. */}
         <Card
           render={<section />}
-          className="col-span-full gap-2 px-6 py-6 text-base ring-0 [background:radial-gradient(120%_90%_at_100%_0%,#ffd34d_0%,rgba(255,211,77,0)_60%),var(--brand-yellow)]"
+          className="gap-2 px-6 py-6 text-base ring-0 [background:radial-gradient(120%_90%_at_100%_0%,#ffd34d_0%,rgba(255,211,77,0)_60%),var(--brand-yellow)]"
         >
           <h3 className="text-sm font-medium">{tx.plazo}</h3>
           {t.plazo ? (
