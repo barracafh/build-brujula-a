@@ -46,13 +46,14 @@ Decisiones sobre la voz con ElevenLabs (suscripción del plan Creator), tomadas 
 - [¿Jev es compatible con la regla 3?](issues/08-jev-y-regla-3.md): Jev se admite en producción con aviso aceptado en el primer uso y minimización de DNI, correos y teléfonos; pendiente de validar con un experto humano.
 - [Capacidades de ElevenLabs para la voz de Brújula](issues/11-capacidades-elevenlabs.md): Scribe v2 por lotes desde una ruta de servidor con autodetección (`ca`/`cat` → `va`), `eleven_v4_turbo` para leer en castellano y valenciano, escucha generable por adelantado; Creator retiene audio en EE. UU. sin retención cero, así que el aviso pide no decir datos personales.
 - [Clave de ElevenLabs en local y en Vercel](issues/12-clave-elevenlabs.md): clave en `.env.local` y verificada con llamadas reales (plan Creator, 131.000 caracteres al mes, no 275.000; renueva el 22/11/2026); sin `voices_read`, así que el `voice_id` va fijo; Vercel pasa a los organizadores.
+- [Consulta por voz: cómo se habla a Brújula](issues/13-consulta-por-voz.md): botón «Dictar» `outline` junto a Buscar, pulsar para empezar y parar, en todas las cajas; Scribe por lotes rellena la caja sin enviar; para a los 60 s; el idioma detectado cambia la interfaz si no se eligió a mano; Creator no admite retención cero.
 
 ## Not yet specified
 
 - Textos de las plantillas fijas de la interfaz en castellano y valenciano. Punto de partida: los del prototipo del flujo (`UI` en `src/components/prototipo-flujo/piezas.tsx`, rama `prototype/flujo-consulta`), más el anuncio «Sigue siendo: <título>» de [Accesibilidad del flujo por pantallas](issues/09-accesibilidad-flujo-pantallas.md).
 - Prompt o configuración de cada proveedor (clasificación y redacción de aclaraciones).
 - Ruta propia de cada entrada: forma de la URL y qué se ve al entrar por ella sin consulta previa.
-- Voz en la aclaración: si las preguntas de aclaración, redactadas por HelmCode en `es` o `va`, también se pueden escuchar, y si el ciudadano puede contestarlas hablando. Depende de cómo queden la consulta por voz y la escucha de la respuesta.
+- Voz en la aclaración: si las preguntas de aclaración, redactadas por HelmCode en `es` o `va`, también se pueden escuchar. Contestarlas hablando ya está resuelto (el micrófono va en todas las cajas). Depende de cómo quede la escucha de la respuesta.
 
 ## Out of scope
 
