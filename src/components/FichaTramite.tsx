@@ -1,3 +1,12 @@
+import {
+  CalendarClock,
+  FileText,
+  Info,
+  Landmark,
+  ListChecks,
+  TriangleAlert,
+  type LucideIcon,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -14,6 +23,9 @@ import type { Textos } from "@/i18n";
 // Anillo de foco visible para títulos que reciben el foco por código.
 export const focoTitulo =
   "rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
+
+// Etiqueta de sección como en reforma-digital.es: mono, mayúsculas, tracking.
+const etiqueta = "font-mono text-xs font-medium tracking-[0.08em] uppercase";
 
 export function FichaTramite({
   tramite: t,
@@ -69,8 +81,9 @@ export function FichaTramite({
       {!t.verificado && (
         <p
           role="note"
-          className="rounded-xl bg-destructive/10 px-5 py-4 text-base text-destructive"
+          className="flex gap-3 rounded-xl bg-destructive/10 px-5 py-4 text-base text-destructive"
         >
+          <TriangleAlert aria-hidden="true" className="mt-1 size-5 shrink-0" />
           {tx.sinVerificar}
         </p>
       )}
@@ -78,7 +91,7 @@ export function FichaTramite({
       <section aria-labelledby="pasos-titulo">
         <h3
           id="pasos-titulo"
-          className="mb-4 text-sm font-medium text-(--text-secondary)"
+          className={cn("mb-4 text-(--text-secondary)", etiqueta)}
         >
           {tx.pasos}
         </h3>
@@ -101,17 +114,27 @@ export function FichaTramite({
         {/* Una sola tarjeta con el sol por vista: el plazo. */}
         <Card
           render={<section />}
-          className="gap-2 px-6 py-6 text-base ring-0 [background:radial-gradient(120%_90%_at_100%_0%,#ffd34d_0%,rgba(255,211,77,0)_60%),var(--brand-yellow)]"
+          className="gap-4 px-6 py-6 text-base ring-0 [background:radial-gradient(120%_90%_at_100%_0%,#ffd34d_0%,rgba(255,211,77,0)_60%),var(--brand-yellow)]"
         >
-          <h3 className="text-sm font-medium">{tx.plazo}</h3>
+          <Cabecera icono={CalendarClock} titulo={tx.plazo} sobreSol />
           {t.plazo ? (
-            <p lang="es">{t.plazo}</p>
+            <p lang="es" className="text-xl leading-snug font-medium">
+              {t.plazo}
+            </p>
           ) : (
             <p>{tx.sinPlazo}</p>
           )}
         </Card>
-        <TarjetaLista titulo={tx.requisitos} items={t.requisitos_clave} />
-        <TarjetaLista titulo={tx.documentacion} items={t.documentacion} />
+        <TarjetaLista
+          icono={ListChecks}
+          titulo={tx.requisitos}
+          items={t.requisitos_clave}
+        />
+        <TarjetaLista
+          icono={FileText}
+          titulo={tx.documentacion}
+          items={t.documentacion}
+        />
       </div>
 
       <Card
@@ -119,10 +142,10 @@ export function FichaTramite({
         className="flex-row flex-wrap items-center justify-between gap-x-6 gap-y-4 px-6 py-6 text-base"
       >
         <div className="min-w-0 flex-[1_1_260px]">
-          <p className="text-sm text-(--text-secondary)">{tx.dondeSeHace}</p>
-          <h3 className="mt-1 text-lg leading-[1.35] font-medium" lang="es">
+          <Cabecera icono={Landmark} titulo={tx.dondeSeHace} />
+          <p className="mt-4 text-lg leading-[1.35] font-medium" lang="es">
             {t.organismo}
-          </h3>
+          </p>
           <p className="mt-1 font-mono text-sm [overflow-wrap:anywhere] text-(--text-secondary)">
             {new URL(principal).hostname}
           </p>
@@ -142,7 +165,8 @@ export function FichaTramite({
 
       {t.nota && (
         <details className="rounded-xl bg-muted px-6 py-4 text-base">
-          <summary className="min-h-11 cursor-pointer content-center font-medium text-(--text-secondary)">
+          <summary className="flex min-h-11 cursor-pointer items-center gap-2 font-medium text-(--text-secondary)">
+            <Info aria-hidden="true" className="size-4 shrink-0" />
             {tx.notas}
           </summary>
           <p className="mt-3 min-w-0 [overflow-wrap:anywhere]" lang="es">
@@ -230,13 +254,54 @@ export function FichaTramite({
   );
 }
 
-function TarjetaLista({ titulo, items }: { titulo: string; items: string[] }) {
+// Pastilla con icono y etiqueta: la cabecera de cada tarjeta de información.
+function Cabecera({
+  icono: Icono,
+  titulo,
+  sobreSol = false,
+}: {
+  icono: LucideIcon;
+  titulo: string;
+  sobreSol?: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-3">
+      <span
+        aria-hidden="true"
+        className={cn(
+          "grid size-10 shrink-0 place-items-center rounded-xl",
+          sobreSol ? "bg-background/70 text-foreground" : "bg-brand/[0.08] text-brand",
+        )}
+      >
+        <Icono className="size-[18px]" strokeWidth={1.5} />
+      </span>
+      <h3
+        className={cn(
+          etiqueta,
+          sobreSol ? "text-foreground" : "text-(--text-secondary)",
+        )}
+      >
+        {titulo}
+      </h3>
+    </div>
+  );
+}
+
+function TarjetaLista({
+  icono,
+  titulo,
+  items,
+}: {
+  icono: LucideIcon;
+  titulo: string;
+  items: string[];
+}) {
   return (
     <Card
       render={<section />}
-      className="gap-2 bg-muted px-6 py-6 text-base ring-0"
+      className="gap-4 bg-muted px-6 py-6 text-base ring-0"
     >
-      <h3 className="text-sm font-medium text-(--text-secondary)">{titulo}</h3>
+      <Cabecera icono={icono} titulo={titulo} />
       <ul className="grid list-disc gap-2 pl-5" lang="es">
         {items.map((item) => (
           <li key={item} className="min-w-0 [overflow-wrap:anywhere]">
