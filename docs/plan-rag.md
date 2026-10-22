@@ -2,48 +2,90 @@
 
 Rama `rag-buscador` (worktree `../brujula-rag`). Parte de `indexacion-valencia` (índice, catálogo de València y scripts) con `main` fusionado (motor, `/api/consulta` y fuente del catálogo). Decisión de producto: `decisiones.md`, punto 18.
 
+Revisado por Codex (pasada 1): incorporados sus 7 hallazgos (orden de las pruebas, módulo puro de similitud, timeout propio, validación de la respuesta, redondeo después de ordenar, prueba real de la herramienta, despacho de `tool_calls`).
+
 ## Objetivo
 
 Una función que el agente pueda llamar con una frase en lenguaje natural y que devuelva los trámites más parecidos:
 
 ```ts
 const { candidatos } = await buscarTramites("me han echado del trabajo");
-// [{ id: "prestacion-desempleo", titulo: "…", tipo: "tramite", organismo: "…", similitud: 0.71 }, … hasta 10]
+// [{ id: "prestacion-desempleo", titulo: "…", tipo: "tramite", organismo: "…", administracion: "…", similitud: 0.71 }, … hasta 10]
 ```
 
-Y la misma función, en formato de herramienta compatible con la API de OpenAI (HelmCode), para meterla en la lista `tools` del agente sin escribir más código.
+Y la misma función como herramienta de la API de OpenAI (HelmCode): `definicion` va en `tools` y `responder(llamada)` convierte cada `tool_call` del modelo en el mensaje `role: "tool"` que se le devuelve. El bucle del agente y el cliente que acepte `tools` los pone quien construya el agente: `completar()` de `src/lib/ia.ts` hoy no envía `tools` ni devuelve `tool_calls` (ver «Uso desde un agente»).
 
 Requisitos:
-- **Rápida.** Una sola llamada de red: el embedding de la frase (~150–250 ms medido el 22/10). La comparación con los 37 vectores es en memoria (<1 ms).
-- **Correcta.** La misma variante y la misma instrucción que ganaron la evaluación (D, con `instruccion_consulta`). Con las 40 preguntas ciegas: top 10 = 100 % y top 3 ≥ 95 %.
-- **Sin estado.** Ni la frase ni su vector se guardan (regla 3).
-- **Si falla el embedding,** devuelve los 37 sin `similitud` y con `aviso`, para que el agente siga funcionando (punto 18).
+- **Rápida.** Una sola llamada de red: el embedding de la frase (~150–250 ms medido el 22/10). La comparación con los 37 vectores es en memoria (<1 ms). Timeout propio de 3 s.
+- **Correcta.** La misma variante y la misma instrucción que ganaron la evaluación (D, con `instruccion_consulta`), y el mismo cálculo de similitud que `evaluar.ts`. Con las 40 preguntas ciegas: top 10 = 100 % y top 3 ≥ 95 %.
+- **Sin estado.** Ni la frase ni su vector se guardan ni se registran (regla 3).
+- **Si falla el embedding** (error, respuesta inválida o timeout propio), devuelve las 37 entradas sin `similitud` y con `aviso`, para que el agente siga funcionando (punto 18). Si quien llama cancela, se propaga la cancelación.
 
 ## Fuera de alcance
 
-- El agente en sí (su prompt y su bucle de herramientas) lo construye el usuario.
+- El agente en sí (su prompt, su bucle de herramientas y el cliente con `tools`).
 - Los adaptadores reales del motor (Jev, HelmCode) y el código antiguo de `/api/brujula` (`clasificar.ts`, `jev.ts`, `catalogo.ts`), que sigue usando solo los 21.
 - Un umbral de similitud para decidir «sin coincidencia»: se decide cuando el agente funcione.
 
 ## Diseño
 
-Tres capas, de abajo arriba. Cada una se puede usar sola.
+Cuatro piezas, de abajo arriba. Cada una se puede usar sola.
 
 | Archivo | Qué hace | `server-only` |
 |---|---|---|
-| `src/lib/embeddings.ts` (nuevo) | Llamada HTTP a `/embeddings` de HelmCode y normalización. Lo comparten la app y los scripts de indexado. | No: lo importan scripts de Bun |
-| `src/lib/buscador.ts` (nuevo) | Carga `vectores.json`, convierte la frase en vector con la instrucción y ordena. Devuelve ids y similitud. | No: lo importan los tests de Bun |
-| `src/lib/herramientas/buscar-tramites.ts` (nuevo) | La herramienta del agente: valida argumentos, llama al buscador, completa con el catálogo (título, tipo, organismo) y gestiona el fallo. | Sí |
+| `src/lib/similitud.ts` (nuevo) | Cálculo puro: producto escalar, similitud de un trámite (máximo sobre sus vectores) y ordenación. Sin datos ni red. Lo comparten `evaluar.ts` y el buscador. | No |
+| `src/lib/embeddings.ts` (nuevo) | Llamada HTTP a `/embeddings` de HelmCode, validación y normalización. Lo comparten la app y los scripts de indexado. | No: lo importan scripts de Bun |
+| `src/lib/buscador.ts` (nuevo) | Carga `vectores.json`, convierte la frase en vector con la instrucción y ordena. Devuelve ids y similitud. | No: lo importan las pruebas |
+| `src/lib/herramientas/buscar-tramites.ts` (nuevo) | La herramienta del agente: valida argumentos, timeout, llama al buscador, completa con el catálogo y degrada si falla. | Sí |
 
-Por qué `server-only` solo en la capa de arriba: Bun no resuelve el paquete `server-only` (lo aporta Next), así que un script que lo importe no arranca. Las dos capas de abajo no tienen secretos en el código (la clave sale de `process.env`, que en el navegador no existe), igual que `src/lib/ia.ts`. La capa de arriba importa `fuente-catalogo.ts`, que ya es `server-only`.
+Por qué `server-only` solo en la pieza de arriba: Bun no resuelve el paquete `server-only` (lo aporta Next), así que un script que lo importe no arranca. Las piezas de abajo no tienen secretos en el código (la clave sale de `process.env`), igual que `src/lib/ia.ts`. La herramienta importa `fuente-catalogo.ts`, que ya es `server-only`. Para probarla con Bun se precarga `scripts/sin-server-only.ts`, que sustituye el paquete por un módulo vacío (comprobado: con `bun --preload` se carga `fuente-catalogo.ts`).
 
 ## Pasos
 
 Cada paso es un commit. Tras cada uno: `bun run typecheck` y `bun scripts/unitarias.ts`.
 
-### Paso 1 · `src/lib/embeddings.ts`
+### Paso 1 · `src/lib/similitud.ts`
 
-Sale de `scripts/indexado/comun.ts` (función `embeber` y `normalizar`), sin lotes ni pausas: eso es cosa del script.
+```ts
+// Similitud entre un vector de consulta y los vectores de un trámite. Los
+// vectores están normalizados: el producto escalar es el coseno. Lo usan
+// scripts/indexado/evaluar.ts y src/lib/buscador.ts: mismo cálculo en la
+// evaluación y en la app.
+
+export function producto(a: number[], b: number[]): number {
+  let s = 0;
+  for (let i = 0; i < a.length; i++) s += a[i] * b[i];
+  return s;
+}
+
+// La mejor entre los vectores del trámite (la variante C tiene varios; la D, uno).
+export const similitud = (consulta: number[], vectores: number[][]) =>
+  Math.max(...vectores.map((v) => producto(consulta, v)));
+
+// De más a menos parecido, con la precisión completa. Ante empate, el orden
+// de entrada (sort es estable), igual que en la evaluación.
+export function ordenar<T extends { vectores: number[][] }>(
+  consulta: number[],
+  items: T[],
+): (T & { puntos: number })[] {
+  return items
+    .map((item) => ({ ...item, puntos: similitud(consulta, item.vectores) }))
+    .sort((a, b) => b.puntos - a.puntos);
+}
+```
+
+`scripts/indexado/evaluar.ts`: borra su `producto` y el `Math.max(...)` de `ranking`; `ranking` pasa a ser:
+
+```ts
+const ranking = (consulta: number[], items: Item[], v: Variante) =>
+  ordenar(consulta, items.map((item) => ({ id: item.id, vectores: vectoresDe(item, v) }))).map((r) => r.id);
+```
+
+No depende de `vectores.json`, así que la evaluación puede regenerarlo aunque falte o esté roto.
+
+### Paso 2 · `src/lib/embeddings.ts`
+
+Sale de `scripts/indexado/comun.ts` (`embeber`, `normalizar`, `MODELO_EMBEDDINGS`, `DIMENSIONES`), sin lotes ni pausas: eso es cosa del script.
 
 ```ts
 // Embeddings de HelmCode (API compatible con OpenAI). Lo usan la app y los
@@ -51,8 +93,9 @@ Sale de `scripts/indexado/comun.ts` (función `embeber` y `normalizar`), sin lot
 export const MODELO_EMBEDDINGS = "qwen3-embedding";
 export const DIMENSIONES = 1536;
 
-// Una sola petición. Devuelve un vector por texto, en el mismo orden,
-// normalizado a longitud 1 y redondeado a 5 decimales.
+// Una sola petición, sin reintentos. Devuelve un vector por texto, en el mismo
+// orden, normalizado a longitud 1 y redondeado a 5 decimales. Lanza si la
+// respuesta no trae exactamente un vector válido por texto.
 export async function embeber(
   textos: string[],
   { signal }: { signal?: AbortSignal } = {},
@@ -66,30 +109,39 @@ export async function embeber(
     signal,
   });
   if (!res.ok) throw new Error(`Embeddings: HelmCode respondió ${res.status}`);
-  const data = (await res.json()) as { data: { index: number; embedding: number[] }[] };
-  if (data.data.length !== textos.length) throw new Error("Embeddings: respuesta incompleta");
-  return data.data.sort((a, b) => a.index - b.index).map((d) => normalizar(d.embedding));
+  const { data } = (await res.json()) as { data?: { index: number; embedding: number[] }[] };
+  const vectores: number[][] = [];
+  for (const d of data ?? []) vectores[d.index] = d.embedding;
+  if (data?.length !== textos.length || textos.some((_, i) => !valido(vectores[i])))
+    throw new Error("Embeddings: respuesta inválida");
+  return vectores.map(normalizar);
 }
+
+const valido = (v: unknown): v is number[] =>
+  Array.isArray(v) &&
+  v.length >= DIMENSIONES &&
+  v.every(Number.isFinite) &&
+  v.some((x) => x !== 0);
 
 function normalizar(v: number[]): number[] {
   const corto = v.slice(0, DIMENSIONES);
-  const norma = Math.hypot(...corto) || 1;
+  const norma = Math.hypot(...corto);
   return corto.map((x) => Math.round((x / norma) * 1e5) / 1e5);
 }
 ```
 
-Sin reintentos ante 429: la herramienta tiene que ser rápida; si falla, la capa de arriba degrada a la lista completa.
+La validación cubre: índices repetidos o que faltan (algún hueco en `vectores`), vectores vacíos, cortos, con `NaN` o todo ceros. Ante cualquiera, lanza, y la herramienta degrada.
 
 `scripts/indexado/comun.ts` cambia:
-- Borra `MODELO_EMBEDDINGS`, `DIMENSIONES`, `normalizar` y el cuerpo HTTP de `embeber`.
-- `embeber(textos)` queda como bucle de lotes de 32 con `PAUSA_IA_MS` que llama a `embeber` de `src/lib/embeddings` (importado con otro nombre, p. ej. `embeberLote`).
-- `evaluar.ts` importa `MODELO_EMBEDDINGS` y `DIMENSIONES` de `src/lib/embeddings`.
+- Borra `MODELO_EMBEDDINGS`, `DIMENSIONES`, `normalizar` y el cuerpo HTTP de su `embeber`; los reexporta desde `../../src/lib/embeddings` para no tocar más imports.
+- Su `embeber(textos)` queda como bucle de lotes de 32 con `PAUSA_IA_MS` que llama al de `src/lib/embeddings` (importado como `embeberLote`).
 
-### Paso 2 · `src/lib/buscador.ts`
+### Paso 3 · `src/lib/buscador.ts`
 
 ```ts
 import indice from "@/datos/vectores.json";
 import { embeber } from "./embeddings";
+import { ordenar } from "./similitud";
 
 // Búsqueda semántica sobre src/datos/vectores.json (docs/index_specification.md).
 // Sin estado: ni la frase ni su vector se guardan (regla 3).
@@ -97,48 +149,37 @@ import { embeber } from "./embeddings";
 export type Coincidencia = { id: string; similitud: number };
 
 export const LIMITE_POR_DEFECTO = 10;
+export const TOTAL = indice.items.length;
 
-type Item = { id: string; vectores: number[][] };
-const items: Item[] = indice.items;
+const items: { id: string; vectores: number[][] }[] = indice.items;
 const prefijo: string = indice.instruccion_consulta ?? "";
-
-const producto = (a: number[], b: number[]) => {
-  let s = 0;
-  for (let i = 0; i < a.length; i++) s += a[i] * b[i];
-  return s;
-};
-
-// Similitud de un trámite: la mejor entre sus vectores (la variante C tiene
-// varios; la D, uno). Los vectores están normalizados: producto = coseno.
-export const similitud = (consulta: number[], vectores: number[][]) =>
-  Math.max(...vectores.map((v) => producto(consulta, v)));
-
-// Pura y síncrona: la usan buscar() y las pruebas.
-export function ordenar(consulta: number[], limite = LIMITE_POR_DEFECTO): Coincidencia[] {
-  return items
-    .map((item) => ({ id: item.id, similitud: Math.round(similitud(consulta, item.vectores) * 1e4) / 1e4 }))
-    .sort((a, b) => b.similitud - a.similitud)
-    .slice(0, Math.max(1, Math.min(limite, items.length)));
-}
 
 // La frase lleva delante la instrucción con la que se evaluó el índice.
 export const textoConsulta = (frase: string) => prefijo + frase;
 
+// Pura y síncrona: la usan buscar() y las pruebas. Ordena con la precisión
+// completa y redondea solo lo que devuelve.
+export function mejores(consulta: number[], limite = LIMITE_POR_DEFECTO): Coincidencia[] {
+  const n = Math.max(1, Math.min(Math.trunc(limite) || LIMITE_POR_DEFECTO, TOTAL));
+  return ordenar(consulta, items)
+    .slice(0, n)
+    .map((r) => ({ id: r.id, similitud: Math.round(r.puntos * 1e4) / 1e4 }));
+}
+
 export async function buscar(
   frase: string,
-  { limite = LIMITE_POR_DEFECTO, signal }: { limite?: number; signal?: AbortSignal } = {},
+  { limite, signal }: { limite?: number; signal?: AbortSignal } = {},
 ): Promise<Coincidencia[]> {
   const [vector] = await embeber([textoConsulta(frase)], { signal });
-  return ordenar(vector, limite);
+  return mejores(vector, limite);
 }
 ```
 
 Notas:
-- `vectores.json` pesa ~1 MB y se importa estático: entra en el bundle del servidor y Vercel lo incluye sin configuración. No lo importa ningún componente de cliente.
-- Si TypeScript tarda demasiado en inferir el tipo del JSON grande, se cambia por `readFileSync` con `path.join(process.cwd(), "src/datos/vectores.json")` y `outputFileTracingIncludes` en `next.config.ts`. Solo si hace falta: medir `bun run typecheck` antes y después.
-- `scripts/indexado/evaluar.ts` deja su `producto` y su `Math.max(...)` y usa `similitud` de aquí (código duplicado fuera).
+- `vectores.json` pesa ~1 MB y se importa estático: entra en el bundle del servidor y Vercel lo incluye sin configuración. Ningún componente de cliente lo importa.
+- Si TypeScript tarda demasiado en inferir el tipo del JSON grande, se cambia por `readFileSync(path.join(process.cwd(), "src/datos/vectores.json"))` y `outputFileTracingIncludes` en `next.config.ts`. Solo si hace falta: medir `bun run typecheck` antes y después.
 
-### Paso 3 · Catálogo con las 37 entradas
+### Paso 4 · Catálogo con las 37 entradas
 
 `src/lib/fuente-catalogo.ts`:
 
@@ -153,23 +194,24 @@ type EntradaJson =
 const entradas: Entrada[] = [...catalogoJson.items, ...valenciaJson.items].map(normalizar);
 ```
 
-`sede.valencia.es` ya tiene nombre en `src/datos/nombres-fuentes.ts`. Las notas de València no hablan al equipo: no hace falta tocar `src/datos/notas.ts`.
+Comprobar que `normalizar` tipa con la unión (si `nota` o `plazo` difieren en tipo entre los dos JSON, ajustar con `?? null`). `sede.valencia.es` ya tiene nombre en `src/datos/nombres-fuentes.ts`. `/api/consulta` no cambia: el motor simulado solo devuelve ids de los 21.
 
-Comprobar que `/api/consulta` sigue igual: el motor simulado solo devuelve ids de los 21.
-
-### Paso 4 · La herramienta del agente: `src/lib/herramientas/buscar-tramites.ts`
+### Paso 5 · La herramienta: `src/lib/herramientas/buscar-tramites.ts`
 
 ```ts
 import "server-only";
-import { buscar, LIMITE_POR_DEFECTO } from "@/lib/buscador";
+import { buscar, LIMITE_POR_DEFECTO, TOTAL } from "@/lib/buscador";
 import { catalogo } from "@/lib/fuente-catalogo";
 import type { Entrada } from "@/lib/entrada";
 
 // Herramienta del agente: de una frase del ciudadano a los trámites más
-// parecidos del catálogo (decisiones.md, punto 18). Uso directo:
+// parecidos del catálogo (decisiones.md, punto 18). Quien llama minimiza antes
+// la frase (src/lib/minimizar.ts), igual que /api/consulta.
+//
 //   const { candidatos } = await buscarTramites("me han echado del trabajo");
-// O como herramienta de HelmCode: `definicion` va en `tools` y, cuando el
-// modelo la pide, `ejecutar(argumentos)` devuelve lo que se le contesta.
+//
+// Como herramienta de HelmCode: `definicion` va en `tools` y, por cada
+// `tool_call` del modelo, `responder(llamada)` da el mensaje `role: "tool"`.
 
 export type Candidato = Pick<Entrada, "id" | "titulo" | "tipo" | "organismo" | "administracion"> & {
   similitud: number | null; // null si el buscador no respondió
@@ -181,28 +223,30 @@ export type ResultadoBusqueda = {
 };
 
 const MAX_CARACTERES = 1000;
+const TIMEOUT_MS = 3000;
 
-function candidato(e: Entrada, similitud: number | null): Candidato {
-  const { id, titulo, tipo, organismo, administracion } = e;
-  return { id, titulo, tipo, organismo, administracion, similitud };
-}
+const candidato = ({ id, titulo, tipo, organismo, administracion }: Entrada, similitud: number | null): Candidato => ({
+  id, titulo, tipo, organismo, administracion, similitud,
+});
 
 export async function buscarTramites(
   frase: string,
-  opciones: { limite?: number; signal?: AbortSignal } = {},
+  { limite, signal }: { limite?: number; signal?: AbortSignal } = {},
 ): Promise<ResultadoBusqueda> {
   const texto = frase.trim().slice(0, MAX_CARACTERES);
   if (!texto) return { candidatos: [] };
+  const plazo = AbortSignal.timeout(TIMEOUT_MS);
   try {
-    const coincidencias = await buscar(texto, opciones);
-    const candidatos: Candidato[] = [];
-    for (const c of coincidencias) {
-      const e = await catalogo.obtener(c.id);
-      if (e) candidatos.push(candidato(e, c.similitud));
-    }
-    return { candidatos };
+    const coincidencias = await buscar(texto, {
+      limite,
+      signal: signal ? AbortSignal.any([signal, plazo]) : plazo,
+    });
+    const entradas = await Promise.all(coincidencias.map((c) => catalogo.obtener(c.id)));
+    return {
+      candidatos: coincidencias.flatMap((c, i) => (entradas[i] ? [candidato(entradas[i], c.similitud)] : [])),
+    };
   } catch {
-    if (opciones.signal?.aborted) throw opciones.signal.reason;
+    if (signal?.aborted) throw signal.reason; // cancela quien llama: no degradar
     const todas = await catalogo.listar();
     return {
       candidatos: todas.map((e) => candidato(e, null)),
@@ -217,7 +261,7 @@ export const definicion = {
   function: {
     name: "buscar_tramites",
     description:
-      "Busca en el catálogo de Brújula (trámites y ayudas para quien vive en València) los más parecidos a lo que necesita el ciudadano. Devuelve id, título, tipo, organismo y similitud (0 a 1), de más a menos parecido. Llámala antes de hablar de un trámite concreto; con el id se obtiene la ficha completa.",
+      "Busca en el catálogo de Brújula (trámites y ayudas para quien vive en València) los más parecidos a lo que necesita el ciudadano. Devuelve id, título, tipo, organismo, administración y similitud (0 a 1), de más a menos parecido. Llámala una vez por mensaje del ciudadano, antes de hablar de un trámite concreto.",
     parameters: {
       type: "object",
       properties: {
@@ -228,7 +272,7 @@ export const definicion = {
         limite: {
           type: "integer",
           minimum: 1,
-          maximum: 37,
+          maximum: TOTAL,
           description: `Cuántos trámites devolver. Por defecto, ${LIMITE_POR_DEFECTO}.`,
         },
       },
@@ -238,61 +282,113 @@ export const definicion = {
   },
 } as const;
 
-// Ejecuta la llamada que pide el modelo. `argumentos` es el JSON (texto) que
-// trae `tool_calls[i].function.arguments`.
-export async function ejecutar(argumentos: string, signal?: AbortSignal): Promise<ResultadoBusqueda> {
-  let args: unknown;
-  try {
-    args = JSON.parse(argumentos);
-  } catch {
-    throw new Error("buscar_tramites: argumentos no son JSON");
-  }
-  const { consulta, limite } = (args ?? {}) as { consulta?: unknown; limite?: unknown };
-  if (typeof consulta !== "string") throw new Error("buscar_tramites: falta «consulta»");
-  return buscarTramites(consulta, {
-    limite: Number.isInteger(limite) ? (limite as number) : undefined,
-    signal,
+// Lo que trae `choices[0].message.tool_calls[i]` en la API de OpenAI.
+export type LlamadaHerramienta = {
+  id: string;
+  type: "function";
+  function: { name: string; arguments: string };
+};
+
+// Ejecuta una llamada del modelo y devuelve el mensaje que se le contesta.
+// Los errores de argumentos van en el contenido para que el modelo corrija;
+// solo la cancelación de quien llama lanza.
+export async function responder(llamada: LlamadaHerramienta, signal?: AbortSignal) {
+  const contenido = await ejecutar(llamada.function.arguments, signal).catch((e) => {
+    if (signal?.aborted) throw e;
+    return { error: e instanceof Error ? e.message : "Error desconocido" };
   });
+  return { role: "tool" as const, tool_call_id: llamada.id, content: JSON.stringify(contenido) };
+}
+
+// `argumentos` es el JSON (texto) de `function.arguments`.
+export async function ejecutar(argumentos: string, signal?: AbortSignal): Promise<ResultadoBusqueda> {
+  let args: { consulta?: unknown; limite?: unknown };
+  try {
+    args = JSON.parse(argumentos) ?? {};
+  } catch {
+    throw new Error("buscar_tramites: los argumentos no son JSON");
+  }
+  if (typeof args.consulta !== "string" || !args.consulta.trim())
+    throw new Error("buscar_tramites: falta «consulta»");
+  const limite = Number.isInteger(args.limite) ? (args.limite as number) : undefined;
+  return buscarTramites(args.consulta, { limite, signal });
 }
 ```
 
 Notas:
-- No se registra la frase en ningún `console.*` (regla 3).
-- La minimización de DNI, correos y teléfonos (`src/lib/minimizar.ts`) la hace quien llama, igual que `/api/consulta` antes del motor. Se documenta en el comentario de cabecera.
+- Ningún `console.*` con la frase (regla 3). El `catch` no registra nada.
+- `Promise.all` sobre `catalogo.obtener`: hoy es un `Map`; si la fuente pasa a ser remota, son 10 consultas en paralelo, no en serie.
 
-### Paso 5 · Pruebas
+### Paso 6 · Pruebas
 
-**`scripts/unitarias.ts`** (sin red; se añaden casos al final, con el mismo `comprobar`):
+**`scripts/unitarias.ts`** (sin red). Los casos nuevos van **antes** de las dos líneas finales (`console.log(fallos ? …)` y `process.exitCode`), para que cuenten en el resultado:
 1. `vectores.json`: `dimensiones === DIMENSIONES`, cada vector mide 1.536 y su norma está entre 0,999 y 1,001.
-2. Los ids de `vectores.json` y los de los dos catálogos (`datos/catalogo-tramites-ayudas.json` + `src/datos/catalogo-valencia.json`, leídos directamente) son el mismo conjunto, sin repetidos.
-3. `ordenar(vectorDe("multa-dgt"))[0].id === "multa-dgt"` y `similitud` ≈ 1.
-4. `ordenar(v).length === 10`; `ordenar(v, 3).length === 3`; `ordenar(v, 0).length === 1`; `ordenar(v, 999).length === 37`.
-5. `ordenar` va de mayor a menor similitud.
-6. `ordenar` tarda menos de 5 ms de media en 1.000 llamadas.
+2. Los ids de `vectores.json` y los de los dos catálogos (`datos/catalogo-tramites-ayudas.json` + `src/datos/catalogo-valencia.json`, leídos directamente, sin `fuente-catalogo.ts`) son el mismo conjunto, sin repetidos.
+3. `mejores(vectorDe("multa-dgt"))[0].id === "multa-dgt"` y su `similitud` ≈ 1.
+4. `mejores(v).length === 10`; `mejores(v, 3).length === 3`; `mejores(v, 0).length === 10` (0 no es válido → por defecto); `mejores(v, -5).length === 1`; `mejores(v, 999).length === 37`.
+5. `mejores` va de mayor a menor similitud.
+6. `ordenar` de `similitud.ts`: con dos items que solo difieren en la quinta cifra decimal, el orden es el correcto (no redondea antes).
+7. `mejores` tarda menos de 5 ms de media en 1.000 llamadas.
 
-**`scripts/probar-buscador.ts`** (nuevo, con red; `bun scripts/probar-buscador.ts`):
-1. Precisión: las 40 frases de `src/datos/pruebas-indice.json`, convertidas con `textoConsulta()` en **una sola** llamada a `embeber`. Con `ordenar(v, 10)` calcula top 1, top 3 y top 10. Falla (exit 1) si top 10 < 100 % o top 3 < 95 %. Imprime los fallos de top 3.
-2. Velocidad: 5 llamadas seguidas a `buscar()` con frases distintas, con 1 s entre ellas. Imprime cada tiempo y la mediana. Falla si la mediana pasa de 1.000 ms.
-3. En total, 6 llamadas a la API: respeta los límites compartidos.
+**`scripts/sin-server-only.ts`** (nuevo, precarga para Bun):
 
-**Herramienta** (con el servidor de desarrollo, `bun run dev`): una ruta de prueba no hace falta. Se prueba con un script de un solo uso en el scratchpad que no se sube, o importándola desde una ruta temporal. Lo mínimo: `bun run build` pasa y `curl` a `/api/consulta` con «quiero votar por correo» sigue devolviendo `respuesta` con la entrada `voto-por-correo`.
+```ts
+// Bun no resuelve `server-only` (lo aporta Next). Para probar módulos de
+// servidor desde scripts: bun --preload ./scripts/sin-server-only.ts <script>
+import { plugin } from "bun";
+plugin({
+  name: "server-only",
+  setup(b) {
+    b.module("server-only", () => ({ exports: {}, loader: "object" }));
+  },
+});
+```
 
-### Paso 6 · Documentación
+**`scripts/probar-buscador.ts`** (nuevo, con red; `bun --preload ./scripts/sin-server-only.ts scripts/probar-buscador.ts`):
+1. Precisión: las 40 frases de `src/datos/pruebas-indice.json`, convertidas con `textoConsulta()` en **una sola** llamada a `embeber`. Con `mejores(v, 10)` calcula top 1, top 3 y top 10. Falla si top 10 < 100 % o top 3 < 95 %. Imprime los fallos de top 3.
+2. Velocidad: 5 llamadas seguidas a `buscarTramites()` con frases distintas, 1 s entre ellas. Imprime cada tiempo y la mediana. Falla si la mediana pasa de 1.000 ms o si alguna devuelve `aviso`.
+3. Herramienta:
+   - `responder({ id: "t1", type: "function", function: { name: "buscar_tramites", arguments: '{"consulta":"quiero votar por correo","limite":3}' } })` → `role: "tool"`, `tool_call_id: "t1"`, `content` con 3 candidatos y `voto-por-correo` entre ellos.
+   - `arguments: "no es json"` y `arguments: "{}"` → `content` con `error`, sin llamada de red.
+   - `buscarTramites("")` → `{ candidatos: [] }` sin red.
+   - Fallo de embeddings: con `process.env.HELMCODE_BASE_URL = "http://127.0.0.1:9"` (puerto cerrado), `buscarTramites("multa")` devuelve 37 candidatos con `similitud: null` y `aviso`. Se restaura la variable después.
+   - Cancelación: con `AbortSignal.abort()`, `buscarTramites("multa", { signal })` lanza.
+4. En total, 7 llamadas a la API: respeta los límites compartidos. Sale con código 1 si algo falla.
 
-- `docs/index_specification.md`, sección 7 «Pendiente»: quitar «Usar `vectores.json` en la búsqueda de la app» y añadir una sección «Uso en la app» con las tres capas, la llamada de ejemplo y el comando de las pruebas.
-- `decisiones.md`: punto nuevo con lo que se haya decidido al implementar (por ejemplo, sin reintentos ante 429, `server-only` solo en la herramienta), con fecha.
-- `package.json`: script `"probar:buscador": "bun scripts/probar-buscador.ts"`.
+`package.json`: `"probar:buscador": "bun --preload ./scripts/sin-server-only.ts scripts/probar-buscador.ts"`.
+
+### Paso 7 · Documentación
+
+- `docs/index_specification.md`, sección 7 «Pendiente»: quitar «Usar `vectores.json` en la búsqueda de la app» y añadir una sección «Uso en la app» con las cuatro piezas, la llamada de ejemplo y el comando de las pruebas.
+- `decisiones.md` (solo mis cambios; el apartado de audio y el punto 15 del compañero no se suben): punto nuevo con lo decidido al implementar: sin reintentos ante 429 y timeout de 3 s, degradar al catálogo entero salvo cancelación, `server-only` solo en la herramienta y precarga para Bun, cálculo de similitud compartido.
+
+## Uso desde un agente
+
+Ejemplo para quien construya el bucle (no se implementa aquí). Necesita un cliente que envíe `tools` y lea `tool_calls`; `completar()` no lo hace.
+
+```ts
+import { definicion, responder } from "@/lib/herramientas/buscar-tramites";
+
+const mensajes = [{ role: "system", content: "…" }, { role: "user", content: frase }];
+for (let paso = 0; paso < 4; paso++) {
+  const { choices } = await llamarHelmCode({ messages: mensajes, tools: [definicion] });
+  const mensaje = choices[0].message;
+  mensajes.push(mensaje);
+  if (!mensaje.tool_calls?.length) break; // respuesta final
+  for (const llamada of mensaje.tool_calls) mensajes.push(await responder(llamada, signal));
+}
+```
 
 ## Verificación final
 
 1. `bun run typecheck` y `bun run build` pasan.
 2. `bun scripts/unitarias.ts`: todo ✓.
-3. `bun scripts/probar-buscador.ts`: top 10 = 100 %, top 3 ≥ 95 %, mediana < 1.000 ms.
-4. `bun run dev` y `curl -s localhost:3000/<equipo>/api/consulta -d '{"historial":[{"rol":"ciudadano","texto":"quiero votar por correo"}]}'` devuelve `tipo: "respuesta"`.
-5. `grep -rn "console\." src/lib/buscador.ts src/lib/embeddings.ts src/lib/herramientas` no encuentra nada.
+3. `bun run probar:buscador`: top 10 = 100 %, top 3 ≥ 95 %, mediana < 1.000 ms, herramienta ✓.
+4. `bun run dev` y `curl -s localhost:3000/<equipo>/api/consulta -H 'content-type: application/json' -d '{"historial":[{"rol":"ciudadano","texto":"quiero votar por correo"}]}'` devuelve `tipo: "respuesta"`.
+5. `grep -rn "console\." src/lib/similitud.ts src/lib/buscador.ts src/lib/embeddings.ts src/lib/herramientas` no encuentra nada.
 
 ## Riesgos
 
-- **Límites compartidos de HelmCode:** cada búsqueda es una llamada. El agente no debe llamar a la herramienta por cada tecla; una vez por mensaje del ciudadano.
-- **Tipo inferido del JSON grande:** ver la nota del paso 2.
-- **Catálogo con 37 entradas en `/api/consulta`:** el motor simulado no cambia, pero las rutas de cada entrada (si se añaden) mostrarán también las de València.
+- **Límites compartidos de HelmCode:** cada búsqueda es una llamada. El agente la llama una vez por mensaje del ciudadano, nunca por tecla.
+- **Tipo inferido del JSON grande:** ver la nota del paso 3.
+- **Catálogo con 37 entradas:** todo lo que use `catalogo.listar()` verá también las de València.
