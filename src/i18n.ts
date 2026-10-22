@@ -11,8 +11,7 @@ export const textos = {
       "Cuéntalo con tus palabras y te decimos qué trámite es, qué necesitas, el plazo y dónde se hace.",
     cambiarIdioma: "Idioma de la interfaz",
     etiqueta: "Cuéntanos qué te pasa",
-    pista:
-      "En castellano o en valenciano. No escribas datos personales: ni DNI ni nombres.",
+    pista: "No escribas datos personales: ni DNI ni nombres.",
     buscar: "Buscar",
     buscando: "Buscando…",
     ejemplos: "O prueba con un ejemplo",
@@ -55,8 +54,7 @@ export const textos = {
       "Conta-ho amb les teues paraules i et diem quin tràmit és, què necessites, el termini i on es fa.",
     cambiarIdioma: "Idioma de la interfície",
     etiqueta: "Conta'ns què et passa",
-    pista:
-      "En castellà o en valencià. No escrigues dades personals: ni DNI ni noms.",
+    pista: "No escrigues dades personals: ni DNI ni noms.",
     buscar: "Cercar",
     buscando: "Cercant…",
     ejemplos: "O prova amb un exemple",

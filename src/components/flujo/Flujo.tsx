@@ -8,6 +8,7 @@ import { Fuentes } from "@/components/Fuentes";
 import { RespuestaCompuesta } from "@/components/respuesta/RespuestaCompuesta";
 import type { Entrada } from "@/lib/entrada";
 import {
+  Avisos,
   BotonesCandidatas,
   Composer,
   EnlacePag,
@@ -250,9 +251,9 @@ function Inicio({
         t={t}
         id="consulta"
         etiqueta={t.etiqueta}
-        pista={t.pista}
         grande
         principal
+        avisosAparte
         className="mt-10"
       />
       <div className="mt-6">
@@ -273,6 +274,7 @@ function Inicio({
           ))}
         </ul>
       </div>
+      <Avisos t={t} id="consulta" className="mt-6" />
     </>
   );
 }
