@@ -10,7 +10,11 @@ import {
   type LlamadaHerramienta,
   type MensajeChat,
 } from "@/lib/ia";
-import { buscar } from "@/lib/rag";
+import {
+  definicion as buscarTramites,
+  responder as responderBusqueda,
+  type ResultadoBusqueda,
+} from "@/lib/herramientas/buscar-tramites";
 import {
   MAX_CARACTERES,
   type Candidata,
@@ -22,13 +26,17 @@ import {
 import { plantillas } from "./plantillas";
 import { sinRespaldo } from "./respaldo";
 
-// Chat de la ficha: un loop agéntico con dos herramientas. El loop es nuestro;
-// HelmCode solo decide qué herramienta llamar y redacta. Nunca se registra el
+// Chat de la ficha: un loop agéntico con dos herramientas (consultar_contexto y
+// buscar_tramites, el índice semántico). El loop es nuestro; HelmCode solo
+// decide qué herramienta llamar y redacta. Nunca se registra el
 // texto del ciudadano (regla 3).
 
-const MAX_LLAMADAS = 3; // la última, sin herramientas
+const MAX_LLAMADAS = 4; // la última, sin herramientas
 const MAX_TEXTO = MAX_CARACTERES; // el frontend lo reenvía en el historial
 const MAX_CANDIDATAS = 3;
+// Respaldo para «ninguno encaja»: el chat puede enlazarlo sin que lo devuelva
+// una herramienta.
+const PAG = "https://administracion.gob.es/";
 
 // contexto.md (unos 30k tokens) se lee una vez por instancia. En Vercel llega
 // gracias a outputFileTracingIncludes (next.config.ts).
@@ -58,27 +66,7 @@ const consultarContexto: Herramienta = {
   },
 };
 
-const buscarTramites: Herramienta = {
-  type: "function",
-  function: {
-    name: "buscar_tramites",
-    description:
-      "Busca en el índice de trámites y ayudas los que encajan con una situación o una pregunta. Devuelve fragmentos, cada uno con el id de su entrada. Úsala cuando el ciudadano pregunte por otro trámite y no sepas su id.",
-    parameters: {
-      type: "object",
-      properties: {
-        consulta: {
-          type: "string",
-          description: "La situación o el trámite, en lenguaje natural.",
-        },
-      },
-      required: ["consulta"],
-      additionalProperties: false,
-    },
-  },
-};
-
-function sistema(abierta: Entrada, lista: string, conRag: boolean): string {
+function sistema(abierta: Entrada): string {
   return `Eres el asistente de Brújula, una herramienta experimental (no oficial) que orienta sobre trámites y ayudas públicas en España y en la Comunitat Valenciana.
 El ciudadano tiene abierta la ficha «${abierta.titulo}» (id: ${abierta.id}).
 
@@ -86,18 +74,22 @@ Reglas:
 1. Solo respondes dudas sobre trámites, ayudas y el funcionamiento de la Administración. Antes de responder, llama a una herramienta y usa solo lo que devuelva.
 2. Si la pregunta no trata de eso (por ejemplo, programar en Python, recetas, charla o saludos), no llames a ninguna herramienta y contesta en una frase que esa pregunta no forma parte de lo que hace este asistente.
 3. Nunca digas si la persona cumple los requisitos ni si le corresponde una ayuda: explica qué pide la ficha y remite al organismo.
-4. Cifras (plazos, importes, fechas, porcentajes) y enlaces: escríbelos solo si aparecen tal cual en lo que devolvieron las herramientas. Si no están, di «No podemos confirmarlo» y remite a la sede oficial.
+4. Cifras (plazos, importes, fechas, porcentajes), requisitos y enlaces: escríbelos solo si aparecen tal cual en lo que devolvieron las herramientas. Nunca los inventes. Si no están, di «No podemos confirmarlo» y remite a la sede oficial.
 5. Responde en el idioma del ciudadano, castellano o valenciano. Sé breve: como mucho 5 frases o una lista corta, y nunca más de 800 caracteres. Texto plano, sin tablas ni títulos.
-6. Si pregunta por otro trámite o por un tema que tiene entrada propia en la lista (por ejemplo, identificacion-digital para Cl@ve o certificado digital), llama a consultar_contexto con ese id${conRag ? " o, si no, a buscar_tramites" : ""}. Si no está, dilo y remite al Punto de Acceso General.
-
-Entradas del catálogo (id — título):
-${lista}`;
+6. Dudas sobre la ficha abierta o sobre cómo funciona la Administración: llama a consultar_contexto sin id.
+7. Si el mensaje trata de otro trámite o de una situación nueva, llama a buscar_tramites una sola vez, antes de hablar de ningún trámite concreto, con lo que necesita el ciudadano. Después:
+   - Elige solo entre los ids que devuelva; nunca otro.
+   - Si dudas entre dos, no elijas: nombra los dos por su título y pregunta cuál es su caso.
+   - Si ninguno encaja, di que no puedes confirmarlo y enlaza el Punto de Acceso General (${PAG}).
+   - Antes de dar pasos, cifras o requisitos del elegido, lee su ficha con consultar_contexto y su id.`;
 }
 
 type Estado = {
   material: string[];
   consultadas: Map<string, Entrada>;
   candidatas: string[];
+  devueltos: Map<string, string>; // id → título, de buscar_tramites
+  buscado: boolean;
   marcoEnviado: boolean;
   usoHerramientas: boolean;
 };
@@ -119,16 +111,22 @@ function anotarCandidata(estado: Estado, id: string, abierta: string) {
 async function ejecutar(
   llamada: LlamadaHerramienta,
   estado: Estado,
-  abierta: string,
+  abierta: Entrada,
+  senal?: AbortSignal,
 ): Promise<string> {
-  const args = leerArgumentos(llamada);
-
   if (llamada.function.name === "consultar_contexto") {
-    const id = typeof args.id === "string" && args.id ? args.id : abierta;
-    const entrada = await catalogo.obtener(id);
+    const args = leerArgumentos(llamada);
+    const id = typeof args.id === "string" && args.id ? args.id : abierta.id;
+    // Solo ids que el chat ya conoce por las herramientas: la abierta, sus
+    // relacionados y lo que devolvió buscar_tramites.
+    const conocido =
+      id === abierta.id ||
+      abierta.relacionados.includes(id) ||
+      estado.devueltos.has(id);
+    const entrada = conocido ? await catalogo.obtener(id) : undefined;
     if (!entrada)
       return JSON.stringify({
-        error: `No hay ninguna entrada con id «${id}». Usa un id de la lista.`,
+        error: `No conozco la entrada «${id}». Usa un id devuelto por buscar_tramites.`,
       });
     const texto = estado.marcoEnviado
       ? "(ya enviado más arriba)"
@@ -139,23 +137,29 @@ async function ejecutar(
     estado.marcoEnviado = true;
     estado.consultadas.set(entrada.id, entrada);
     estado.usoHerramientas = true;
-    anotarCandidata(estado, entrada.id, abierta);
+    anotarCandidata(estado, entrada.id, abierta.id);
     return JSON.stringify({ entrada, marco: texto });
   }
 
-  if (llamada.function.name === "buscar_tramites" && buscar) {
-    const consulta = typeof args.consulta === "string" ? args.consulta : "";
-    const fragmentos = [];
-    for (const f of await buscar(consulta, 5)) {
-      const e = await catalogo.obtener(f.id);
-      if (!e) continue;
-      fragmentos.push({ id: e.id, titulo: e.titulo, texto: f.texto });
-      estado.material.push(e.titulo, f.texto);
-      estado.consultadas.set(e.id, e);
-      anotarCandidata(estado, e.id, abierta);
+  if (llamada.function.name === "buscar_tramites") {
+    // Una búsqueda por mensaje: la segunda no llega a HelmCode.
+    if (estado.buscado)
+      return JSON.stringify({
+        error: "Ya has buscado en este mensaje: elige entre esos candidatos.",
+      });
+    const respuesta = await responderBusqueda(llamada, senal);
+    const resultado = JSON.parse(respuesta.content) as
+      | ResultadoBusqueda
+      | { error: string };
+    if ("candidatos" in resultado) {
+      estado.buscado = true;
+      estado.usoHerramientas = true;
+      for (const c of resultado.candidatos) {
+        estado.devueltos.set(c.id, c.titulo);
+        estado.material.push(`${c.titulo} — ${c.organismo}`);
+      }
     }
-    estado.usoHerramientas = true;
-    return JSON.stringify({ fragmentos });
+    return respuesta.content;
   }
 
   return JSON.stringify({ error: "Herramienta desconocida." });
@@ -186,7 +190,13 @@ function cerrar(
   estado: Estado,
 ): Resultado {
   const comun = { idioma, proveedor: "helmcode" as const };
-  const candidatas: Candidata[] = estado.candidatas
+  // Las consultadas y, de lo que devolvió la búsqueda, lo que el texto nombra.
+  const nombradas = [...estado.devueltos]
+    .filter(([id, titulo]) => id !== abierta.id && texto.includes(titulo))
+    .map(([id]) => id);
+  const candidatas: Candidata[] = [
+    ...new Set([...estado.candidatas, ...nombradas]),
+  ]
     .slice(0, MAX_CANDIDATAS)
     .map((id) => ({ id, confianza: "media" }));
 
@@ -244,21 +254,19 @@ export const motorAgente: Motor = {
     const idioma = detectarIdioma(
       historial.findLast((t) => t.rol === "ciudadano")?.texto ?? "",
     );
-    const entradas = await catalogo.listar();
-    const lista = entradas.map((e) => `- ${e.id} — ${e.titulo}`).join("\n");
-    const herramientas = buscar
-      ? [consultarContexto, buscarTramites]
-      : [consultarContexto];
+    const herramientas: Herramienta[] = [consultarContexto, buscarTramites];
 
     const estado: Estado = {
-      material: [lista],
+      material: [PAG],
       consultadas: new Map(),
       candidatas: [],
+      devueltos: new Map(),
+      buscado: false,
       marcoEnviado: false,
       usoHerramientas: false,
     };
     const mensajes: MensajeChat[] = [
-      { role: "system", content: sistema(abierta, lista, Boolean(buscar)) },
+      { role: "system", content: sistema(abierta) },
       ...historial.map((t) => ({
         role: t.rol === "ciudadano" ? ("user" as const) : ("assistant" as const),
         content: t.texto,
@@ -279,7 +287,7 @@ export const motorAgente: Motor = {
         mensajes.push({
           role: "tool",
           tool_call_id: llamada.id,
-          content: await ejecutar(llamada, estado, abierta.id),
+          content: await ejecutar(llamada, estado, abierta, senal),
         });
     }
     // No se llega aquí: la última vuelta siempre cierra.
