@@ -1,4 +1,4 @@
-// Textos fijos de la respuesta compuesta (tickets 03 y 10). El contenido de la
+// Textos fijos de la respuesta compuesta (tickets 03, 10 y 19). El contenido de la
 // entrada no pasa por aquí: se muestra literal y en castellano.
 
 export type IdiomaRespuesta = "es" | "va";
@@ -25,6 +25,8 @@ export const textosRespuesta = {
     escucharRespuesta: "Escuchar la respuesta",
     pausarRespuesta: "Pausar la respuesta",
     audioError: "No hemos podido reproducir el audio.",
+    anadirCalendario: "Añadir a Google Calendar",
+    pestanaNueva: "(se abre en una pestaña nueva)",
   },
   va: {
     tipoTramite: "Tràmit",
@@ -47,6 +49,8 @@ export const textosRespuesta = {
     escucharRespuesta: "Escoltar la resposta",
     pausarRespuesta: "Pausar la resposta",
     audioError: "No hem pogut reproduir l'àudio.",
+    anadirCalendario: "Afegir a Google Calendar",
+    pestanaNueva: "(s'obri en una pestanya nova)",
   },
 } satisfies Record<IdiomaRespuesta, Record<string, string>>;
 

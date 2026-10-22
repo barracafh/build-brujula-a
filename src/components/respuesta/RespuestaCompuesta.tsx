@@ -15,9 +15,10 @@ import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Fuentes } from "@/components/Fuentes";
 import { Escuchar } from "./Escuchar";
+import { enlaceGoogleCalendar, fechasAbiertas } from "@/lib/calendario";
 import { textosRespuesta, type IdiomaRespuesta } from "./textos";
 
-// Respuesta compuesta (tickets 03, 09 y 10). Sin estado ni hooks: sirve en
+// Respuesta compuesta (tickets 03, 09, 10 y 19). Sin estado ni hooks: sirve en
 // cliente y en servidor. El contenido de la entrada se muestra literal y lleva
 // lang="es"; los textos fijos siguen el idioma de la interfaz.
 
@@ -48,6 +49,7 @@ export function RespuestaCompuesta({
   const tx = textosRespuesta[idioma];
   const conTramite = e.enlace_tramite !== null;
   const enlace = e.enlace_tramite ?? e.enlace_info;
+  const fechas = fechasAbiertas(e);
 
   return (
     <article
@@ -135,6 +137,38 @@ export function RespuestaCompuesta({
             >
               {e.plazo}
             </p>
+            {/* Solo fechas fijas que siguen abiertas (ticket 19). */}
+            {fechas.length > 0 && (
+              <ul className="grid gap-3">
+                {fechas.map((f) => (
+                  <li
+                    key={f.fecha}
+                    className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2"
+                  >
+                    <p className="min-w-0 flex-[1_1_200px]">
+                      <time dateTime={f.fecha} className="font-mono text-sm">
+                        {f.fecha.split("-").reverse().join("/")}
+                      </time>{" "}
+                      {f.que[idioma]}
+                    </p>
+                    <a
+                      href={enlaceGoogleCalendar(e, f, idioma)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={cn(
+                        buttonVariants({ variant: "outline" }),
+                        "h-auto min-h-11 whitespace-normal max-md:w-full",
+                      )}
+                    >
+                      {tx.anadirCalendario} <span aria-hidden="true">↗</span>
+                      <span className="sr-only">
+                        : {f.que[idioma]} {tx.pestanaNueva}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
           </Card>
         )}
         <TarjetaLista
