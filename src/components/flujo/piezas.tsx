@@ -15,6 +15,7 @@ import { MAX_CARACTERES } from "@/lib/motor/contrato";
 import type { Candidata, Conversacion } from "./useConversacion";
 import { PAG, lang, type TextosFlujo } from "./textos";
 import { Dictar } from "./voz/Dictar";
+import { useEjemploEscrito } from "./useEjemploEscrito";
 
 export const titular =
   "rounded-md text-[clamp(30px,5vw,48px)] leading-[1.1] tracking-[-0.02em] outline-none";
@@ -50,6 +51,7 @@ export function Composer({
   className?: string;
 }) {
   const [texto, setTexto] = useState("");
+  useEjemploEscrito(id, t.ejemploCaja, grande && !texto);
 
   function enviar(e?: FormEvent) {
     e?.preventDefault();
