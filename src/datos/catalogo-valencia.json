@@ -1,0 +1,696 @@
+{
+  "version": "2026-10-22",
+  "ambito": "Trámites del Ajuntament de València (demo)",
+  "aviso": "Fichas estructuradas con IA y revisadas por IA contra la sede electrónica. Verificar siempre en la sede oficial antes de actuar.",
+  "items": [
+    {
+      "id": "CU.US.10",
+      "tipo": "tramite",
+      "titulo": "Solicitar el uso de las salas de exposiciones de las Juntas Municipales",
+      "administracion": "Ajuntament de València",
+      "organismo": "Juntas Municipales de Distrito",
+      "frases_usuario": [
+        "Quiero solicitar el uso de una sala de exposiciones de la Junta Municipal.",
+        "¿Cómo puedo pedir una sala de exposiciones de la Junta de Distrito?",
+        "Necesito presentar una solicitud para exponer en una sala municipal.",
+        "Vull sol·licitar una sala d'exposicions de la meua Junta Municipal.",
+        "Com puc demanar l'ús de la sala d'exposicions de la Junta de Districte?"
+      ],
+      "requisitos_clave": [
+        "Pueden solicitarlo las personas que acrediten interés en hacer uso de las Salas de Exposiciones.",
+        "Debe acreditarse que la actividad pueda resultar de interés general.",
+        "El control y vigilancia y la limpieza diaria y final corren a cargo de las personas o entidad autorizadas, que responden de los deterioros y deben dejar la sala como estaba.",
+        "Las publicaciones y catálogos son por cuenta del interesado y deben mencionar la colaboración del Ayuntamiento y la Junta; los gastos del acto son de quien expone."
+      ],
+      "pasos": [
+        "Se recomienda consultar previamente la fecha con la Junta de Distrito correspondiente.",
+        "Pedir cita previa para la atención presencial en las Juntas de Distrito por la web municipal o el teléfono 010; en Pobles, por los teléfonos indicados.",
+        "Presentar la instancia de solicitud o el formulario en línea con firma digital.",
+        "Adjuntar la documentación indicada y, si es posible, una muestra de la obra artística.",
+        "Presentar y firmar la solicitud.",
+        "Imprimir y guardar el justificante; consultar o aportar documentación en Carpeta Ciudadana."
+      ],
+      "documentacion": [
+        "Instancia de solicitud para la utilización de las salas de exposiciones de las Juntas Municipales, indicando el objeto de la exposición y las fechas previstas.",
+        "A ser posible, una muestra de la obra artística que se pretende exponer.",
+        "En línea: formulario de solicitud."
+      ],
+      "plazo": "Como mínimo un mes antes de la fecha que se pide; conviene consultar antes la fecha con la Junta de Distrito. Si no hay respuesta, se entiende denegada (silencio desestimatorio). La ficha de la sede da dos plazos de resolución distintos: 3 meses y «no aplica».",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/CU.US.10?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/CU.US.10?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/CU.US.10?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22. La ficha de la sede da dos plazos máximos de resolución distintos (3 meses y «no aplica»).",
+      "relacionados": []
+    },
+    {
+      "id": "LA.AC.65",
+      "tipo": "tramite",
+      "titulo": "Declaración responsable de obras de habilitación o reforma para comercio o actividad inocua",
+      "administracion": "Ajuntament de València",
+      "organismo": "Ajuntament de València",
+      "frases_usuario": [
+        "Quiero presentar la declaración responsable para reformar el local de mi comercio.",
+        "Necesito tramitar las obras de habilitación de un local para una actividad inocua.",
+        "¿Cómo puedo comunicar al Ayuntamiento las obras de reforma de mi negocio?",
+        "Vull presentar la declaració responsable per a reformar el local del meu comerç.",
+        "Necessite tramitar les obres d'habilitació d'un local per a una activitat innòcua."
+      ],
+      "requisitos_clave": [
+        "Puede presentarlo la persona interesada o su representante legal.",
+        "Obras para implantar actividades inocuas que cumplan todas las condiciones del Anexo III de la Ley 6/2014 y no estén sometidas a autorización ambiental integrada, licencia ambiental o declaración responsable ambiental.",
+        "Obras para actividades comerciales minoristas incluidas en el anexo de la Ley 12/2012, realizadas en establecimientos permanentes y con superficie útil de exposición y venta al público no superior a 750 metros cuadrados.",
+        "En actividades inocuas es preceptivo el previo informe urbanístico municipal de compatibilidad.",
+        "En actividades comerciales minoristas no es preceptivo el previo informe urbanístico municipal de compatibilidad.",
+        "Si la actividad requiere autorización o comunicación sectorial, el titular debe acreditar haber cumplido antes la tramitación sectorial.",
+        "Coste: tasa de actuaciones urbanísticas según el presupuesto de la obra (140,90 € hasta 6.010,12 €; más en tramos superiores) e Impuesto de Construcciones, Instalaciones y Obras (ICIO) del 4% del presupuesto de ejecución material."
+      ],
+      "pasos": [
+        "Ingresar la tasa por actuaciones urbanísticas con carácter previo a la declaración responsable y el Impuesto sobre Construcciones, Instalaciones y Obras.",
+        "Presentar la comunicación de actividad inocua y la declaración responsable de obras tipo II con la documentación indicada.",
+        "Si se hace en sede electrónica, identificarse y firmar electrónicamente, rellenar el formulario, adjuntar la documentación y presentar y firmar la solicitud.",
+        "Una vez finalizadas las obras, aportar el certificado de cumplimiento de normativa emitido por técnico competente.",
+        "Para el inicio de la actividad, presentar el modelo normalizado de comunicación de actividad inocua o declaración responsable para el título habilitante en normativa de comercio.",
+        "Guardar el justificante de presentación y, en su caso, consultar o aportar documentación en la Carpeta Ciudadana."
+      ],
+      "documentacion": [
+        "Modelo de declaración responsable cumplimentado por la persona interesada o representante legal, junto con la documentación indicada.",
+        "Autoliquidación y justificante de pago de la tasa de actuaciones urbanísticas y autoliquidación y justificante de pago del Impuesto de Construcciones, Instalaciones y Obras (ICIO).",
+        "Memoria técnica de las obras suscrita por técnico/a competente; en el caso de habilitación de local, memoria técnica de la actividad con documentación gráfica.",
+        "Presupuesto desglosado y total con detalle del IVA y planos definitorios de la actuación, del estado actual y del reformado.",
+        "Estudio básico de seguridad y salud y estudios de gestión de residuos y demolición; declaración responsable de personal técnico competente si no se aporta documentación visada.",
+        "Certificado de cumplimiento de normativa emitido por técnico competente una vez finalizadas las obras; modelo normalizado de comunicación de actividad inocua o declaración responsable para el inicio de la actividad."
+      ],
+      "plazo": "Se solicita en cualquier momento previo a la ejecución de la obra e inicio de la actividad sujeta a comunicación o declaración responsable; plazo máximo de resolución: no aplica.",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/LA.AC.65?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/LA.AC.65?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/LA.AC.65?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "LA.AI.10",
+      "tipo": "tramite",
+      "titulo": "Cambiar de titular una actividad inocua con licencia o comunicación en València",
+      "administracion": "Ajuntament de València",
+      "organismo": "Ajuntament de València",
+      "frases_usuario": [
+        "Quiero cambiar el titular de mi actividad inocua.",
+        "¿Cómo tramito el cambio de titularidad de una licencia de actividad inocua?",
+        "Necesito poner la actividad a nombre de otra persona.",
+        "Vull canviar la titularitat de la meua activitat innòcua.",
+        "Com tramite el canvi de titular d'una llicència d'activitat innòcua?"
+      ],
+      "requisitos_clave": [
+        "El establecimiento debe contar con licencia de apertura de actividad inocua (peticiones anteriores al 11 de agosto de 2006) o comunicación de actividad inocua con acuse de recibo.",
+        "La actividad debe ser de carácter comercial, industrial o de servicios.",
+        "Pueden solicitarlo personas físicas, jurídicas, comunidades de bienes y demás entidades sin personalidad jurídica interesadas en ejercer la actividad.",
+        "La nueva persona titular pasa a ser titular de un establecimiento que ya cuenta con la preceptiva licencia."
+      ],
+      "pasos": [
+        "Solicitar cita previa para la atención presencial en las Juntas de Distrito por la web municipal o llamando al 010.",
+        "En las Juntas municipales de Pobles, solicitar cita llamando a los teléfonos indicados.",
+        "Presentar la solicitud presencialmente o iniciar la solicitud en línea en la Sede Electrónica con firma digital.",
+        "Rellenar el formulario.",
+        "Adjuntar la documentación indicada.",
+        "Presentar y firmar la solicitud y guardar o imprimir el justificante."
+      ],
+      "documentacion": [
+        "Impreso de solicitud debidamente cumplimentado, con identificación clara del solicitante y del emplazamiento de la actividad, indicando la referencia catastral.",
+        "Si el solicitante o el cedente es una sociedad: escritura de constitución y escritura de poderes que acredite la representación de quien firma la instancia.",
+        "Si el solicitante o el cedente es una comunidad de bienes: contrato de constitución; si es el solicitante, deben suscribir la instancia todos los comuneros o quien ostente su representación legal.",
+        "Documento de cesión de derechos sobre la actividad, suscrito por el anterior titular y por el nuevo titular.",
+        "Copia de la licencia de apertura o documento de toma en consideración de la comunicación de actividad objeto de cesión, o indicar el número de expediente.",
+        "En caso de fallecimiento del anterior titular: testamento, escritura de partición de herencia y renuncia de las demás personas herederas a favor de la nueva titular; o certificado de defunción, certificado de Últimas Voluntades, declaración judicial o notarial de las personas herederas y renuncia."
+      ],
+      "plazo": "Se solicita como mínimo un mes antes de pasar a ejercer la actividad la nueva persona titular; el plazo máximo de resolución es de 3 meses.",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/LA.AI.10?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/LA.AI.10?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/LA.AI.10?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "LA.AI.90",
+      "tipo": "tramite",
+      "titulo": "Denunciar molestias de aire acondicionado en locales comerciales y oficinas",
+      "administracion": "Ajuntament de València",
+      "organismo": "Ajuntament de València",
+      "frases_usuario": [
+        "Quiero denunciar las molestias que me causa el aire acondicionado de un local comercial.",
+        "¿Dónde puedo presentar una denuncia por el ruido del aire acondicionado de una oficina?",
+        "Necesito pedir una inspección por las molestias del aire acondicionado de un comercio.",
+        "Vull denunciar les molèsties que em causa l'aire condicionat d'un local comercial.",
+        "On puc presentar una denúncia per les molèsties de l'aire condicionat d'una oficina?"
+      ],
+      "requisitos_clave": [
+        "Pueden solicitarlo personas físicas, jurídicas, comunidades de bienes, comunidades de personas propietarias y demás entidades sin personalidad jurídica que se vean afectadas.",
+        "Debe tratarse de mal funcionamiento de aparatos de aire acondicionado colocados en locales comerciales u oficinas sujetas al régimen de comunicación ambiental en el término municipal de Valencia.",
+        "Las molestias deben ser indebidas y producirse por el funcionamiento de algún aparato de aire acondicionado en un local sujeto al régimen de actividad inocua.",
+        "Se puede denunciar si el aparato supera los niveles de ruido, produce vibraciones, vierte aire caliente o frío o gotea a la calle, o si la unidad exterior está en un patio interior o en fachada sin permiso, sobresale más de 40 cm de la fachada o está a menos de 3 metros de la acera."
+      ],
+      "pasos": [
+        "Solicitar cita previa si el trámite se va a hacer presencialmente en una Junta de Distrito.",
+        "Iniciar la solicitud en línea pulsando \"Iniciar trámite\" e identificarse y firmar electrónicamente.",
+        "Tener preparada la documentación que se necesite adjuntar.",
+        "Rellenar el formulario.",
+        "Adjuntar, en su caso, la documentación indicada.",
+        "Presentar y firmar la solicitud; se podrá imprimir y guardar el justificante."
+      ],
+      "documentacion": [
+        "Instancia de solicitud de inspección de aparatos de aire o formulario de solicitud de inspección de aparatos de aire en línea.",
+        "Identificación clara de la persona solicitante y del inmueble objeto de denuncia, así como de la actividad que se está ejerciendo.",
+        "Si la denunciante es una sociedad: escritura de constitución de la sociedad y escritura de poderes de representación.",
+        "Si la denunciante es una Comunidad de Bienes: contrato constitutivo de la Comunidad de Bienes; la instancia la suscriben todos los miembros o quien acredite su representación.",
+        "Si se actúa en representación de persona física distinta del/la solicitante: poderes de representación."
+      ],
+      "plazo": "Se presenta desde que se producen las molestias. La ficha de la sede da dos plazos de resolución distintos: 3 meses y «no aplica».",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/LA.AI.90?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/LA.AI.90?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/LA.AI.90?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22. La ficha de la sede da dos plazos máximos de resolución distintos (3 meses y «no aplica»).",
+      "relacionados": []
+    },
+    {
+      "id": "LA.AS.10",
+      "tipo": "tramite",
+      "titulo": "Comunicar una actividad inocua para abrir un establecimiento en València",
+      "administracion": "Ajuntament de València",
+      "organismo": "Ajuntament de València",
+      "frases_usuario": [
+        "Quiero comunicar una actividad inocua para abrir mi negocio.",
+        "¿Cómo presento la comunicación de actividad inocua?",
+        "Necesito saber si mi actividad es inocua y qué documentos debo entregar.",
+        "Vull comunicar una activitat innòcua per a obrir el meu negoci.",
+        "Com puc presentar la comunicació d'activitat innòcua?"
+      ],
+      "requisitos_clave": [
+        "Puede solicitarlo toda persona física, jurídica, comunidad de bienes y demás entidades sin personalidad jurídica interesada en la apertura de un establecimiento para actividades sujetas a comunicación de actividad inocua en València.",
+        "La actividad no debe ser susceptible de afectar a la seguridad ni producir efectos negativos sobre la salud o el medio ambiente.",
+        "La actividad no debe estar sometida a autorización ambiental integrada, licencia ambiental o declaración responsable ambiental, conforme a la Ley 6/2014.",
+        "Es preceptivo el previo informe urbanístico municipal de compatibilidad; el procedimiento es consecutivo y la comunicación debe ir precedida de su solicitud.",
+        "Si la actividad requiere autorización o comunicación sectorial, el titular debe acreditar haber cumplimentado antes esa tramitación sectorial.",
+        "Si se requieren obras sujetas a declaración responsable, debe presentarse con carácter previo la declaración responsable de obras de habilitación o reforma para actividad de comercio o actividad inocua.",
+        "No sirve para actividades de espectáculos públicos, recreativas o establecimientos públicos (Ley 14/2010)."
+      ],
+      "pasos": [
+        "Solicitar el informe urbanístico municipal de compatibilidad; debe emitirse en el plazo de un mes desde su solicitud.",
+        "Si el informe no se emite en ese plazo, presentar la comunicación indicando la fecha en que fue solicitado.",
+        "Si corresponde, acreditar antes la tramitación sectorial y presentar previamente la declaración responsable de obras.",
+        "Presentar la comunicación de actividad inocua acompañada de la documentación indicada.",
+        "En la sede electrónica, rellenar el formulario, adjuntar la documentación, revisar los datos, firmar y presentar la solicitud.",
+        "Una vez presentada, podrá iniciarse la actividad, sin perjuicio de las facultades de comprobación, control e inspección."
+      ],
+      "documentacion": [
+        "Certificado de cumplimiento de normativa emitido por técnica/o competente en el que conste que la actividad se ajusta a la normativa vigente que le sea de aplicación.",
+        "Certificado de compatibilidad urbanística favorable o justificante de su solicitud con más de un mes de antelación, salvo que la verificación la realice una OCA o entidad colaboradora inscrita en el registro de la Generalitat.",
+        "Declaración responsable de que se dispone de la autorización preceptiva por la normativa sectorial para el ejercicio de la actividad.",
+        "Memoria técnica de la actividad suscrita por técnico/a competente, con descripción del local, las instalaciones y la actividad.",
+        "En caso de no aportarse la documentación visada, declaración responsable de personal técnico competente.",
+        "Requerimientos de la instalación respecto a los servicios públicos esenciales."
+      ],
+      "plazo": "Se solicita en cualquier momento previo al inicio de la actividad; el informe urbanístico de compatibilidad debe emitirse en el plazo de un mes desde su solicitud y el plazo máximo de resolución no aplica.",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/LA.AS.10?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/LA.AS.10?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/LA.AS.10?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "LA.OT.10",
+      "tipo": "tramite",
+      "titulo": "Certificado sobre si un local tiene o ha tenido actividad: antecedentes, cese o no actividad",
+      "administracion": "Ajuntament de València",
+      "organismo": "Ajuntament de València",
+      "frases_usuario": [
+        "Quiero un certificado de que en este local no hay actividad.",
+        "Necesito saber si en el inmueble se ha ejercido una actividad.",
+        "Pido certificado de cese de actividad para Hacienda.",
+        "Vull un certificat de si en aquest local hi ha activitat o no.",
+        "Necessite un certificat d'antecedents d'activitat per al local."
+      ],
+      "requisitos_clave": [
+        "Hay tres certificados: de antecedentes de una actividad, de cese de actividad (se pide sobre todo para Hacienda) y de no existencia de actividad (para dar de alta la luz o el agua en el local).",
+        "Pueden solicitarlo personas físicas, jurídicas, comunidades de bienes, de propietarios y demás entidades sin personalidad jurídica interesadas.",
+        "La solicitud de antecedentes o de cese debe expresar claramente los datos del inmueble y del anterior titular."
+      ],
+      "pasos": [
+        "Solicitar cita previa si se va a hacer el trámite presencialmente en Juntas de Distrito.",
+        "Iniciar la solicitud en línea con firma digital.",
+        "Identificarse y firmar electrónicamente según los sistemas de firma de la Sede Electrónica.",
+        "Preparar la documentación que se necesite adjuntar.",
+        "Rellenar el formulario y adjuntar la documentación indicada.",
+        "Presentar y firmar la solicitud e imprimir o guardar el justificante."
+      ],
+      "documentacion": [
+        "Instancia de solicitud general para pedir el certificado de antecedentes de existencia de actividad.",
+        "Copia del poder y exhibición del original para cotejo si se solicita en nombre de persona jurídica o de interesado distinto del solicitante.",
+        "Fotocopia de la escritura de constitución y de los poderes de representación si el solicitante es una sociedad.",
+        "Copia del contrato constitutivo de la comunidad de bienes y firma de todos los comuneros o de quien acredite su representación.",
+        "Para el cese de actividad, la misma documentación del caso de antecedentes de existencia de actividad.",
+        "Para la no existencia de actividad, instancia de solicitud de no ejercer ninguna actividad y copia del boletín de instalación para la compañía suministradora."
+      ],
+      "plazo": "Se puede pedir en cualquier momento. La ficha de la sede da dos plazos de resolución distintos: 3 meses y «no aplica».",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/LA.OT.10?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/LA.OT.10?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/LA.OT.10?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22. La ficha de la sede da dos plazos máximos de resolución distintos (3 meses y «no aplica»).",
+      "relacionados": []
+    },
+    {
+      "id": "PC.AE.10",
+      "tipo": "tramite",
+      "titulo": "Inscribir una asociación en el Registro Municipal de Entidades de València",
+      "administracion": "Ajuntament de València",
+      "organismo": "Servicio de Descentralización",
+      "frases_usuario": [
+        "Quiero inscribir mi asociación en el Registro Municipal de Entidades.",
+        "Cómo doy de alta una asociación en el registro del Ayuntamiento.",
+        "Necesito inscribir nuestra entidad para poder pedir subvenciones municipales.",
+        "Vull inscriure la meua associació en el Registre Municipal d'Entitats.",
+        "Com puc donar d'alta una entitat al registre de l'Ajuntament."
+      ],
+      "requisitos_clave": [
+        "Pueden inscribirse las entidades cuyo objeto sea la defensa, fomento o mejora de los intereses generales o sectoriales de la vecindad del municipio.",
+        "En particular, asociaciones vecinales de barrio o distrito, de padres y madres de alumnos, culturales, deportivas, recreativas, juveniles, empresariales, profesionales y similares.",
+        "Que no tengan ánimo de lucro.",
+        "Que sus Estatutos contemplen un funcionamiento democrático.",
+        "Que su domicilio social se encuentre en la Ciudad de Valencia.",
+        "Estar inscritas en el Registro General de Asociaciones de la Comunitat Valenciana u otros registros públicos."
+      ],
+      "pasos": [
+        "Iniciar el trámite en línea en la Sede Electrónica con firma digital.",
+        "Identificarse y firmar electrónicamente según los sistemas de firma de la Sede.",
+        "Tener preparada la documentación que se necesite adjuntar.",
+        "Rellenar el formulario.",
+        "Adjuntar, en su caso, la documentación indicada.",
+        "Presentar y firmar la solicitud."
+      ],
+      "documentacion": [
+        "Certificado de inscripción en el Registro General de Asociaciones de la Comunidad Valenciana u otros registros públicos.",
+        "Certificado de la Secretaria de la Entidad con la relación nominal de las personas que constituyen la Junta Directiva.",
+        "Certificado de la Secretaria de la Entidad donde conste el domicilio social de la Asociación en la ciudad de València o copia del CIF.",
+        "Estatutos de la asociación."
+      ],
+      "plazo": "En cualquier momento, después de inscribirse en el registro autonómico y antes de pedir subvenciones o uso de bienes municipales. Plazo máximo de resolución: 3 meses; si no hay respuesta, se entiende concedida (silencio estimatorio).",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/WEB_ASSET_CRG_0141?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/WEB_ASSET_CRG_0141?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/WEB_ASSET_CRG_0141?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "PC.AE.40",
+      "tipo": "tramite",
+      "titulo": "Actualizar los datos de una entidad en el Registro Municipal de Entidades de València",
+      "administracion": "Ajuntament de València",
+      "organismo": "Servicio de Descentralización",
+      "frases_usuario": [
+        "Quiero actualizar los datos de nuestra entidad en el Registro Municipal.",
+        "Soy representante de una asociación y necesito cambiar los datos del registro.",
+        "¿Cómo actualizo la ficha de mi entidad en el Registro Municipal de Entidades?",
+        "Vull actualitzar les dades de la nostra entitat en el Registre Municipal.",
+        "Sóc representant d'una associació i necessite canviar les dades del registre."
+      ],
+      "requisitos_clave": [
+        "Estar inscritas en el Registro Municipal de Entidades.",
+        "Pueden solicitarlo las entidades inscritas en el RMEC o persona física o jurídica representante en nombre de la entidad.",
+        "Se ha de realizar en línea con firma digital."
+      ],
+      "pasos": [
+        "Iniciar el trámite en línea con firma digital.",
+        "Preparar la documentación que se necesite adjuntar.",
+        "Rellenar el formulario.",
+        "Adjuntar, en su caso, la documentación indicada.",
+        "Presentar y firmar la solicitud.",
+        "Imprimir y guardar un justificante de presentación."
+      ],
+      "documentacion": [
+        "Estatutos modificados (si es el caso).",
+        "Copia del acta acreditativa de la modificación.",
+        "Certificado de la secretaría de la entidad en el que consten los datos objeto de la modificación.",
+        "Anexo 1. Nuevos datos de la entidad de la solicitud de actualización de datos en el registro municipal de entidades."
+      ],
+      "plazo": "Dentro del mes siguiente al cambio de datos. Plazo máximo de resolución: 3 meses; si no hay respuesta, se entiende concedida (silencio estimatorio).",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/WEB_ASSET_1_20170000428694?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/WEB_ASSET_1_20170000428694?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/WEB_ASSET_1_20170000428694?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "PC.AE.50",
+      "tipo": "tramite",
+      "titulo": "Comunicar cada año los datos de una entidad al Registro Municipal de Entidades",
+      "administracion": "Ajuntament de València",
+      "organismo": "Servicio de Descentralización",
+      "frases_usuario": [
+        "Quiero comunicar los datos anuales de mi asociación al Registro Municipal de Entidades.",
+        "¿Cómo presento la comunicación anual de mi entidad?",
+        "Necesito entregar el presupuesto y las actividades de mi asociación.",
+        "Vull comunicar les dades anuals de la meua associació al Registre Municipal d'Entitats.",
+        "Com puc presentar la comunicació anual de la meua entitat?"
+      ],
+      "requisitos_clave": [
+        "Estar inscritas en el Registro Municipal de Entidades.",
+        "Están obligadas a presentar la comunicación anual todas las entidades inscritas en el Registro Municipal de Entidades.",
+        "Se ha de realizar en línea con firma digital.",
+        "Si no se presenta, la entidad puede ser dada de baja en el Registro."
+      ],
+      "pasos": [
+        "Iniciar el trámite en la Sede Electrónica.",
+        "Identificarse y firmar electrónicamente.",
+        "Tener preparada la documentación que se necesite adjuntar.",
+        "Rellenar el formulario.",
+        "Adjuntar la documentación indicada.",
+        "Presentar y firmar la solicitud y guardar el justificante."
+      ],
+      "documentacion": [
+        "Copia del presupuesto anual.",
+        "Programa anual de actividades.",
+        "Certificado de la secretaría de la entidad en el que consta el número de personas asociadas."
+      ],
+      "plazo": "Entre el mes de octubre y enero de cada ejercicio económico; plazo máximo de resolución: No aplica; silencio administrativo: No procede.",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/PC.AE.50?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/PC.AE.50?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/PC.AE.50?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "PC.OT.20",
+      "tipo": "tramite",
+      "titulo": "Obtener un certificado de fe de vida en València",
+      "administracion": "Ajuntament de València",
+      "organismo": "Juntas Municipales de Distrito y Servicio de Descentralización y Participación Ciudadana",
+      "frases_usuario": [
+        "Quiero un certificado de fe de vida",
+        "Necesito acreditar que estoy vivo para la pensión",
+        "¿Dónde puedo pedir la fe de vida?",
+        "Vull un certificat de fe de vida",
+        "On puc sol·licitar la fe de vida?"
+      ],
+      "requisitos_clave": [
+        "Personas que cobran una pensión de jubilación/viudedad de un país miembro de la UE o en el extranjero.",
+        "Ser residentes en Valencia.",
+        "Se les requiere acreditar desde el país pagador de la pensión que están vivas.",
+        "Es requisito indispensable que se persone la persona interesada.",
+        "No se certifica el estado civil; en su caso, se remite al Registro Civil o al Consulado correspondiente."
+      ],
+      "pasos": [
+        "Solicitar cita previa por la web municipal o llamando al 010; en las Juntas municipales de Pobles, por los teléfonos indicados.",
+        "Acudir a las Juntas Municipales de Distrito con el DNI o NIE en vigor y los documentos que tenga que cumplimentar el personal funcionario competente.",
+        "Presentar el oficio/carta del país pagador de la pensión para que lo rellene el personal funcionario competente.",
+        "Si no está el Secretario/a de la Junta, acudir al Servicio de Descentralización y Participación Ciudadana."
+      ],
+      "documentacion": [
+        "D.N.I. o N.I.E. en vigor.",
+        "Oficio/carta del país pagador de la pensión para rellenar por el personal funcionario competente."
+      ],
+      "plazo": "No hay término para solicitarlo; el plazo máximo de resolución no aplica y el silencio administrativo no procede.",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/PC.OT.20?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/PC.OT.20?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/PC.OT.20?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "TR.OT.15",
+      "tipo": "tramite",
+      "titulo": "Pedir el Bono Oro del autobús urbano de València",
+      "administracion": "Ajuntament de València",
+      "organismo": "Empresa Municipal de Transportes (EMT) y Juntas Municipales del Ayuntamiento de València",
+      "frases_usuario": [
+        "Quiero solicitar el Bono Oro para viajar en el autobús urbano de València.",
+        "¿Dónde puedo pedir el Bono Oro si estoy jubilado?",
+        "Necesito cita previa para tramitar el Bono Oro.",
+        "Vull sol·licitar el Bono Oro per a viatjar amb autobús a València.",
+        "On puc tramitar el Bono Oro si soc pensionista?"
+      ],
+      "requisitos_clave": [
+        "Personas mayores de 65 años con residencia legal en España y empadronadas como mínimo desde los seis meses anteriores a la solicitud en la ciudad de València.",
+        "Personas menores de 65 años perceptoras de pensión por jubilación, viudedad, orfandad o incapacidad permanente, con residencia legal en España y empadronadas como mínimo desde los seis meses anteriores a la solicitud en el término municipal de València.",
+        "Personas menores de 65 años con discapacidad reconocida del 65% o superior, con residencia legal en España y empadronadas como mínimo desde los seis meses anteriores a la solicitud en el término municipal de València.",
+        "Las pensiones deben ser otorgadas por la Seguridad Social española; las similares de otros Estados no dan derecho.",
+        "Coste: 3,00 € por el carné (una sola vez) más el Abono Anual, que se paga por trimestres hasta el 31 de diciembre: 20,00 € en el 1.º trimestre, 15,00 € en el 2.º, 10,00 € en el 3.º y 5,00 € en el 4.º. Duplicado: 5,00 €."
+      ],
+      "pasos": [
+        "Solicitar cita previa por la web municipal o llamando al teléfono 010; en Juntas de Distrito de Pobles, por los teléfonos indicados.",
+        "Personarse en la Junta Municipal correspondiente, una vez constatado que se reúnen los requisitos, para la entrega en el mismo momento del Bono Oro.",
+        "Abonar el importe de 3,00 € y satisfacer el importe del Abono Anual en las oficinas de Atención al Cliente de EMT y en los puntos de venta autorizados.",
+        "Para activar el Bono Oro, a partir de la fecha que se indique cada año, exhibir el nuevo carné y el DNI y abonar el abono anual en las oficinas de EMT y puntos de venta autorizados.",
+        "En caso de pérdida, robo o deterioro, personarse en la Oficina Central de Atención al Cliente de EMT, C/ Mendoza 5, para solicitar duplicado con la copia del DNI, NIE o Pasaporte.",
+        "Abonar 5,00 € por el duplicado; se activará el Bono Anual vigente hasta el 31 de diciembre sin coste alguno para la persona titular."
+      ],
+      "documentacion": [
+        "DNI o NIE o pasaporte en vigor.",
+        "Certificado oficial original y actualizado de la pensión que se percibe, en el caso de menores de 65 años perceptores de pensión.",
+        "Certificado oficial original y actualizado del grado de discapacidad, en el caso de personas con discapacidad igual o superior al 65%.",
+        "Copia del DNI, NIE o pasaporte para solicitar duplicado en caso de pérdida, robo o deterioro."
+      ],
+      "plazo": "La primera solicitud o renovación se pide desde que se cumplan los requisitos y la activación a partir de la fecha que se indique cada año; el plazo máximo de resolución es de 3 meses y el silencio administrativo es estimatorio.",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/TR.OT.15?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/TR.OT.15?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/TR.OT.15?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "TR.OT.60",
+      "tipo": "tramite",
+      "titulo": "Sacar el carné y abono anual EMT ambTU para viajar en autobús urbano de València",
+      "administracion": "Ajuntament de València",
+      "organismo": "EMT València (Empresa Municipal de Transportes) y las Juntas Municipales de Distrito del Ayuntamiento de València",
+      "frases_usuario": [
+        "Quiero sacar el carné EMT ambTU para el autobús.",
+        "¿Cómo pido el abono anual de la EMT si estoy en paro?",
+        "Necesito cita previa en mi junta municipal para el carné ambTU.",
+        "Vull traure el carnet EMT ambTU per a l'autobús.",
+        "Com demane el bo anual de l'EMT si estic a l'atur?"
+      ],
+      "requisitos_clave": [
+        "Estar en edad laboral, es decir, tener entre 16 y 65 años.",
+        "Tener residencia legal en España y estar empadronado en el término municipal de València como mínimo desde los seis meses anteriores a la solicitud.",
+        "No superar los límites de renta familiar: ingresos totales inferiores al IPREM vigente.",
+        "En el caso de familias se computan los ingresos de ambos cónyuges y al IPREM se le suma el coeficiente 0,5 por el cónyuge y 0,3 por cada hijo o hija menor de 16 años.",
+        "Mujeres que acrediten ser víctimas de violencia de género y sus hijos e hijas menores, con independencia de su situación laboral, recursos económicos, situación administrativa o periodo de empadronamiento.",
+        "Personas de entre 14 y 16 años cuyo padre o madre ya tenga el carné EMT ambTU.",
+        "Personas empadronadas como mínimo desde los seis meses anteriores en las pedanías Sur de València, con independencia de su situación laboral y recursos económicos.",
+        "Coste: 3 € de activación del carné (una sola vez) más el Abono Anual; duplicado, 5 €. La ficha fija el Abono Anual en 10 € «para el año 2025»."
+      ],
+      "pasos": [
+        "Solicitar cita previa en la web municipal o llamando al teléfono 010; en Pobles del Sud, Pobles del Nord y Pobles de Benimàmet i Beniferri se pide por sus teléfonos propios.",
+        "Personarse en la Junta Municipal correspondiente una vez constatado que se reúnen los requisitos, donde se entrega el carné EMT ambTU en el mismo momento.",
+        "Abonar el importe de 3 € por una sola vez, salvo expedición de duplicados.",
+        "Satisfacer el Abono Anual en las oficinas de Atención al Cliente de EMT y en los puntos de venta autorizados, exhibiendo el nuevo carné y el DNI, NIE o pasaporte.",
+        "En caso de pérdida, personarse en la Oficina Central de Atención al Cliente de EMT València (c/ Mendoza, 5) y solicitar el duplicado con copia del DNI o NIE, abonando el importe correspondiente."
+      ],
+      "documentacion": [
+        "Formulario de solicitud debidamente cumplimentado y firmado.",
+        "DNI, NIE o Pasaporte en vigor (original y fotocopia del anverso y reverso).",
+        "Certificado de renta o certificado de no tener obligación de presentarla emitido por la Agencia Tributaria (original); si hay cónyuge, de ambos.",
+        "En caso de divorcio, certificado o sentencia judicial que acredite esa situación; si la declaración es conjunta, certificado de renta individual de la persona solicitante.",
+        "Para descendientes entre 14 y 16 años cuyo progenitor sea beneficiario: su DNI y libro de familia.",
+        "Para personas mayores de 16 años que convivan con su padre y/o madre: certificado de renta del padre, de la madre o de ambos."
+      ],
+      "plazo": "La primera solicitud o renovación se pide desde que se cumplan los requisitos en la Junta Municipal correspondiente; el carné se activa a partir de la fecha que se indique cada año, y el plazo máximo de resolución es de 3 meses.",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/TR.OT.60?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/TR.OT.60?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/TR.OT.60?lang=1",
+      "verificado": false,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22. Sin verificar: La ficha de la sede mezcla 2025 y 2026: cita la normativa de 2026 pero fija el Abono Anual (10 €) y la vigencia para 2025. Confirmar el importe en la sede.",
+      "relacionados": []
+    },
+    {
+      "id": "UR.LC.135",
+      "tipo": "tramite",
+      "titulo": "Declarar obras de reforma o rehabilitación de fachadas, cubiertas y medianeras en edificios no protegidos",
+      "administracion": "Ajuntament de València",
+      "organismo": "Ajuntament de València",
+      "frases_usuario": [
+        "Quiero declarar obras de reforma de la fachada de mi edificio.",
+        "Necesito presentar la declaración responsable para arreglar la cubierta.",
+        "¿Cómo tramito la rehabilitación de medianeras de un edificio no protegido?",
+        "Vull declarar obres de reforma de la façana del meu edifici.",
+        "Com tramite la rehabilitació de cobertes i mitgeres d'un edifici no protegit?"
+      ],
+      "requisitos_clave": [
+        "Declaraciones responsables de obras de mera reforma que no supongan alteración estructural del edificio ni afecten a elementos catalogados o en trámite de catalogación, y las de mantenimiento de la edificación.",
+        "Declaraciones responsables en edificios no catalogados situados en ámbitos patrimonialmente protegidos sin transcendencia patrimonial.",
+        "Declaraciones responsables para reforma o rehabilitación de una fachada de edificios no catalogados.",
+        "Puede solicitarlo la persona interesada o su representante, acreditando la representación.",
+        "No se admite prórroga salvo paralización por fuerza mayor o justa causa; la ocupación temporal para andamiajes requiere licencia o resolución de ocupación del dominio público.",
+        "Coste: tasa de actuaciones urbanísticas según el presupuesto de la obra (140,90 € hasta 6.010,12 €; más en tramos superiores) e Impuesto de Construcciones, Instalaciones y Obras (ICIO) del 4% del presupuesto de ejecución material."
+      ],
+      "pasos": [
+        "Ingresar la tasa por actuaciones urbanísticas con carácter previo a la presentación de la declaración responsable.",
+        "Presentar la solicitud de declaración responsable debidamente cumplimentada con la documentación señalada.",
+        "Ingresar el Impuesto sobre Construcciones, Instalaciones y Obras en el plazo de un mes desde la notificación de la licencia.",
+        "Si se hace en línea, pulsar “Iniciar trámite”, identificarse y firmar electrónicamente, cumplimentar el formulario y adjuntar la documentación.",
+        "Confirmar los datos, firmar y presentar la solicitud.",
+        "Para trámites presenciales en Juntas de Distrito, solicitar cita previa por la web municipal o llamando al teléfono 010; en Juntas de Pobles, por los teléfonos indicados."
+      ],
+      "documentacion": [
+        "Impreso de Declaración responsable debidamente cumplimentado, con identificación clara del solicitante y del emplazamiento de las obras y referencia catastral.",
+        "Documento que acredite la representación en caso de que el solicitante sea distinto de la persona interesada.",
+        "Autoliquidación y justificante de pago de la tasa de actuaciones urbanísticas.",
+        "Autoliquidación y justificante de pago del Impuesto de Construcciones, Instalaciones y Obras (ICIO).",
+        "Memoria técnica, presupuesto desglosado y total con detalle del IVA, estudio básico de seguridad y salud, estudio de gestión de residuos y documentación técnica de los medios auxiliares.",
+        "Planos de planta y sección de la ubicación en vía pública, si hay ocupación, y nombramiento del Director/a Técnico/a firmado digitalmente; si no se aporta documentación visada, declaración responsable de personal técnico competente."
+      ],
+      "plazo": "La declaración responsable puede iniciarse de inmediato si se presenta toda la documentación necesaria; el plazo máximo de resolución es de 3 meses y el ICIO se paga en el plazo de un mes desde la notificación de la licencia.",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/UR.LC.135?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/UR.LC.135?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/UR.LC.135?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "UR.LC.140",
+      "tipo": "tramite",
+      "titulo": "Declaración responsable para obras de mantenimiento o reforma en vivienda o elemento común (edificio no catalogado)",
+      "administracion": "Ajuntament de València",
+      "organismo": "Ajuntament de València",
+      "frases_usuario": [
+        "Quiero presentar una declaración responsable para reformar mi vivienda.",
+        "¿Cómo puedo comunicar obras de mantenimiento en un edificio no catalogado?",
+        "Necesito tramitar una reforma en un elemento común del edificio.",
+        "Vull presentar una declaració responsable per a reformar ma casa.",
+        "Com puc comunicar obres de manteniment en un edifici no catalogat?"
+      ],
+      "requisitos_clave": [
+        "Pueden ser obras que afecten a la estructura sin sustituir o reponer elementos estructurales principales, al aspecto exterior e interior, o de mera reforma sin alteración estructural ni afección a elementos catalogados, así como obras de mantenimiento y en edificios no catalogados en ámbitos patrimonialmente protegidos sin transcendencia patrimonial.",
+        "Las personas físicas pueden elegir medios electrónicos o presenciales; los sujetos obligados deben relacionarse por sede electrónica.",
+        "Se presenta siempre antes de empezar las obras.",
+        "Coste: tasa de actuaciones urbanísticas según el presupuesto de la obra (140,90 € hasta 6.010,12 €; más en tramos superiores) e Impuesto de Construcciones, Instalaciones y Obras (ICIO) del 4% del presupuesto de ejecución material, ambos antes de presentar la declaración."
+      ],
+      "pasos": [
+        "Ingresar la tasa por actuaciones urbanísticas antes de presentar la declaración responsable.",
+        "Ingresar el Impuesto sobre Construcciones, Instalaciones y Obras antes de presentar la declaración responsable.",
+        "Presentar la declaración responsable de obras cumplimentada con la documentación señalada.",
+        "Si se hace en sede electrónica, rellenar el formulario y adjuntar la documentación requerida.",
+        "Revisar los datos, firmar y presentar la solicitud.",
+        "Consultar y descargar una copia en Carpeta Ciudadana o aportar documentación adicional o la requerida."
+      ],
+      "documentacion": [
+        "Obras de mantenimiento de vivienda, elementos comunes, fachada o cubierta sin riesgo de caída de más de 2 metros: memoria descriptiva detallada de las obras.",
+        "Modelo de Declaración responsable cumplimentado por la persona interesada o representante legal (si es presencial) o formulario de la sede electrónica.",
+        "Autoliquidación y justificante de pago de la tasa de actuaciones urbanísticas.",
+        "Autoliquidación y justificante de pago del Impuesto de Construcciones, Instalaciones y Obras (ICIO).",
+        "Memoria descriptiva detallada de las obras a realizar y presupuesto desglosado y total, indicando detalle del IVA.",
+        "Para cambio de distribución, superposición de pavimentos, reparación de elementos constructivos o estructurales secundarios o modificación general de instalaciones: memoria técnica, justificación del CTE y de habitabilidad, planos, estudio básico de seguridad y salud, estudio de gestión de residuos, nombramiento de dirección técnica y declaración de personal técnico competente si no hay visado.",
+        "Para carpinterías exteriores: declaración de mantenimiento de las características formales y estéticas; para catas o ensayos: declaración de la persona interesada."
+      ],
+      "plazo": "Se presenta siempre antes del inicio de las obras; el plazo máximo de resolución no aplica.",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/UR.LC.140?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/UR.LC.140?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/UR.LC.140?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "VP.OC.30",
+      "tipo": "tramite",
+      "titulo": "Solicitar un contenedor de escombros en la vía pública para una obra",
+      "administracion": "Ajuntament de València",
+      "organismo": "La oficina que tramitó la licencia o la declaración de obras (Servicio de Licencias Urbanísticas, de Disciplina Urbanística, de Actividades o Junta Municipal de Distrito)",
+      "frases_usuario": [
+        "Quiero poner un contenedor de escombros en la calle para mi obra.",
+        "Necesito comunicar la ocupación de la vía pública con un contenedor.",
+        "¿Dónde solicito el contenedor de escombros para la obra?",
+        "Vull posar un contenidor de runes al carrer per a la meua obra.",
+        "Necessite comunicar l'ocupació de la via pública amb un contenidor de runes."
+      ],
+      "requisitos_clave": [
+        "Pueden solicitarlo personas físicas o jurídicas, comunidades de bienes o de propietarios y otras entidades sin personalidad jurídica que sean titulares de una licencia de obras o hayan presentado declaración responsable o comunicación previa de obras y necesiten retirar escombros con un contenedor.",
+        "El contenedor se instalará en la zona permitida más próxima a la obra, preferentemente en la calzada y en zona de estacionamiento permitido, sin sobresalir ni entorpecer el tráfico; si no es posible, en aceras entre alcorques y con acera mínima de 3,00 metros.",
+        "En calles sin estacionamiento permitido y acera inferior a 3,00 metros no se permite frente al inmueble; se usará sacas normalizadas de 1 m3 o un contenedor en la esquina o chaflán más próximo si hay aparcamiento.",
+        "En calles peatonales se respetarán las bandas libres peatonales y se mantendrá libre un carril para emergencias y acceso a la propiedad.",
+        "En calzada, el contenedor llevará elementos reflectantes de longitud mínima 50 cm y anchura 10 cm, se colocará a 0,20 m de la acera y no podrá ocupar el carril de circulación.",
+        "La superficie de apoyo se protegerá con palastro de 10 mm de espesor como mínimo; no se colocará sobre tapas de servicios, bocas de incendios, alcorques ni elementos urbanísticos, y al finalizar la jornada laboral se tapará para evitar polvo, salida de materiales o depósito de residuos.",
+        "Coste: tasa de ocupación de 0,31 € por m² o fracción y día, que se paga al solicitar el contenedor."
+      ],
+      "pasos": [
+        "Solicitar el contenedor como instalación auxiliar en la misma oficina que tramitó la licencia, orden de ejecución, declaración responsable o comunicación previa de obras.",
+        "Si la tramitación corresponde a una Junta Municipal de Distrito, pedir cita previa por la web municipal o llamando al teléfono 010.",
+        "Realizar el ingreso de la tasa por utilización privativa o aprovechamiento especial de bienes de dominio público municipal con mercancías, materiales de construcción y otras instalaciones análogas.",
+        "Presentar el impreso de comunicación de ocupación de la vía pública con contenedor de recogida de escombros junto con la documentación indicada.",
+        "Si se hace en línea, iniciar la solicitud con firma digital, rellenar el formulario y adjuntar la documentación requerida.",
+        "Presentar y firmar la solicitud y guardar el justificante de presentación."
+      ],
+      "documentacion": [
+        "Instancia de comunicación de ocupación de la vía pública con contenedor de recogida de escombros debidamente cumplimentada.",
+        "Identificación clara de la persona solicitante y del emplazamiento de las obras, indicando la referencia catastral.",
+        "Copia de la licencia, declaración responsable o comunicación previa de obras o datos identificativos de la misma (número de expediente o similar).",
+        "Justificante acreditativo de haber realizado el ingreso previo de la tasa correspondiente y autoliquidación completa para el pago de la Tasa de Ocupación de vía pública por elementos auxiliares.",
+        "Plano o croquis a mano alzada que grafique la ocupación que se pretende y los elementos de mobiliario urbano afectado.",
+        "Si es sociedad, escritura de constitución y escritura de poderes; si es comunidad de bienes, constitución de la comunidad y firma de todos los comuneros o de quien ostente su representación legal."
+      ],
+      "plazo": "Debe solicitarse siempre antes de la colocación del contenedor; el ingreso de la tasa se efectúa al solicitar el contenedor y el plazo máximo de resolución es de 3 meses.",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/VP.OC.30?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/VP.OC.30?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/VP.OC.30?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22.",
+      "relacionados": []
+    },
+    {
+      "id": "VP.PU.55",
+      "tipo": "tramite",
+      "titulo": "Pedir licencia para instalar publicidad en València con lonas, rótulos, banderolas o pancartas",
+      "administracion": "Ajuntament de València",
+      "organismo": "Servicio municipal de control de la publicidad (Ajuntament de València)",
+      "frases_usuario": [
+        "Quiero pedir licencia para poner publicidad en la fachada de mi local.",
+        "¿Cómo solicito permiso para instalar lonas en andamios?",
+        "Necesito autorización para colocar banderolas o pancartas.",
+        "Vull demanar llicència per a instal·lar publicitat en la façana del meu local.",
+        "Com puc sol·licitar permís per a posar lones en bastides?"
+      ],
+      "requisitos_clave": [
+        "Pueden ser titulares de la licencia las personas físicas o jurídicas que realicen directamente las actividades comerciales, industriales o de servicio a que se refieren los elementos publicitarios.",
+        "También pueden ser titulares las personas físicas o jurídicas que de forma habitual y profesional se dediquen a la actividad publicitaria y estén incluidas en la matrícula del Impuesto sobre Actividades Económicas e inscritas en los registros públicos que procedan.",
+        "En pancartas y banderolas también pueden solicitarla las candidaturas de partidos políticos que concurran a las elecciones y los titulares de museos o edificios públicos.",
+        "Debe cumplirse la normativa urbanística y la Ley de Patrimonio Cultural Valenciano respecto de los centros históricos e inmuebles protegidos.",
+        "Las banderolas deben retirarse al concluir el periodo electoral o el evento y como máximo en dos meses desde su instalación; las pancartas no deben perturbar la circulación ni causar daños y su parte inferior no puede situarse a menos de cinco metros sobre la calzada.",
+        "Para rótulos en azotea se necesita autorización expresa de la comunidad de propietarios y que el edificio no esté en situación de Fuera de Ordenación Sustantiva.",
+        "Coste: rótulos de locales comerciales que solo identifican el establecimiento, 47,08 €; rótulos en coronación y lonas en andamios, tasa según el presupuesto, y las lonas pagan además 14,33 € al año por metro cuadrado (un 50% más si son luminosas)."
+      ],
+      "pasos": [
+        "Abonar la tasa correspondiente.",
+        "Presentar la solicitud acompañada de la documentación señalada.",
+        "Si se solicita en línea, identificarse y firmar electrónicamente, rellenar el formulario y adjuntar la documentación requerida.",
+        "Presentar y firmar la solicitud, y guardar o imprimir el justificante de presentación.",
+        "Consultar o aportar documentación adicional desde la Carpeta Ciudadana.",
+        "Si se hace presencialmente en Juntas de Distrito, solicitar cita previa por la web municipal o llamando al teléfono 010; en Pobles, llamar a los teléfonos indicados."
+      ],
+      "documentacion": [
+        "Instancia cumplimentada, con identificación clara del solicitante y del inmueble e indicando la referencia catastral.",
+        "Justificante del ingreso previo de la tasa correspondiente y carta de pago de las tasas o precios públicos liquidados según la ordenanza fiscal.",
+        "Autorización de la propiedad del edificio, local o parcela y, en su caso, acuerdo de la comunidad de propietarios.",
+        "Si es sociedad, escritura de constitución y escritura de poderes que acrediten la representación de quien firma; si es comunidad de bienes, constitución y firma de todos los comuneros o de su representante legal.",
+        "Fotografías a color de tamaño mínimo 13 x 18 centímetros y, cuando proceda, proyecto técnico visado y proyecto específico de instalaciones eléctricas.",
+        "Cuando proceda, acreditación de inscripción en el Registro municipal de Empresas Publicitarias y póliza de seguro de responsabilidad civil."
+      ],
+      "plazo": "Un mes antes de la colocación, como mínimo. Si no hay respuesta, se entiende denegada (silencio desestimatorio). La ficha de la sede da dos plazos de resolución distintos: 3 meses y «no aplica».",
+      "enlace_info": "https://sede.valencia.es/sede/registro/procedimiento/VP.PU.55?lang=1",
+      "enlace_tramite": "https://sede.valencia.es/sede/registro/procedimiento/VP.PU.55?lang=1",
+      "fuente": "https://sede.valencia.es/sede/registro/procedimiento/VP.PU.55?lang=1",
+      "verificado": true,
+      "nota": "Revisado por IA contra la ficha oficial el 2026-10-22. La ficha de la sede da dos plazos máximos de resolución distintos (3 meses y «no aplica»).",
+      "relacionados": []
+    }
+  ]
+}
