@@ -1,6 +1,7 @@
 // Piezas compartidas por los scripts de indexación (docs/index_specification.md).
 import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
+import { DIMENSIONES, MODELO_EMBEDDINGS, embeber as embeberLote } from "../../src/lib/embeddings";
 
 export const DIR_CACHE = ".cache/indexado";
 export const DIR_SEDE = `${DIR_CACHE}/sede`;
@@ -96,35 +97,16 @@ export const esperar = (ms: number) => new Promise((r) => setTimeout(r, ms));
 // Pausa entre llamadas a HelmCode: la clave es compartida por todos los equipos.
 export const PAUSA_IA_MS = 3000;
 
-export const MODELO_EMBEDDINGS = "qwen3-embedding";
-export const DIMENSIONES = 1536;
+export { DIMENSIONES, MODELO_EMBEDDINGS };
+
 const LOTE = 32;
 
-// Embeddings en lotes de 32, normalizados a longitud 1 y con 5 decimales.
+// Embeddings en lotes de 32 con pausa entre ellos.
 export async function embeber(textos: string[]): Promise<number[][]> {
-  const { HELMCODE_API_KEY, HELMCODE_BASE_URL } = process.env;
-  if (!HELMCODE_API_KEY) throw new Error("Falta HELMCODE_API_KEY en .env.local");
   const vectores: number[][] = [];
   for (let i = 0; i < textos.length; i += LOTE) {
     if (i > 0) await esperar(PAUSA_IA_MS);
-    const res = await fetch(`${HELMCODE_BASE_URL ?? "https://api.helmcode.com/v1"}/embeddings`, {
-      method: "POST",
-      headers: { authorization: `Bearer ${HELMCODE_API_KEY}`, "content-type": "application/json" },
-      body: JSON.stringify({
-        model: MODELO_EMBEDDINGS,
-        input: textos.slice(i, i + LOTE),
-        dimensions: DIMENSIONES,
-      }),
-    });
-    if (!res.ok) throw new Error(`Embeddings: HelmCode respondió ${res.status}`);
-    const data = (await res.json()) as { data: { index: number; embedding: number[] }[] };
-    for (const d of data.data.sort((a, b) => a.index - b.index)) vectores.push(normalizar(d.embedding));
+    vectores.push(...(await embeberLote(textos.slice(i, i + LOTE))));
   }
   return vectores;
-}
-
-function normalizar(v: number[]): number[] {
-  const corto = v.slice(0, DIMENSIONES);
-  const norma = Math.hypot(...corto) || 1;
-  return corto.map((x) => Math.round((x / norma) * 1e5) / 1e5);
 }
