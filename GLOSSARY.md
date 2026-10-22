@@ -43,3 +43,11 @@ _Evitar_: ficha, resultado, tarjeta
 **Sin coincidencia**:
 Resultado de una consulta que no corresponde a ninguna entrada del catálogo; se remite al buscador del PAG.
 _Evitar_: no encontrado, fallback
+
+**Acción principal**:
+El único botón `sunset` de la respuesta compuesta; existe solo si la entrada tiene `enlace_tramite`.
+_Evitar_: CTA, botón principal
+
+**Entrada sin verificar**:
+Entrada con `verificado: false`; se muestra con un aviso junto al titular.
+_Evitar_: entrada dudosa, incompleta
