@@ -1,0 +1,3 @@
+{
+  "smoke": { "about": "Lo que nunca puede romperse", "suites": ["consulta"] }
+}

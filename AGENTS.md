@@ -49,3 +49,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Multi-person suites (QA Cockpit)
+
+The app's suites where several people use it at once live in
+`qa/suites/`, and QA Cockpit sets them up, records them and heals
+them. Before running, writing or recording one, or setting QA Cockpit up,
+read and follow `qa/SKILL.md` («Before you launch anything» first).
