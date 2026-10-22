@@ -24,7 +24,10 @@ const instruccionesEncaja =
   "La persona (que puede escribir en castellano o en valenciano, de forma coloquial o con faltas) describe una situación o necesidad que se resuelve con alguno de estos trámites o ayudas: " +
   tramites.map((t) => t.titulo).join("; ");
 
-export async function preguntarJev(frase: string): Promise<RespuestaJev> {
+export async function preguntarJev(
+  frase: string,
+  senal?: AbortSignal,
+): Promise<RespuestaJev> {
   const clave = process.env.JEV_API_KEY;
   if (!clave) throw new Error("Falta JEV_API_KEY");
   const body = JSON.stringify({
@@ -46,7 +49,8 @@ export async function preguntarJev(frase: string): Promise<RespuestaJev> {
     },
   });
   // Los 3 s cubren la operación entera, reintento incluido.
-  const signal = AbortSignal.timeout(TIMEOUT_MS);
+  const limite = AbortSignal.timeout(TIMEOUT_MS);
+  const signal = senal ? AbortSignal.any([senal, limite]) : limite;
   for (let intento = 0; ; intento++) {
     const res = await fetch(URL_JEV, {
       method: "POST",

@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { BotonAviso } from "@/components/BotonAviso";
-import { Buscador } from "@/components/Buscador";
+import { Flujo } from "@/components/flujo/Flujo";
 import ficha from "../../ficha.json";
 
 export default function Home() {
@@ -26,14 +26,19 @@ export default function Home() {
         tabIndex={-1}
         className="mx-auto max-w-[760px] px-(--page-gutter) pt-8 pb-20 outline-none md:pt-12"
       >
-        <Buscador />
+        <Flujo />
       </main>
 
       <footer className="p-2">
         <div className="flex flex-wrap items-center justify-between gap-6 rounded-[28px] px-(--page-gutter) py-12 [background:radial-gradient(80%_70%_at_50%_-12%,#ffe58f_0%,rgba(255,229,143,0)_70%),linear-gradient(180deg,#ffd34d_0%,var(--brand-yellow)_46%,var(--brand-orange)_100%)] md:px-12">
           <p className="text-[15px]">
             Una pieza del squad{" "}
-            <span className="font-mono">{ficha.equipo}</span> · Build night
+            <span className="font-mono">{ficha.equipo}</span> · Build night ·{" "}
+            {/* Reabre el aviso del primer uso para retirar la aceptación. */}
+            <a href="#privacidad" className="underline underline-offset-4">
+              Privacidad<span aria-hidden="true"> · </span>
+              <span lang="ca">Privacitat</span>
+            </a>
           </p>
           <BotonAviso />
         </div>

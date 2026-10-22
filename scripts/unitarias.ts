@@ -5,6 +5,11 @@ import {
   parsearLLM,
   porPalabras,
 } from "../src/lib/clasificar";
+import { getTramite } from "../src/lib/catalogo";
+import { componer, pasaGuardarrail } from "../src/lib/motor/componer";
+import { leerHelmcode } from "../src/lib/motor/helmcode";
+import { candidatasJev } from "../src/lib/motor/jev";
+import { plantillas } from "../src/lib/motor/plantillas";
 
 let fallos = 0;
 function comprobar(nombre: string, ok: boolean) {
@@ -75,6 +80,37 @@ for (const [f, i] of [
   ["la casa de mi madre", "es"],
 ] as const)
   comprobar(`idioma «${f}» → ${i}`, detectarIdioma(f) === i);
+
+// Motor: regla de Jev (ticket 04)
+const ids = (cs: { id: string; confianza: string }[]) =>
+  cs.map((c) => `${c.id}:${c.confianza}`).join(",");
+comprobar("Motor Jev: confianza alta → una alta", ids(candidatasJev(alta)) === "voto-por-correo:alta");
+comprobar("Motor Jev: encaja bajo → ninguna", candidatasJev(fuera).length === 0);
+comprobar("Motor Jev: confianza media → 2 medias", ids(candidatasJev(media)) === "complemento-ayuda-infancia:media,ingreso-minimo-vital:media");
+comprobar("Motor Jev: confianza baja → ninguna", candidatasJev(baja).length === 0);
+
+// Motor: HelmCode
+const h1 = leerHelmcode('```json\n{"id":"multa-dgt","alternativas":[],"idioma":"es"}\n```');
+comprobar("Motor HelmCode: id seguro → una alta", ids(h1.candidatas) === "multa-dgt:alta");
+const h2 = leerHelmcode('{"id":null,"alternativas":["vida-laboral","inventado","vida-laboral","multa-dgt"],"idioma":"va"}');
+comprobar("Motor HelmCode: duda → medias sin inventadas ni repetidas", ids(h2.candidatas) === "vida-laboral:media,multa-dgt:media" && h2.idioma === "va");
+comprobar("Motor HelmCode: id inventado → ninguna", leerHelmcode('{"id":"pasaporte","alternativas":[]}').candidatas.length === 0);
+comprobar("Motor HelmCode: sin JSON lanza", lanza(() => leerHelmcode("no sé")));
+
+// Motor: resultado
+const c0 = await componer([], "va", "jev", "x");
+comprobar("Motor: ninguna → sin coincidencia de plantilla", c0.tipo === "sin_coincidencia" && c0.texto === plantillas.va.sinCoincidencia);
+const c1 = await componer([{ id: "multa-dgt", confianza: "alta" }], "es", "helmcode", "x");
+comprobar("Motor: una alta → respuesta", c1.tipo === "respuesta" && c1.candidata.id === "multa-dgt");
+
+// Motor: guardarraíl de la aclaración
+comprobar("Guardarraíl: pregunta limpia pasa", pasaGuardarrail("¿Quieres pedir el paro o apuntarte en Labora?", []));
+comprobar("Guardarraíl: dígitos no pasan", !pasaGuardarrail("¿Han pasado 15 días?", []));
+comprobar("Guardarraíl: moneda no pasa", !pasaGuardarrail("¿Cobras menos de mil €?", []));
+comprobar("Guardarraíl: enlace no pasa", !pasaGuardarrail("¿Has mirado HTTPS://sede.gva.es?", []));
+comprobar("Guardarraíl: más de 280 caracteres no pasa", !pasaGuardarrail(`¿${"a".repeat(280)}?`, []));
+const voto = getTramite("voto-por-correo")!.titulo;
+comprobar("Guardarraíl: los dígitos del título citado no cuentan", pasaGuardarrail(`¿Te refieres a «${voto}»?`, [voto]));
 
 console.log(fallos ? `\n${fallos} fallos` : "\nTodo bien");
 if (fallos) process.exitCode = 1;
