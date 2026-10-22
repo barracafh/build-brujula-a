@@ -8,3 +8,6 @@ out/
 next-env.d.ts
 .DS_Store
 .claude/worktrees
+
+# Indexación: capturas y salidas intermedias (no se suben)
+.cache/
