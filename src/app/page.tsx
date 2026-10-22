@@ -1,15 +1,29 @@
-import { Badge } from "@/components/ui/badge";
+import { Compass } from "lucide-react";
 import { BotonAviso } from "@/components/BotonAviso";
 import { Flujo } from "@/components/flujo/Flujo";
 import ficha from "../../ficha.json";
+
+// «Brújula · Asistente de trámites»: el nombre pesa y la frase acompaña.
+const [nombre, apellido] = ficha.nombre.split(" · ");
 
 export default function Home() {
   return (
     <>
       <header className="mx-auto flex min-h-20 max-w-(--container-content) flex-wrap items-center justify-between gap-4 px-(--page-gutter) py-4">
-        <Badge variant="outline" className="ml-auto">
-          {ficha.datos === "reales" ? "Datos públicos" : "Datos simulados"}
-        </Badge>
+        <span className="inline-flex items-center gap-3 leading-tight">
+          <span
+            aria-hidden="true"
+            className="grid size-9 shrink-0 place-items-center rounded-lg bg-brand text-white"
+          >
+            <Compass className="size-5" strokeWidth={2.25} />
+          </span>
+          <span className="text-lg font-semibold tracking-tight">{nombre}</span>
+          {apellido && (
+            <span className="hidden text-base text-(--text-secondary) sm:inline">
+              {apellido}
+            </span>
+          )}
+        </span>
       </header>
 
       <main
@@ -25,6 +39,7 @@ export default function Home() {
           <p className="text-[15px]">
             Una pieza del squad{" "}
             <span className="font-mono">{ficha.equipo}</span> · Build night ·{" "}
+            {ficha.datos === "reales" ? "Datos públicos" : "Datos simulados"} ·{" "}
             {/* Reabre el aviso del primer uso para retirar la aceptación. */}
             <a href="#privacidad" className="underline underline-offset-4">
               Privacidad<span aria-hidden="true"> · </span>
