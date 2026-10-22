@@ -141,3 +141,16 @@ Dominios del catálogo que **no** rastreamos: gva.es, sede.gva.es, labora.gva.es
       - Las frases de usuario no entran en el índice. Se siguen usando como ejemplos en Jev (punto 11).
       - El orden de desempate quedó fijado así: mejor top 3, luego mejor top 1, luego la variante más simple (A, D, C) y, dentro de ella, sin instrucción.
     - **Límites:** 40 preguntas son pocas, y entre variantes hay una o dos preguntas de diferencia. Tres trámites de la organización no tienen pregunta (`bono-alquiler-joven`, `ayudas-comedor-escolar`, `xarxa-llibres`). Si añadimos trámites, hay que repetir la prueba con `bun scripts/indexado/evaluar.ts`.
+18. **Cuándo se usa el índice: siempre, como primer paso, para quedarnos con los 10 trámites más parecidos (22/10/2026).**
+    - **Flujo:** cada consulta se convierte en vector (con `instruccion_consulta` delante) y se compara con los 37. Los 10 más parecidos pasan al clasificador (Jev o HelmCode), que elige entre ellos o pide aclaración como hasta ahora (ticket 04).
+    - **Por qué 10:** antes el clasificador veía los 21 trámites a la vez y funcionaba bien; 10 es menos que eso, así que no le complicamos la elección. Y con 10 no perdemos el correcto: en la prueba, D con instrucción ya lo tenía siempre entre los 3 primeros.
+    - **Por qué no otras opciones:**
+      - Solo como respaldo (cuando Jev dice «no encaja»): una pregunta de València podía acabar mal clasificada en uno de los 21.
+      - Solo vectores, sin clasificador: el top 1 es del 83 %; demasiadas respuestas directas erróneas.
+      - Los 37 directamente al clasificador: funcionaría hoy, pero no escala si añadimos más trámites.
+    - **Qué ve el ciudadano si gana un trámite de València:** la ficha completa, igual que las 21 de la organización. Las 16 están revisadas y tienen el mismo formato. TR.OT.60 lleva el aviso de ficha no verificada (ticket 03). Sustituye a lo que decía el punto 1 («solo título, enlace y fecha»).
+    - **Consecuencias para el código:**
+      - La fuente del catálogo (ticket 05) devuelve en `listar()` las 37 entradas: `datos/catalogo-tramites-ayudas.json` más `src/datos/catalogo-valencia.json`.
+      - Los criterios de Jev y la lista del prompt de HelmCode se construyen en cada consulta con los 10 candidatos, no con el catálogo entero.
+      - Cada consulta hace una llamada más a HelmCode (el embedding de la pregunta). La pregunta no se guarda: su vector se descarta al responder (punto 6).
+      - Si falla el embedding, el clasificador recibe los 37: es una lista corta y sigue funcionando.
