@@ -2,7 +2,7 @@
 
 Rama `rag-buscador` (worktree `../brujula-rag`). Parte de `indexacion-valencia` (índice, catálogo de València y scripts) con `main` fusionado (motor, `/api/consulta` y fuente del catálogo). Decisión de producto: `decisiones.md`, punto 18.
 
-Revisado por Codex (pasada 1): incorporados sus 7 hallazgos (orden de las pruebas, módulo puro de similitud, timeout propio, validación de la respuesta, redondeo después de ordenar, prueba real de la herramienta, despacho de `tool_calls`).
+Revisado por Codex dos veces. Pasada 2: validar solo las dimensiones usadas, similitud de -1 a 1 y `null` al degradar explicados al modelo, minimización dentro de la herramienta y respuesta final en el ejemplo del bucle. Pasada 1: incorporados sus 7 hallazgos (orden de las pruebas, módulo puro de similitud, timeout propio, validación de la respuesta, redondeo después de ordenar, prueba real de la herramienta, despacho de `tool_calls`).
 
 ## Objetivo
 
@@ -117,11 +117,12 @@ export async function embeber(
   return vectores.map(normalizar);
 }
 
-const valido = (v: unknown): v is number[] =>
-  Array.isArray(v) &&
-  v.length >= DIMENSIONES &&
-  v.every(Number.isFinite) &&
-  v.some((x) => x !== 0);
+// Se valida lo que se usa: los primeros DIMENSIONES valores, con norma > 0.
+const valido = (v: unknown): v is number[] => {
+  if (!Array.isArray(v) || v.length < DIMENSIONES) return false;
+  const corto = v.slice(0, DIMENSIONES);
+  return corto.every(Number.isFinite) && corto.some((x) => x !== 0);
+};
 
 function normalizar(v: number[]): number[] {
   const corto = v.slice(0, DIMENSIONES);
@@ -205,8 +206,8 @@ import { catalogo } from "@/lib/fuente-catalogo";
 import type { Entrada } from "@/lib/entrada";
 
 // Herramienta del agente: de una frase del ciudadano a los trámites más
-// parecidos del catálogo (decisiones.md, punto 18). Quien llama minimiza antes
-// la frase (src/lib/minimizar.ts), igual que /api/consulta.
+// parecidos del catálogo (decisiones.md, punto 18). La frase se minimiza aquí
+// (src/lib/minimizar.ts) antes de enviarla a HelmCode, venga de donde venga.
 //
 //   const { candidatos } = await buscarTramites("me han echado del trabajo");
 //
@@ -233,7 +234,7 @@ export async function buscarTramites(
   frase: string,
   { limite, signal }: { limite?: number; signal?: AbortSignal } = {},
 ): Promise<ResultadoBusqueda> {
-  const texto = frase.trim().slice(0, MAX_CARACTERES);
+  const texto = minimizar(frase.trim().slice(0, MAX_CARACTERES));
   if (!texto) return { candidatos: [] };
   const plazo = AbortSignal.timeout(TIMEOUT_MS);
   try {
@@ -261,7 +262,7 @@ export const definicion = {
   function: {
     name: "buscar_tramites",
     description:
-      "Busca en el catálogo de Brújula (trámites y ayudas para quien vive en València) los más parecidos a lo que necesita el ciudadano. Devuelve id, título, tipo, organismo, administración y similitud (0 a 1), de más a menos parecido. Llámala una vez por mensaje del ciudadano, antes de hablar de un trámite concreto.",
+      "Busca en el catálogo de Brújula (trámites y ayudas para quien vive en València) los más parecidos a lo que necesita el ciudadano. Devuelve id, título, tipo, organismo, administración y similitud (coseno, de -1 a 1; cuanto más alta, más parecido), de más a menos parecido. Si el buscador falla, devuelve el catálogo entero sin ordenar, con similitud null y un campo aviso: elige tú entre todos. Llámala una vez por mensaje del ciudadano, antes de hablar de un trámite concreto.",
     parameters: {
       type: "object",
       properties: {
@@ -316,6 +317,7 @@ export async function ejecutar(argumentos: string, signal?: AbortSignal): Promis
 ```
 
 Notas:
+- La frase se minimiza dentro de `buscarTramites`, así que también la que escribe el modelo en `tool_calls` pasa por `minimizar` antes de llegar a HelmCode.
 - Ningún `console.*` con la frase (regla 3). El `catch` no registra nada.
 - `Promise.all` sobre `catalogo.obtener`: hoy es un `Map`; si la fuente pasa a ser remota, son 10 consultas en paralelo, no en serie.
 
@@ -370,12 +372,15 @@ Ejemplo para quien construya el bucle (no se implementa aquí). Necesita un clie
 import { definicion, responder } from "@/lib/herramientas/buscar-tramites";
 
 const mensajes = [{ role: "system", content: "…" }, { role: "user", content: frase }];
-for (let paso = 0; paso < 4; paso++) {
-  const { choices } = await llamarHelmCode({ messages: mensajes, tools: [definicion] });
+let respuesta: string | undefined;
+for (let paso = 0; paso < 4 && respuesta === undefined; paso++) {
+  // En el último paso no se ofrecen herramientas: el modelo tiene que contestar.
+  const ultimo = paso === 3;
+  const { choices } = await llamarHelmCode({ messages: mensajes, tools: ultimo ? undefined : [definicion] });
   const mensaje = choices[0].message;
   mensajes.push(mensaje);
-  if (!mensaje.tool_calls?.length) break; // respuesta final
-  for (const llamada of mensaje.tool_calls) mensajes.push(await responder(llamada, signal));
+  if (!mensaje.tool_calls?.length) respuesta = mensaje.content; // respuesta final
+  else for (const llamada of mensaje.tool_calls) mensajes.push(await responder(llamada, signal));
 }
 ```
 
