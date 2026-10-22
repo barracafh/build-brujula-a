@@ -2,10 +2,11 @@ import "server-only";
 import { buscar, LIMITE_POR_DEFECTO, TOTAL } from "@/lib/buscador";
 import { catalogo } from "@/lib/fuente-catalogo";
 import type { Entrada } from "@/lib/entrada";
+import { minimizar } from "@/lib/minimizar";
 
 // Herramienta del agente: de una frase del ciudadano a los trámites más
-// parecidos del catálogo (decisiones.md, punto 18). Quien llama minimiza antes
-// la frase (src/lib/minimizar.ts), igual que /api/consulta.
+// parecidos del catálogo (decisiones.md, punto 18). La frase se minimiza aquí
+// (src/lib/minimizar.ts) antes de enviarla a HelmCode, venga de donde venga.
 //
 //   const { candidatos } = await buscarTramites("me han echado del trabajo");
 //
@@ -32,7 +33,7 @@ export async function buscarTramites(
   frase: string,
   { limite, signal }: { limite?: number; signal?: AbortSignal } = {},
 ): Promise<ResultadoBusqueda> {
-  const texto = frase.trim().slice(0, MAX_CARACTERES);
+  const texto = minimizar(frase.trim().slice(0, MAX_CARACTERES));
   if (!texto) return { candidatos: [] };
   const plazo = AbortSignal.timeout(TIMEOUT_MS);
   try {
@@ -60,7 +61,7 @@ export const definicion = {
   function: {
     name: "buscar_tramites",
     description:
-      "Busca en el catálogo de Brújula (trámites y ayudas para quien vive en València) los más parecidos a lo que necesita el ciudadano. Devuelve id, título, tipo, organismo, administración y similitud (0 a 1), de más a menos parecido. Llámala una vez por mensaje del ciudadano, antes de hablar de un trámite concreto.",
+      "Busca en el catálogo de Brújula (trámites y ayudas para quien vive en València) los más parecidos a lo que necesita el ciudadano. Devuelve id, título, tipo, organismo, administración y similitud (coseno, de -1 a 1; cuanto más alta, más parecido), de más a menos parecido. Si el buscador falla, devuelve el catálogo entero sin ordenar, con similitud null y un campo aviso: elige tú entre todos. Llámala una vez por mensaje del ciudadano, antes de hablar de un trámite concreto.",
     parameters: {
       type: "object",
       properties: {
