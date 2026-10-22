@@ -11,6 +11,17 @@ El backend está hecho; la interfaz del chat la construye el frontend.
 - `entradaAbierta`: obligatorio para el chat. Si no es un id del catálogo → 400.
 - Tarda de 5 a 40 s (varias llamadas a la IA; con glm5.3-flash, una pregunta sobre otro trámite ronda los 30 s). Mostrar «pensando» y permitir cancelar. La ruta corta a los 45 s → 502.
 
+## En vivo (streaming)
+
+Con `"enVivo": true` en la petición, la respuesta llega como NDJSON (una línea JSON por evento) y el texto se puede pintar según se escribe:
+
+- `{"texto": "trozo"}`: añadir al mensaje del asistente.
+- `{"descartar": true}`: borrar lo escrito hasta ahora (el modelo escribió algo antes de llamar a una herramienta).
+- `{"respuesta": RespuestaConsulta}`: el final. Su `texto` (ya comprobado) sustituye lo escrito en vivo; si no pasó la comprobación de cifras y enlaces, es la plantilla «No podemos confirmarlo».
+- `{"error": "La IA no responde."}`: no hubo respuesta.
+
+Es lo que usa la interfaz (`charlar()` en `useConversacion.ts`). Sin `enVivo`, todo igual que abajo.
+
 ## Respuesta
 
 `{ tipo: "contestacion", texto, fuentes, candidatas, idioma }` (`RespuestaConsulta` de `src/lib/consulta.ts`).

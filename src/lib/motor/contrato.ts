@@ -53,6 +53,11 @@ export type Resultado =
       candidatas: Candidata[];
     } & Comun);
 
+// Texto del chat según lo escribe el modelo, para mostrarlo en vivo. Es un
+// borrador: si una vuelta acaba llamando a una herramienta se descarta, y el
+// `texto` del resultado (ya comprobado) siempre lo sustituye.
+export type EnVivo = { texto(trozo: string): void; descartar(): void };
+
 export interface Motor {
   // `entradaAbierta`: id de la ficha que el ciudadano está viendo. Si llega,
   // el motor contesta dudas sobre ella (tipo "contestacion").
@@ -60,5 +65,6 @@ export interface Motor {
     historial: Turno[],
     senal?: AbortSignal,
     entradaAbierta?: string,
+    enVivo?: EnVivo,
   ): Promise<Resultado>;
 }

@@ -18,6 +18,7 @@ import {
 import {
   MAX_CARACTERES,
   type Candidata,
+  type EnVivo,
   type FuenteResultado,
   type Idioma,
   type Motor,
@@ -251,7 +252,7 @@ async function cerrar(
 }
 
 export const motorAgente: Motor = {
-  async clasificar(historial, senal, entradaAbierta) {
+  async clasificar(historial, senal, entradaAbierta, enVivo?: EnVivo) {
     if (!entradaAbierta) throw new Error("El agente necesita entradaAbierta");
     const abierta = await catalogo.obtener(entradaAbierta);
     if (!abierta) throw new Error("entradaAbierta fuera del catálogo");
@@ -280,13 +281,22 @@ export const motorAgente: Motor = {
 
     for (let i = 0; i < MAX_LLAMADAS; i++) {
       const ultima = i === MAX_LLAMADAS - 1;
+      let escrito = false;
       const msg = await conversar(mensajes, {
         tools: herramientas,
         toolChoice: ultima ? "none" : "auto",
         signal: senal,
+        alTexto:
+          enVivo &&
+          ((trozo) => {
+            escrito = true;
+            enVivo.texto(trozo);
+          }),
       });
       if (!msg.tool_calls || ultima)
         return cerrar(msg.content ?? "", idioma, abierta, estado);
+      // Lo que escribió antes de llamar a una herramienta no es la respuesta.
+      if (escrito) enVivo?.descartar();
       mensajes.push(msg);
       for (const llamada of msg.tool_calls)
         mensajes.push({

@@ -15,6 +15,14 @@
     font-synthesis: none;
   }
 
+  /* Con el chat de la ficha abierto, en pantallas anchas la página deja
+     sitio al panel lateral (Flujo.tsx). */
+  @media (min-width: 64rem) {
+    html[data-chat-abierto] body {
+      padding-right: 26rem;
+    }
+  }
+
   h1,
   h2 {
     @apply font-heading font-normal;

@@ -38,38 +38,86 @@ export async function completar(
   messages: Mensaje[],
   { signal }: { signal?: AbortSignal } = {},
 ): Promise<string> {
-  const data = await pedir({ messages }, signal);
+  const data = await (await pedir({ messages }, signal)).json();
   return data.choices[0].message.content;
 }
 
 // Una vuelta del loop: devuelve el mensaje del asistente tal cual, con texto
-// o con llamadas a herramientas, listo para añadirlo a `messages`.
+// o con llamadas a herramientas, listo para añadirlo a `messages`. Con
+// `alTexto`, pide la respuesta en streaming y le pasa cada trozo de texto
+// según llega (el razonamiento y las llamadas no se pasan).
 export async function conversar(
   messages: MensajeChat[],
   {
     tools,
     toolChoice = "auto",
     signal,
+    alTexto,
   }: {
     tools: Herramienta[];
     toolChoice?: "auto" | "none";
     signal?: AbortSignal;
+    alTexto?: (trozo: string) => void;
   },
 ): Promise<MensajeAsistente> {
-  const data = await pedir(
-    { messages, tools, tool_choice: toolChoice },
-    signal,
-  );
-  const { content, tool_calls, reasoning_content } = data.choices[0].message;
+  const cuerpo = { messages, tools, tool_choice: toolChoice };
+  const { content, tool_calls, reasoning_content } = alTexto
+    ? await leerStream(await pedir({ ...cuerpo, stream: true }, signal), alTexto)
+    : (await (await pedir(cuerpo, signal)).json()).choices[0].message;
   return {
     role: "assistant",
-    content: content ?? null,
+    content: content || null,
     ...(tool_calls?.length ? { tool_calls } : {}),
     ...(reasoning_content ? { reasoning_content } : {}),
   };
 }
 
-async function pedir(cuerpo: object, signal?: AbortSignal) {
+// Junta los trozos del stream (formato SSE de OpenAI) en un solo mensaje.
+async function leerStream(
+  res: Response,
+  alTexto: (trozo: string) => void,
+): Promise<{
+  content: string;
+  tool_calls: LlamadaHerramienta[];
+  reasoning_content: string;
+}> {
+  let content = "";
+  let reasoning_content = "";
+  const tool_calls: LlamadaHerramienta[] = [];
+  const lector = res.body!.pipeThrough(new TextDecoderStream()).getReader();
+  let resto = "";
+  for (;;) {
+    const { value, done } = await lector.read();
+    if (done) break;
+    const lineas = (resto + value).split("\n");
+    resto = lineas.pop() ?? "";
+    for (const linea of lineas) {
+      const datos = linea.startsWith("data:") ? linea.slice(5).trim() : "";
+      if (!datos || datos === "[DONE]") continue;
+      const delta = JSON.parse(datos).choices?.[0]?.delta ?? {};
+      if (delta.reasoning_content) reasoning_content += delta.reasoning_content;
+      if (delta.content) {
+        content += delta.content;
+        alTexto(delta.content);
+      }
+      for (const t of delta.tool_calls ?? []) {
+        const i = t.index ?? tool_calls.length;
+        tool_calls[i] ??= {
+          id: "",
+          type: "function",
+          function: { name: "", arguments: "" },
+        };
+        if (t.id) tool_calls[i].id = t.id;
+        if (t.function?.name) tool_calls[i].function.name += t.function.name;
+        if (t.function?.arguments)
+          tool_calls[i].function.arguments += t.function.arguments;
+      }
+    }
+  }
+  return { content, tool_calls: tool_calls.filter(Boolean), reasoning_content };
+}
+
+async function pedir(cuerpo: object, signal?: AbortSignal): Promise<Response> {
   const { HELMCODE_API_KEY, HELMCODE_BASE_URL, HELMCODE_MODEL } = process.env;
   if (!HELMCODE_API_KEY || !HELMCODE_MODEL)
     throw new Error("Faltan HELMCODE_API_KEY o HELMCODE_MODEL en .env.local");
@@ -93,7 +141,7 @@ async function pedir(cuerpo: object, signal?: AbortSignal) {
       continue;
     }
     if (!res.ok) throw new Error(`HelmCode respondió ${res.status}`);
-    return await res.json();
+    return res;
   }
 }
 

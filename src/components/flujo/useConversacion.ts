@@ -15,9 +15,13 @@ export type Candidata = Resumen & { confianza: "alta" | "media" };
 
 // Un turno del chat de la ficha lleva además sus fuentes y las otras fichas
 // que nombra. Solo se muestran: al servidor se manda `rol` y `texto`.
+// `pendiente`: la respuesta se está escribiendo; `error`: no llegó (no se
+// manda en el historial).
 export type TurnoChat = Turno & {
   fuentes?: Fuente[];
   candidatas?: Candidata[];
+  pendiente?: boolean;
+  error?: boolean;
 };
 
 export type Pantalla =
@@ -55,6 +59,7 @@ const MAX_RONDAS = 2;
 export function useConversacion() {
   const [estado, setEstado] = useState<Estado>(INICIAL);
   const [pensando, setPensando] = useState(false);
+  const [charlando, setCharlando] = useState(false); // chat de la ficha en curso
   const [borrador, setBorrador] = useState(""); // se conserva si la IA falla
   const enCurso = useRef<AbortController | null>(null);
   const reintento = useRef<(() => void) | null>(null);
@@ -99,22 +104,6 @@ export function useConversacion() {
         { rol: "asistente", texto },
       ];
       const viendoRespuesta = e.pantalla.tipo === "respuesta" && e.respuesta;
-
-      // Chat de la ficha (docs/CHAT.md): la respuesta se queda en pantalla.
-      if (r.tipo === "contestacion")
-        return {
-          ...e,
-          historial: [
-            ...e.historial,
-            {
-              rol: "asistente",
-              texto: r.texto,
-              fuentes: r.fuentes,
-              candidatas: r.candidatas,
-            },
-          ],
-          anuncio: r.texto,
-        };
 
       if (r.tipo === "respuesta") {
         // Afinar que confirma la misma entrada: no se sustituye nada.
@@ -168,14 +157,12 @@ export function useConversacion() {
     const limpio = texto.trim();
     if (!limpio || enCurso.current) return;
     const historial: TurnoChat[] = [
-      ...estado.historial,
+      ...estado.historial.filter((t) => !t.error),
       { rol: "ciudadano", texto: limpio } satisfies Turno,
     ].slice(-MAX_TURNOS);
     // Con una ficha en pantalla, la pregunta va al chat de esa ficha.
-    const entradaAbierta =
-      estado.pantalla.tipo === "respuesta"
-        ? estado.pantalla.entrada.id
-        : undefined;
+    if (estado.pantalla.tipo === "respuesta")
+      return charlar(historial, estado.pantalla.entrada.id);
     setBorrador(limpio);
     reintento.current = () => enviar(limpio);
     pedir(
@@ -185,7 +172,6 @@ export function useConversacion() {
           headers: { "content-type": "application/json" },
           body: JSON.stringify({
             historial: historial.map(({ rol, texto }) => ({ rol, texto })),
-            entradaAbierta,
           }),
           signal: senal,
         });
@@ -199,6 +185,78 @@ export function useConversacion() {
       },
       fallar,
     );
+  }
+
+  // Chat de la ficha (docs/CHAT.md): la pregunta y «Pensando…» aparecen ya
+  // en el chat, y la respuesta se va escribiendo según llega. No apaga la
+  // pantalla: la ficha sigue usable mientras tanto.
+  async function charlar(historial: TurnoChat[], entradaAbierta: string) {
+    const control = new AbortController();
+    enCurso.current = control;
+    setCharlando(true);
+    const ultimo = (cambio: (t: TurnoChat) => TurnoChat) =>
+      setEstado((e) => ({
+        ...e,
+        historial: [...e.historial.slice(0, -1), cambio(e.historial.at(-1)!)],
+      }));
+    setEstado((e) => ({
+      ...e,
+      historial: [...historial, { rol: "asistente", texto: "", pendiente: true }],
+      anuncio: textosFlujo[e.idioma].pensando,
+    }));
+    try {
+      const res = await fetch(ruta("/api/consulta"), {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          historial: historial.map(({ rol, texto }) => ({ rol, texto })),
+          entradaAbierta,
+          enVivo: true,
+        }),
+        signal: control.signal,
+      });
+      if (!res.ok || !res.body) throw new Error(String(res.status));
+      const fin: { respuesta?: RespuestaConsulta } = {};
+      await leerLineas(res.body, (ev) => {
+        if (typeof ev.texto === "string")
+          ultimo((t) => ({ ...t, texto: t.texto + ev.texto }));
+        else if (ev.descartar) ultimo((t) => ({ ...t, texto: "" }));
+        else if (ev.respuesta) fin.respuesta = ev.respuesta as RespuestaConsulta;
+      });
+      const r = fin.respuesta;
+      if (r?.tipo !== "contestacion") throw new Error("sin respuesta");
+      setEstado((e) => ({
+        ...(e.idiomaManual ? e : { ...e, idioma: r.idioma }),
+        historial: [
+          ...e.historial.slice(0, -1),
+          {
+            rol: "asistente",
+            texto: r.texto,
+            fuentes: r.fuentes,
+            candidatas: r.candidatas,
+          },
+        ],
+        anuncio: r.texto,
+      }));
+    } catch {
+      if (control.signal.aborted) return;
+      setEstado((e) => {
+        const texto = textosFlujo[e.idioma].errorChat;
+        return {
+          ...e,
+          historial: [
+            ...e.historial.slice(0, -1),
+            { rol: "asistente", texto, error: true },
+          ],
+          anuncio: texto,
+        };
+      });
+    } finally {
+      if (enCurso.current === control) {
+        enCurso.current = null;
+        setCharlando(false);
+      }
+    }
   }
 
   // Abrir una candidata no llama al motor: solo trae la entrada. Desde los
@@ -245,6 +303,7 @@ export function useConversacion() {
     enCurso.current?.abort();
     enCurso.current = null;
     setPensando(false);
+    setCharlando(false);
     setBorrador("");
     setEstado((e) => ({
       ...sustituir(INICIAL, { tipo: "inicio" }),
@@ -257,6 +316,8 @@ export function useConversacion() {
   return {
     ...estado,
     pensando,
+    charlando,
+    ocupado: pensando || charlando,
     borrador,
     enviar,
     elegir,
@@ -273,3 +334,23 @@ export function useConversacion() {
 }
 
 export type Conversacion = ReturnType<typeof useConversacion>;
+
+// Lee una respuesta NDJSON: un objeto JSON por línea.
+async function leerLineas(
+  cuerpo: ReadableStream<Uint8Array>,
+  alEvento: (ev: Record<string, unknown>) => void,
+) {
+  const lector = cuerpo.getReader();
+  const decodificar = new TextDecoder();
+  let resto = "";
+  for (;;) {
+    const { value, done } = await lector.read();
+    if (done) break;
+    const lineas = (resto + decodificar.decode(value, { stream: true })).split(
+      "\n",
+    );
+    resto = lineas.pop() ?? "";
+    for (const linea of lineas) if (linea.trim()) alEvento(JSON.parse(linea));
+  }
+  if (resto.trim()) alEvento(JSON.parse(resto));
+}

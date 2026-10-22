@@ -55,7 +55,7 @@ export function Composer({
 
   function enviar(e?: FormEvent) {
     e?.preventDefault();
-    if (!texto.trim() || c.pensando) return;
+    if (!texto.trim() || c.ocupado) return;
     c.enviar(texto);
     setTexto("");
   }
@@ -65,7 +65,7 @@ export function Composer({
       t={t}
       grande={false}
       icono={grande}
-      deshabilitado={c.pensando}
+      deshabilitado={c.ocupado}
       alTexto={(tr) => {
         setTexto((prev) =>
           (prev.trim() ? `${prev.trimEnd()} ${tr.texto}` : tr.texto).slice(
@@ -143,7 +143,7 @@ export function Composer({
             variant={principal ? "sunset" : "default"}
             size="icon-lg"
             aria-label={t.buscar}
-            disabled={c.pensando || !texto.trim()}
+            disabled={c.ocupado || !texto.trim()}
             className="size-11 rounded-full"
           >
             <ArrowUpIcon aria-hidden="true" />
@@ -153,7 +153,7 @@ export function Composer({
             type="submit"
             variant={principal ? "sunset" : "outline"}
             size="lg"
-            disabled={c.pensando}
+            disabled={c.ocupado}
             className="min-h-11"
           >
             {t.enviar}

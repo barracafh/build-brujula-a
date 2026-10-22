@@ -28,9 +28,9 @@ export function motor(): Motor {
   const elegido = motores[nombre];
   if (!elegido) throw new Error(`BRUJULA_MOTOR desconocido: ${nombre}`);
   return {
-    clasificar: (historial, senal, entradaAbierta) =>
+    clasificar: (historial, senal, entradaAbierta, enVivo) =>
       entradaAbierta
-        ? motorAgente.clasificar(historial, senal, entradaAbierta)
+        ? motorAgente.clasificar(historial, senal, entradaAbierta, enVivo)
         : elegido.clasificar(historial, senal),
   };
 }

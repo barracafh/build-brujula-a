@@ -201,3 +201,8 @@ Dominios del catálogo que **no** rastreamos: gva.es, sede.gva.es, labora.gva.es
     - **El agente nunca ve la traducción:** se añade en las rutas (`/api/consulta` y `/api/entradas/[id]`), no en el catálogo.
     - **El audio y las fechas del calendario salen del castellano.** El audio pregenerado está en castellano y lo dice debajo del botón.
     - **Siguen en castellano:** las candidatas de la aclaración, los recientes y «Volver a».
+24. **El chat de la ficha responde en vivo y en un panel lateral (22/10/2026).**
+    - **Por qué:** una respuesta tarda de 10 a 30 s y, mientras, la página entera quedaba apagada con «Pensando…» arriba. Parecía que se había colgado.
+    - **Streaming:** con `enVivo: true`, `/api/consulta` responde en NDJSON (docs/CHAT.md) y el agente pide a HelmCode cada vuelta en streaming. El texto de una vuelta que acaba llamando a una herramienta se descarta.
+    - **La comprobación de cifras y enlaces (`sinRespaldo`) sigue mandando:** se hace al final, y el texto comprobado sustituye al escrito en vivo. Si no la pasa, lo escrito se cambia por «No podemos confirmarlo». Ese texto se ve unos segundos antes de que se cambie: lo aceptamos a cambio de que no parezca colgado.
+    - **Interfaz:** el chat se abre en un panel a la derecha (pantalla completa en móvil), no modal: la ficha sigue usable y no se apaga. La pregunta y «Pensando…» aparecen en el propio chat y luego el texto se va escribiendo. Si falla, el error sale como mensaje del chat, no como pantalla de error.

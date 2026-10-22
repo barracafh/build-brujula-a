@@ -6,6 +6,7 @@ import {
   MAX_CARACTERES,
   MAX_TURNOS,
   type Candidata,
+  type EnVivo,
   type Resultado,
   type Turno,
 } from "@/lib/motor/contrato";
@@ -15,7 +16,8 @@ import type { RespuestaConsulta } from "@/lib/consulta";
 // (src/lib/consulta.ts). Es lo único que llama al motor: valida, minimiza,
 // clasifica y completa los ids con el catálogo. Con `entradaAbierta` responde
 // el chat de la ficha, que necesita más tiempo (varias llamadas al LLM).
-// No se guarda ni se registra el texto (regla 3).
+// Con `entradaAbierta` y `"enVivo": true`, responde en streaming (NDJSON, ver
+// docs/CHAT.md). No se guarda ni se registra el texto (regla 3).
 const TIMEOUT_MS = 15_000;
 const TIMEOUT_CHAT_MS = 45_000;
 
@@ -98,16 +100,64 @@ export async function POST(req: Request) {
     req.signal,
     AbortSignal.timeout(entradaAbierta ? TIMEOUT_CHAT_MS : TIMEOUT_MS),
   ]);
-  try {
+  const minimizado = historial.map((t) => ({
+    ...t,
+    texto: minimizar(t.texto),
+  }));
+  const responder = async (enVivo?: EnVivo) => {
     const resultado = await motor().clasificar(
-      historial.map((t) => ({ ...t, texto: minimizar(t.texto) })),
+      minimizado,
       senal,
       entradaAbierta,
+      enVivo,
     );
     const respuesta = await completar(resultado);
     if (!respuesta) throw new Error("El motor devolvió ids fuera del catálogo");
-    return Response.json(respuesta);
+    return respuesta;
+  };
+
+  if (entradaAbierta && (cuerpo as { enVivo?: unknown }).enVivo === true)
+    return enStream(responder);
+
+  try {
+    return Response.json(await responder());
   } catch {
     return Response.json({ error: "La IA no responde." }, { status: 502 });
   }
+}
+
+// Una línea JSON por evento: {"texto": trozo}, {"descartar": true} y, al
+// final, {"respuesta": RespuestaConsulta} o {"error": "La IA no responde."}.
+function enStream(
+  responder: (enVivo: EnVivo) => Promise<RespuestaConsulta>,
+): Response {
+  const codificar = new TextEncoder();
+  const cuerpo = new ReadableStream<Uint8Array>({
+    async start(control) {
+      // Si el navegador ya cerró la conexión, no queda nadie a quien enviar.
+      const enviar = (evento: object) => {
+        try {
+          control.enqueue(codificar.encode(JSON.stringify(evento) + "\n"));
+        } catch {}
+      };
+      try {
+        const respuesta = await responder({
+          texto: (trozo) => enviar({ texto: trozo }),
+          descartar: () => enviar({ descartar: true }),
+        });
+        enviar({ respuesta });
+      } catch {
+        enviar({ error: "La IA no responde." });
+      }
+      try {
+        control.close();
+      } catch {}
+    },
+  });
+  return new Response(cuerpo, {
+    headers: {
+      "content-type": "application/x-ndjson; charset=utf-8",
+      "cache-control": "no-store",
+    },
+  });
 }

@@ -41,6 +41,7 @@ export const textosFlujo = {
     errorTexto:
       "Tu consulta sigue aquí: vuelve a intentarlo o búscalo en el Punto de Acceso General.",
     reintentar: "Reintentar",
+    errorChat: "La IA no ha respondido. Vuelve a preguntar en unos segundos.",
     buscarPag: "Buscar en administracion.gob.es",
     esEsta: (titulo: string) => `Es esta: ${titulo}.`,
     sigueSiendo: (titulo: string) => `Sigue siendo: ${titulo}`,
@@ -135,6 +136,7 @@ export const textosFlujo = {
     errorTexto:
       "La teua consulta continua ací: torna-ho a provar o busca-ho en el Punt d'Accés General.",
     reintentar: "Torna-ho a provar",
+    errorChat: "La IA no ha respost. Torna a preguntar d'ací a uns segons.",
     buscarPag: "Cercar en administracion.gob.es",
     esEsta: (titulo: string) => `És este: ${titulo}.`,
     sigueSiendo: (titulo: string) => `Continua sent: ${titulo}`,

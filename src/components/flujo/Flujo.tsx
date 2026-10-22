@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type Ref } from "react";
+import { XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,13 @@ export function Flujo() {
   const [revisando, setRevisando] = useState(false);
   const [cambioAviso, setCambioAviso] = useState(0);
   const [anuncioAviso, setAnuncioAviso] = useState("");
+  const [chatAbierto, setChatAbierto] = useState(false);
+  const verChat = chatAbierto && c.pantalla.tipo === "respuesta";
+
+  useEffect(() => {
+    document.documentElement.toggleAttribute("data-chat-abierto", verChat);
+    return () => document.documentElement.removeAttribute("data-chat-abierto");
+  }, [verChat]);
 
   useEffect(() => {
     if (c.vez === 0 && cambioAviso === 0) return;
@@ -180,7 +188,12 @@ export function Flujo() {
 
           {pantalla.tipo === "respuesta" && (
             <>
-              <BarraAfinar c={c} t={t} consulta={consulta} />
+              <BarraAfinar
+                t={t}
+                consulta={consulta}
+                abierta={verChat}
+                alternar={() => setChatAbierto((a) => !a)}
+              />
               <div className="mt-10">
                 <RespuestaCompuesta
                   entrada={pantalla.entrada}
@@ -236,6 +249,11 @@ export function Flujo() {
           )}
         </div>
       </div>
+
+      {/* Fuera de la zona inert: el chat no se apaga mientras se abre otra ficha. */}
+      {verChat && (
+        <PanelChat c={c} t={t} cerrar={() => setChatAbierto(false)} />
+      )}
     </div>
   );
 }
@@ -430,97 +448,141 @@ function Ninguna({ c, t }: { c: Conversacion; t: TextosFlujo }) {
   );
 }
 
-// Barra fija sobre la respuesta: despliega el historial y una caja para
-// afinar. Al abrirla, foco en la caja; al cerrarla, vuelve al botón.
+// Barra fija sobre la respuesta: la consulta y el botón que abre el chat de
+// la ficha en el panel lateral.
 function BarraAfinar({
-  c,
   t,
   consulta,
+  abierta,
+  alternar,
+}: {
+  t: TextosFlujo;
+  consulta?: string;
+  abierta: boolean;
+  alternar: () => void;
+}) {
+  return (
+    <div className="sticky top-2 z-30 mt-6 flex flex-wrap items-center justify-between gap-2 rounded-xl bg-background px-4 py-3 shadow-[0_8px_24px_rgb(0_0_0/0.08)] ring-1 ring-foreground/10">
+      <p className="min-w-0 truncate text-sm text-(--text-secondary)">
+        {t.tuConsulta}: <q className="text-foreground">{consulta}</q>
+      </p>
+      <Button
+        id="abrir-chat"
+        type="button"
+        variant="outline"
+        size="lg"
+        aria-expanded={abierta}
+        aria-controls="panel-chat"
+        onClick={alternar}
+        className="min-h-11"
+      >
+        {abierta ? t.ocultar : t.preguntar}
+      </Button>
+    </div>
+  );
+}
+
+// Chat de la ficha en un panel lateral (a pantalla completa en móvil). No es
+// modal: la ficha sigue usable al lado. Al abrirlo, foco en la caja; al
+// cerrarlo (botón o Escape), vuelve al botón que lo abrió. Mientras responde,
+// «Pensando…» y luego el texto aparecen en el propio chat.
+function PanelChat({
+  c,
+  t,
+  cerrar,
 }: {
   c: Conversacion;
   t: TextosFlujo;
-  consulta?: string;
+  cerrar: () => void;
 }) {
-  const [abierta, setAbierta] = useState(false);
-  const refBoton = useRef<HTMLButtonElement>(null);
   const refCaja = useRef<HTMLTextAreaElement>(null);
-  const yaAbierta = useRef(false);
+  const refLista = useRef<HTMLOListElement>(null);
 
   useEffect(() => {
-    if (abierta) refCaja.current?.focus();
-    else if (yaAbierta.current) refBoton.current?.focus();
-    yaAbierta.current ||= abierta;
-  }, [abierta]);
+    refCaja.current?.focus();
+    return () => document.getElementById("abrir-chat")?.focus();
+  }, []);
 
-  // Mientras piensa la barra queda inert y pierde el foco. Si la respuesta no
-  // cambia, la pantalla sigue montada y el foco vuelve a la caja.
-  const pensaba = useRef(false);
+  // Sigue el final de la conversación según se escribe la respuesta.
   useEffect(() => {
-    if (pensaba.current && !c.pensando && abierta) refCaja.current?.focus();
-    pensaba.current = c.pensando;
-  }, [c.pensando, abierta]);
+    const lista = refLista.current;
+    if (lista) lista.scrollTop = lista.scrollHeight;
+  }, [c.historial]);
 
   return (
-    <section
-      aria-label={t.preguntar}
-      className="sticky top-2 z-30 mt-6 rounded-xl bg-background px-4 py-3 shadow-[0_8px_24px_rgb(0_0_0/0.08)] ring-1 ring-foreground/10"
+    <aside
+      id="panel-chat"
+      aria-labelledby="panel-chat-titulo"
+      className="fixed inset-y-0 right-0 z-50 flex w-full flex-col bg-background shadow-[-8px_0_24px_rgb(0_0_0/0.08)] ring-1 ring-foreground/10 lg:w-[26rem]"
     >
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="min-w-0 truncate text-sm text-(--text-secondary)">
-          {t.tuConsulta}: <q className="text-foreground">{consulta}</q>
-        </p>
+      <div className="flex items-center justify-between gap-2 border-b px-4 py-3">
+        <h2 id="panel-chat-titulo" className="text-xl">
+          {t.preguntar}
+        </h2>
         <Button
-          ref={refBoton}
           type="button"
-          variant="outline"
-          size="lg"
-          aria-expanded={abierta}
-          aria-controls="afinar-panel"
-          onClick={() => setAbierta((a) => !a)}
-          className="min-h-11"
+          variant="ghost"
+          size="icon-lg"
+          aria-label={t.ocultar}
+          onClick={cerrar}
+          className="size-11"
         >
-          {abierta ? t.ocultar : t.preguntar}
+          <XIcon aria-hidden="true" />
         </Button>
       </div>
-      {abierta && (
-        <div id="afinar-panel" className="mt-3 grid gap-3">
-          <h2 className="sr-only">{t.conversacion}</h2>
-          <ol className="grid max-h-[40dvh] gap-3 overflow-y-auto">
-            {c.historial.map((turno, i) => (
-              <li
-                key={i}
-                className={cn(
-                  "rounded-xl px-4 py-3 text-base [overflow-wrap:anywhere]",
-                  turno.rol === "ciudadano"
-                    ? "ml-8 justify-self-end bg-muted"
-                    : "mr-4 grid gap-4 ring-1 ring-foreground/10",
-                )}
+      <ol
+        ref={refLista}
+        aria-label={t.conversacion}
+        className="grid flex-1 content-start gap-3 overflow-y-auto px-4 py-4"
+      >
+        {c.historial.map((turno, i) => (
+          <li
+            key={i}
+            className={cn(
+              "rounded-xl px-4 py-3 text-base [overflow-wrap:anywhere]",
+              turno.rol === "ciudadano"
+                ? "ml-8 justify-self-end bg-muted"
+                : "mr-4 grid gap-4 ring-1 ring-foreground/10",
+            )}
+          >
+            {turno.pendiente && !turno.texto ? (
+              <p className="text-(--text-secondary) motion-safe:animate-pulse">
+                {t.pensando}
+              </p>
+            ) : (
+              // Las respuestas del chat las redacta una IA (AI Act, art. 50.2).
+              <p
+                className="whitespace-pre-line"
+                data-generado-con-ia={
+                  turno.fuentes || turno.pendiente ? "" : undefined
+                }
               >
-                {/* Las respuestas del chat las redacta una IA (AI Act, art. 50.2). */}
-                <p
-                  className="whitespace-pre-line"
-                  data-generado-con-ia={turno.fuentes ? "" : undefined}
-                >
-                  {turno.texto}
-                </p>
-                {!!turno.candidatas?.length && (
-                  <BotonesCandidatas c={c} t={t} candidatas={turno.candidatas} />
+                {turno.texto}
+                {turno.pendiente && (
+                  <span
+                    aria-hidden="true"
+                    className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] bg-foreground motion-safe:animate-pulse"
+                  />
                 )}
-                {!!turno.fuentes?.length && <Fuentes fuentes={turno.fuentes} />}
-              </li>
-            ))}
-          </ol>
-          <Composer
-            c={c}
-            t={t}
-            id="afinar-barra"
-            etiqueta={t.preguntar}
-            pista={t.preguntarPista}
-            refCaja={refCaja}
-            onEscape={() => setAbierta(false)}
-          />
-        </div>
-      )}
-    </section>
+              </p>
+            )}
+            {!!turno.candidatas?.length && (
+              <BotonesCandidatas c={c} t={t} candidatas={turno.candidatas} />
+            )}
+            {!!turno.fuentes?.length && <Fuentes fuentes={turno.fuentes} />}
+          </li>
+        ))}
+      </ol>
+      <Composer
+        c={c}
+        t={t}
+        id="afinar-barra"
+        etiqueta={t.preguntar}
+        pista={t.preguntarPista}
+        refCaja={refCaja}
+        onEscape={cerrar}
+        className="border-t px-4 py-3"
+      />
+    </aside>
   );
 }
