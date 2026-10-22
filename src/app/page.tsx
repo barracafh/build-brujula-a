@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { BotonAviso } from "@/components/BotonAviso";
-import { Buscador } from "@/components/Buscador";
+import { Flujo } from "@/components/flujo/Flujo";
 import ficha from "../../ficha.json";
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
         tabIndex={-1}
         className="mx-auto max-w-[760px] px-(--page-gutter) pt-8 pb-20 outline-none md:pt-12"
       >
-        <Buscador />
+        <Flujo />
       </main>
 
       <footer className="p-2">

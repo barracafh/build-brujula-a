@@ -11,3 +11,6 @@ next-env.d.ts
 
 # Indexación: capturas y salidas intermedias (no se suben)
 .cache/
+
+# Salida de scripts/evaluar.ts (respuestas en bruto de Jev y HelmCode)
+/evaluacion/
