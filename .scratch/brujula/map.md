@@ -11,6 +11,7 @@ Una spec implementable (`.scratch/brujula/spec.md`) de la pieza 1, centrada en l
 - La UX es la prioridad del equipo; el motor y el resto se tocan, pero al servicio de la UX.
 - Skills para cada sesión: `grilling` y `domain-modeling` en los tickets de conversación; `prototype` en los de prototipo.
 - Tracker local: tickets en `.scratch/brujula/issues/`.
+- Hard rule (AI Act, art. 50.1; `contexto.md` 7.6): cada caja de texto que envía un mensaje lleva debajo una etiqueta que dice que se habla con una IA, asociada con `aria-describedby`. Brújula nunca dictamina si alguien cumple los requisitos (eso la haría de alto riesgo, anexo III 5.a).
 
 Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 
