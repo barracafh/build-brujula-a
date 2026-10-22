@@ -11,3 +11,6 @@ next-env.d.ts
 
 # Salida de scripts/evaluar.ts (respuestas en bruto de Jev y HelmCode)
 /evaluacion/
+
+# Caché de fragmentos de scripts/pregenerar-audio.ts
+/.audio-fragmentos/

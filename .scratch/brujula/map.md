@@ -53,6 +53,7 @@ Decisiones sobre la voz con ElevenLabs (suscripción del plan Creator), tomadas 
 - [Aviso del primer uso con ElevenLabs](issues/15-aviso-elevenlabs.md): un solo aviso al inicio con texto fijo que nombra a Jev, HelmCode y ElevenLabs («tu voz va a ElevenLabs (en EE. UU.), que guarda el audio y el texto»); «Más información» en un desplegable y «Retirar la aceptación» desde «Privacidad» en el pie; pendiente de validar con un experto humano.
 - [Escuchar la respuesta: qué se lee y cuándo se genera](issues/14-escuchar-respuesta.md): se lee todo lo visible en orden, sin URL ni fuentes y con una tabla de pronunciación solo para el audio; un MP3 por entrada e idioma (etiquetas en valenciano, contenido en castellano); botón `outline` «Escuchar» → «Pausar · 0:42 / 1:20» sin adelantar; voz Alice, provisional hasta que alguien la escuche.
 - [Clave de ElevenLabs en Vercel](issues/16-clave-elevenlabs-vercel.md): Jev comprobado en producción desde el navegador (`motor: jev` en `es` y `va`); la voz en producción queda como condición para terminar la implementación, porque aún no hay ruta de voz en `main`; el interruptor de entrenamiento de ElevenLabs está encendido y le toca apagarlo a Nico.
+- [Pregenerar el audio de las respuestas](issues/17-pregenerar-audio.md): 42 MP3 con Alice (21 entradas × `es`/`va`, 17 MB) en `public/audio/`, manifiesto con duraciones en `src/datos/audio.json`; `eleven_v4_turbo` cuesta unos 0,21 créditos por carácter (5.530 por todo el catálogo).
 
 ## Not yet specified
 
