@@ -1,9 +1,15 @@
 "use client";
 
 import { useState, type FormEvent, type Ref } from "react";
+import { Info, TriangleAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { MAX_CARACTERES } from "@/lib/motor/contrato";
 import type { Candidata, Conversacion } from "./useConversacion";
@@ -13,9 +19,10 @@ import { Dictar } from "./voz/Dictar";
 export const titular =
   "rounded-md text-[clamp(30px,5vw,48px)] leading-[1.1] tracking-[-0.02em] outline-none";
 
-// Caja de texto que envía un mensaje. Lleva siempre debajo el aviso de IA
-// (AI Act, art. 50.1), asociado con aria-describedby, y al lado «Dictar»
-// (ticket 13): lo dictado se añade a la caja y se envía con el botón.
+// Caja de texto que envía un mensaje. Lleva siempre el aviso de IA (AI Act,
+// art. 50.1), asociado con aria-describedby: debajo, o donde se pinte <Avisos />
+// si avisosAparte. Al lado, «Dictar» (ticket 13): lo dictado se añade a la
+// caja y se envía con el botón.
 export function Composer({
   c,
   t,
@@ -24,6 +31,7 @@ export function Composer({
   pista,
   grande = false,
   principal = false,
+  avisosAparte = false,
   refCaja,
   onEscape,
   className,
@@ -35,6 +43,7 @@ export function Composer({
   pista?: string;
   grande?: boolean;
   principal?: boolean;
+  avisosAparte?: boolean;
   refCaja?: Ref<HTMLTextAreaElement>;
   onEscape?: () => void;
   className?: string;
@@ -71,7 +80,11 @@ export function Composer({
     />
   );
 
-  const descripcion = [pista && `${id}-pista`, `${id}-ia`]
+  const descripcion = [
+    pista && `${id}-pista`,
+    avisosAparte && `${id}-datos`,
+    `${id}-ia`,
+  ]
     .filter(Boolean)
     .join(" ");
 
@@ -131,10 +144,61 @@ export function Composer({
           {pista}
         </p>
       )}
-      <p id={`${id}-ia`} className="text-sm text-(--text-secondary)">
-        {t.avisoIA}
-      </p>
+      {!avisosAparte && <AvisoIA t={t} id={id} />}
     </form>
+  );
+}
+
+// Avisos de la caja principal, uno debajo del otro: datos personales e IA.
+// Las ids coinciden con el aria-describedby del Composer con avisosAparte.
+export function Avisos({
+  t,
+  id,
+  className,
+}: {
+  t: TextosFlujo;
+  id: string;
+  className?: string;
+}) {
+  return (
+    <div className={cn("grid justify-items-start gap-1", className)}>
+      <p
+        id={`${id}-datos`}
+        className="flex items-start gap-1.5 text-sm text-(--text-secondary)"
+      >
+        <TriangleAlert
+          aria-hidden="true"
+          className="mt-0.5 size-4 shrink-0"
+          strokeWidth={1.5}
+        />
+        {t.pista}
+      </p>
+      <AvisoIA t={t} id={id} />
+    </div>
+  );
+}
+
+// «Usa IA» con el aviso completo en un popover (hover, clic o teclado).
+function AvisoIA({ t, id }: { t: TextosFlujo; id: string }) {
+  return (
+    <p className="flex items-center gap-0.5 text-sm text-(--text-secondary)">
+      <span id={`${id}-ia`}>{t.usaIA}</span>
+      <Popover>
+        <PopoverTrigger
+          openOnHover
+          aria-label={t.infoIA}
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "icon-sm" }),
+            "text-(--text-secondary)",
+          )}
+        >
+          <Info aria-hidden="true" strokeWidth={1.5} />
+        </PopoverTrigger>
+        <PopoverContent align="start" className="p-3 text-sm">
+          {t.avisoIA}
+        </PopoverContent>
+      </Popover>
+    </p>
   );
 }
 

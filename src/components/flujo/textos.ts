@@ -9,8 +9,9 @@ export const textosFlujo = {
       "Cuéntalo con tus palabras y te decimos qué trámite es, qué necesitas, el plazo y dónde se hace.",
     cambiarIdioma: "Idioma de la interfaz",
     etiqueta: "Cuéntanos qué te pasa",
-    pista:
-      "En castellano o en valenciano. No escribas datos personales: ni DNI ni nombres.",
+    pista: "No escribas datos personales: ni DNI ni nombres.",
+    usaIA: "Usa IA",
+    infoIA: "Qué hace la IA",
     avisoIA:
       "Hablas con una inteligencia artificial. Solo identifica el trámite: los pasos, plazos y requisitos no los escribe ella, salen del catálogo con su fuente oficial.",
     buscar: "Buscar",
@@ -92,8 +93,9 @@ export const textosFlujo = {
       "Conta-ho amb les teues paraules i et diem quin tràmit és, què necessites, el termini i on es fa.",
     cambiarIdioma: "Idioma de la interfície",
     etiqueta: "Conta'ns què et passa",
-    pista:
-      "En castellà o en valencià. No escrigues dades personals: ni DNI ni noms.",
+    pista: "No escrigues dades personals: ni DNI ni noms.",
+    usaIA: "Usa IA",
+    infoIA: "Què fa la IA",
     avisoIA:
       "Parles amb una intel·ligència artificial. Només identifica el tràmit: els passos, terminis i requisits no els escriu ella, ixen del catàleg amb la seua font oficial.",
     buscar: "Cercar",
