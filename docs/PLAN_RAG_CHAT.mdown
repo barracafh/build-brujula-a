@@ -1,0 +1,422 @@
+# Plan · Herramienta `buscar_tramites` en el chat de la ficha (v2)
+
+Estado: v2 (tras la 1.ª revisión de Codex) · 22/10/2026 · rama `rag-buscador` (PR #3), ya con `main` fusionado hasta `ebe05bc`.
+
+## Cambios respecto a v1 (revisión 1 de Codex)
+
+| # | Problema | Corrección v2 |
+|---|---|---|
+| 1 | Una aclaración («¿te refieres a…?») sin `consultar_contexto` citaba como fuente la ficha abierta, ajena a la respuesta. | `cerrar` pasa a `async`. Fuentes = fuentes de las entradas consultadas ∪ candidatas (por `catalogo.obtener`). Si queda vacío, el buscador del PAG. La rama `noConfirmado` usa esas mismas fuentes (sin añadir `abierta.enlace_info`). |
+| 2 | «Ninguno encaja» enlazaba la portada del PAG; `SETUP.md` y `ESPECIFICACION.md` piden el buscador. | `PAG = "https://administracion.gob.es/tramites-electronicos/resultados-actuaciones"`. |
+| — | Riesgos 1, 3, 4 y 5: Codex no ve incumplimiento; se mantienen como limitaciones aceptadas. Riesgo 2: se corrige la frase «falsos positivos no hay» (nombrar un título para descartarlo también da botón). | Documentado. |
+
+### Código v2 de `cerrar` (sustituye al de v1)
+
+```ts
+async function cerrar(
+  texto: string,
+  idioma: Idioma,
+  abierta: Entrada,
+  estado: Estado,
+): Promise<Resultado> {
+  const comun = { idioma, proveedor: "helmcode" as const };
+  const nombradas = [...estado.devueltos]
+    .filter(([id, titulo]) => id !== abierta.id && texto.includes(titulo))
+    .map(([id]) => id);
+  const candidatas: Candidata[] = [...new Set([...estado.candidatas, ...nombradas])]
+    .slice(0, MAX_CANDIDATAS)
+    .map((id) => ({ id, confianza: "media" }));
+
+  if (!estado.usoHerramientas)
+    return { tipo: "contestacion", texto: plantillas[idioma].fueraDeAmbito, fuentes: [], candidatas: [], ...comun };
+
+  // Fuentes: las fichas que sostienen la respuesta (consultadas o nombradas),
+  // nunca la abierta por defecto. Sin ninguna, el buscador del PAG.
+  const ids = new Set([...estado.consultadas.keys(), ...candidatas.map((c) => c.id)]);
+  const entradas = await Promise.all([...ids].map((id) => catalogo.obtener(id)));
+  const fuentes = unicas(entradas.flatMap((e) => e?.fuentes ?? []));
+  if (!fuentes.length) fuentes.push({ nombre: "Buscador de trámites del PAG", url: PAG });
+
+  const material = estado.material.join("\n");
+  const limpio = texto.trim();
+  if (!limpio || limpio.length > MAX_TEXTO || sinRespaldo(limpio, material).length > 0)
+    return { tipo: "contestacion", texto: plantillas[idioma].noConfirmado, fuentes, candidatas, ...comun };
+
+  return { tipo: "contestacion", texto: limpio, fuentes: unicas([...fuentes, ...enlacesCitados(limpio)]), candidatas, ...comun };
+}
+```
+
+Los `return cerrar(...)` de `motorAgente.clasificar` no cambian (devuelven la promesa). Se añade un caso a `scripts/unitarias-chat.ts` no es posible sin red; la prueba `probar-agente.ts` ya comprueba `fuentes.length > 0`.
+
+## Objetivo
+
+El chat de la ficha (`src/lib/motor/agente.ts`, loop agéntico sobre `/api/consulta` con `entradaAbierta`) tiene hoy una herramienta, `consultar_contexto`, y encuentra otros trámites leyendo la lista del catálogo en el prompt. Añadimos la segunda herramienta, `buscar_tramites` (índice semántico, `src/lib/herramientas/buscar-tramites.ts`, decisiones 18 y 19), para que el chat encuentre el trámite correcto entre las 37 entradas.
+
+Requisitos (petición del equipo):
+1. Cliente con tools: ya existe (`conversar()` en `src/lib/ia.ts`: envía `tools`, devuelve `tool_calls`, acepta `role: "tool"`, reintenta en 429, respeta `signal`; `completar()` intacto).
+2. Loop: `tools` incluye `definicion`; por cada `tool_call` `buscar_tramites`, `await responder(llamada, signal)`; máximo ~4 vueltas, la última sin tools.
+3. Prompt: llamar a `buscar_tramites` una vez por mensaje antes de hablar de un trámite concreto; elegir solo ids devueltos; si duda entre dos, preguntar; si ninguno encaja, decir que no puede confirmarlo y enlazar la sede oficial; nunca inventar importes, plazos ni requisitos.
+4. Reglas: IA solo en servidor; una búsqueda por mensaje; nada de `console.*` con el texto del ciudadano; `<Fuentes />` (campo `fuentes`) en cada respuesta; decisiones nuevas desde el 20; commits pequeños en castellano; `bun run build` antes de push.
+
+## Paso a paso
+
+1. **`src/lib/motor/agente.ts`**
+   - Importar `definicion` (como `buscarTramites`), `responder` (como `responderBusqueda`) y el tipo `ResultadoBusqueda` de `@/lib/herramientas/buscar-tramites`. Quitar el import de `@/lib/rag` y la herramienta local `buscarTramites` (stub con fragmentos).
+   - `MAX_LLAMADAS = 4`.
+   - Constante `PAG` (en v2, el buscador del PAG): entra en el material para que `sinRespaldo` acepte el enlace en el caso «ninguno encaja».
+   - `sistema(abierta)`: sin la lista del catálogo. Reglas 6 (ficha abierta → `consultar_contexto` sin id) y 7 (otro trámite → `buscar_tramites` una vez, elegir solo ids devueltos, preguntar si duda entre dos, PAG si ninguno, leer la ficha con `consultar_contexto(id)` antes de dar datos).
+   - `Estado` gana `devueltos: Map<id, titulo>` y `buscado: boolean`.
+   - `ejecutar(llamada, estado, abierta: Entrada, senal)`:
+     - `consultar_contexto(id)`: solo acepta la abierta, sus `relacionados` o un id devuelto por la búsqueda; si no, error al modelo.
+     - `buscar_tramites`: si ya se buscó en este mensaje → error al modelo sin llamar a HelmCode. Si no, `responderBusqueda(llamada, senal)`; si el contenido trae `candidatos`, marca `buscado` y `usoHerramientas`, guarda `id → titulo` en `devueltos` y mete `titulo — organismo` en el material. Devuelve el `content` tal cual.
+   - `cerrar`: candidatas = consultadas (≠ abierta) ∪ devueltas cuyo título aparece literal en el texto, máximo 3.
+   - `material` inicial = `[PAG]` (antes, la lista del catálogo).
+2. **Borrar `src/lib/rag.ts`** (stub sin uso).
+3. **`scripts/probar-agente.ts`** (nuevo) y `package.json` (`probar:agente`, con `--preload ./scripts/sin-server-only.ts`): llama a `motorAgente.clasificar` con `entradaAbierta = renovacion-dni` y 3 frases («quiero votar por correo», «me han echado del trabajo», «m'he mudat a València i vull empadronar-me»). Envuelve `fetch` para contar llamadas a `/embeddings` y recoger los ids de los mensajes `role: "tool"`. Comprueba: una sola búsqueda, hay candidatas, todas salen de los ids devueltos, incluye el esperado, hay fuentes.
+4. **`docs/CHAT.md`**: sección «Cómo encuentra otros trámites» (sustituye a «Pendiente»); tiempos 5–40 s.
+5. **`decisiones.md`**: punto 20.
+6. **Fusionar `origin/main`** (`f10a430`, aviso de primer uso; sin conflictos según `git merge-tree`), pasar todo y push a `main`.
+
+## Código exacto
+
+Diff respecto a `fe2c3a9` (merge de main en la rama), solo código:
+
+```diff
+diff --git a/package.json b/package.json
+index 3269cbc..65ce1db 100644
+--- a/package.json
++++ b/package.json
+@@ -10,7 +10,8 @@
+     "dev": "next dev",
+     "build": "next build --webpack",
+     "typecheck": "tsc --noEmit",
+-    "probar:buscador": "bun --preload ./scripts/sin-server-only.ts scripts/probar-buscador.ts"
++    "probar:buscador": "bun --preload ./scripts/sin-server-only.ts scripts/probar-buscador.ts",
++    "probar:agente": "bun --preload ./scripts/sin-server-only.ts scripts/probar-agente.ts"
+   },
+   "dependencies": {
+     "@base-ui/react": "1.8.0",
+diff --git a/scripts/probar-agente.ts b/scripts/probar-agente.ts
+new file mode 100644
+index 0000000..e7fe52c
+--- /dev/null
++++ b/scripts/probar-agente.ts
+@@ -0,0 +1,69 @@
++// Prueba del loop del agente con buscar_tramites, contra HelmCode de verdad.
++//   bun run probar:agente           (modelo de HELMCODE_MODEL)
++//   HELMCODE_MODEL=glm5.3-flash bun run probar:agente
++// Comprueba que cada frase hace una sola búsqueda y que las candidatas de la
++// respuesta salen de los ids que devolvió la herramienta.
++import { motorAgente } from "../src/lib/motor/agente";
++
++const casos = [
++  { frase: "quiero votar por correo", esperado: "voto-por-correo" },
++  { frase: "me han echado del trabajo", esperado: "prestacion-desempleo" },
++  { frase: "m'he mudat a València i vull empadronar-me", esperado: "alta-padron-valencia" },
++];
++const ABIERTA = "renovacion-dni";
++
++// Cuenta las búsquedas y recoge los ids que la herramienta devolvió al modelo
++// leyendo los mensajes `role: "tool"` de la siguiente petición.
++let busquedas = 0;
++let devueltos = new Set<string>();
++const fetchOriginal = globalThis.fetch;
++globalThis.fetch = (async (entrada: RequestInfo | URL, init?: RequestInit) => {
++  const url = String(entrada instanceof Request ? entrada.url : entrada);
++  if (url.endsWith("/embeddings")) busquedas++;
++  if (url.endsWith("/chat/completions") && typeof init?.body === "string") {
++    for (const m of JSON.parse(init.body).messages ?? []) {
++      if (m.role !== "tool") continue;
++      try {
++        for (const c of JSON.parse(m.content).candidatos ?? []) devueltos.add(c.id);
++      } catch {
++        // respuesta de consultar_contexto u otra: no trae candidatos
++      }
++    }
++  }
++  return fetchOriginal(entrada, init);
++}) as typeof fetch;
++
++let fallos = 0;
++function comprobar(nombre: string, ok: boolean) {
++  console.log(`  ${ok ? "✓" : "✗"} ${nombre}`);
++  if (!ok) fallos++;
++}
++
++for (const { frase, esperado } of casos) {
++  busquedas = 0;
++  devueltos = new Set();
++  const inicio = performance.now();
++  const r = await motorAgente.clasificar([{ rol: "ciudadano", texto: frase }], undefined, ABIERTA);
++  const ms = Math.round(performance.now() - inicio);
++  console.log(`\n«${frase}» (${ms} ms)`);
++  if (r.tipo !== "contestacion") {
++    comprobar(`contestación (llegó ${r.tipo})`, false);
++    continue;
++  }
++  console.log(`  texto: ${r.texto}`);
++  console.log(`  candidatas: ${r.candidatas.map((c) => c.id).join(", ") || "—"}`);
++  comprobar("una sola búsqueda", busquedas === 1);
++  comprobar("hay candidatas", r.candidatas.length > 0);
++  comprobar(
++    "las candidatas salen de la búsqueda",
++    r.candidatas.every((c) => devueltos.has(c.id)),
++  );
++  if (esperado) comprobar(`incluye ${esperado}`, r.candidatas.some((c) => c.id === esperado));
++  comprobar("con fuentes", r.fuentes.length > 0);
++}
++
++if (fallos) {
++  console.log(`\n${fallos} fallos`);
++  process.exit(1);
++}
++console.log("\nTodo bien");
+diff --git a/src/lib/motor/agente.ts b/src/lib/motor/agente.ts
+index 39f9220..e62db2b 100644
+--- a/src/lib/motor/agente.ts
++++ b/src/lib/motor/agente.ts
+@@ -10,7 +10,11 @@ import {
+   type LlamadaHerramienta,
+   type MensajeChat,
+ } from "@/lib/ia";
+-import { buscar } from "@/lib/rag";
++import {
++  definicion as buscarTramites,
++  responder as responderBusqueda,
++  type ResultadoBusqueda,
++} from "@/lib/herramientas/buscar-tramites";
+ import {
+   MAX_CARACTERES,
+   type Candidata,
+@@ -22,13 +26,17 @@ import {
+ import { plantillas } from "./plantillas";
+ import { sinRespaldo } from "./respaldo";
+ 
+-// Chat de la ficha: un loop agéntico con dos herramientas. El loop es nuestro;
+-// HelmCode solo decide qué herramienta llamar y redacta. Nunca se registra el
++// Chat de la ficha: un loop agéntico con dos herramientas (consultar_contexto y
++// buscar_tramites, el índice semántico). El loop es nuestro; HelmCode solo
++// decide qué herramienta llamar y redacta. Nunca se registra el
+ // texto del ciudadano (regla 3).
+ 
+-const MAX_LLAMADAS = 3; // la última, sin herramientas
++const MAX_LLAMADAS = 4; // la última, sin herramientas
+ const MAX_TEXTO = MAX_CARACTERES; // el frontend lo reenvía en el historial
+ const MAX_CANDIDATAS = 3;
++// Respaldo para «ninguno encaja»: el chat puede enlazarlo sin que lo devuelva
++// una herramienta.
++const PAG = "https://administracion.gob.es/";
+ 
+ // contexto.md (unos 30k tokens) se lee una vez por instancia. En Vercel llega
+ // gracias a outputFileTracingIncludes (next.config.ts).
+@@ -58,27 +66,7 @@ const consultarContexto: Herramienta = {
+   },
+ };
+ 
+-const buscarTramites: Herramienta = {
+-  type: "function",
+-  function: {
+-    name: "buscar_tramites",
+-    description:
+-      "Busca en el índice de trámites y ayudas los que encajan con una situación o una pregunta. Devuelve fragmentos, cada uno con el id de su entrada. Úsala cuando el ciudadano pregunte por otro trámite y no sepas su id.",
+-    parameters: {
+-      type: "object",
+-      properties: {
+-        consulta: {
+-          type: "string",
+-          description: "La situación o el trámite, en lenguaje natural.",
+-        },
+-      },
+-      required: ["consulta"],
+-      additionalProperties: false,
+-    },
+-  },
+-};
+-
+-function sistema(abierta: Entrada, lista: string, conRag: boolean): string {
++function sistema(abierta: Entrada): string {
+   return `Eres el asistente de Brújula, una herramienta experimental (no oficial) que orienta sobre trámites y ayudas públicas en España y en la Comunitat Valenciana.
+ El ciudadano tiene abierta la ficha «${abierta.titulo}» (id: ${abierta.id}).
+ 
+@@ -86,18 +74,22 @@ Reglas:
+ 1. Solo respondes dudas sobre trámites, ayudas y el funcionamiento de la Administración. Antes de responder, llama a una herramienta y usa solo lo que devuelva.
+ 2. Si la pregunta no trata de eso (por ejemplo, programar en Python, recetas, charla o saludos), no llames a ninguna herramienta y contesta en una frase que esa pregunta no forma parte de lo que hace este asistente.
+ 3. Nunca digas si la persona cumple los requisitos ni si le corresponde una ayuda: explica qué pide la ficha y remite al organismo.
+-4. Cifras (plazos, importes, fechas, porcentajes) y enlaces: escríbelos solo si aparecen tal cual en lo que devolvieron las herramientas. Si no están, di «No podemos confirmarlo» y remite a la sede oficial.
++4. Cifras (plazos, importes, fechas, porcentajes), requisitos y enlaces: escríbelos solo si aparecen tal cual en lo que devolvieron las herramientas. Nunca los inventes. Si no están, di «No podemos confirmarlo» y remite a la sede oficial.
+ 5. Responde en el idioma del ciudadano, castellano o valenciano. Sé breve: como mucho 5 frases o una lista corta, y nunca más de 800 caracteres. Texto plano, sin tablas ni títulos.
+-6. Si pregunta por otro trámite o por un tema que tiene entrada propia en la lista (por ejemplo, identificacion-digital para Cl@ve o certificado digital), llama a consultar_contexto con ese id${conRag ? " o, si no, a buscar_tramites" : ""}. Si no está, dilo y remite al Punto de Acceso General.
+-
+-Entradas del catálogo (id — título):
+-${lista}`;
++6. Dudas sobre la ficha abierta o sobre cómo funciona la Administración: llama a consultar_contexto sin id.
++7. Si el mensaje trata de otro trámite o de una situación nueva, llama a buscar_tramites una sola vez, antes de hablar de ningún trámite concreto, con lo que necesita el ciudadano. Después:
++   - Elige solo entre los ids que devuelva; nunca otro.
++   - Si dudas entre dos, no elijas: nombra los dos por su título y pregunta cuál es su caso.
++   - Si ninguno encaja, di que no puedes confirmarlo y enlaza el Punto de Acceso General (${PAG}).
++   - Antes de dar pasos, cifras o requisitos del elegido, lee su ficha con consultar_contexto y su id.`;
+ }
+ 
+ type Estado = {
+   material: string[];
+   consultadas: Map<string, Entrada>;
+   candidatas: string[];
++  devueltos: Map<string, string>; // id → título, de buscar_tramites
++  buscado: boolean;
+   marcoEnviado: boolean;
+   usoHerramientas: boolean;
+ };
+@@ -119,16 +111,22 @@ function anotarCandidata(estado: Estado, id: string, abierta: string) {
+ async function ejecutar(
+   llamada: LlamadaHerramienta,
+   estado: Estado,
+-  abierta: string,
++  abierta: Entrada,
++  senal?: AbortSignal,
+ ): Promise<string> {
+-  const args = leerArgumentos(llamada);
+-
+   if (llamada.function.name === "consultar_contexto") {
+-    const id = typeof args.id === "string" && args.id ? args.id : abierta;
+-    const entrada = await catalogo.obtener(id);
++    const args = leerArgumentos(llamada);
++    const id = typeof args.id === "string" && args.id ? args.id : abierta.id;
++    // Solo ids que el chat ya conoce por las herramientas: la abierta, sus
++    // relacionados y lo que devolvió buscar_tramites.
++    const conocido =
++      id === abierta.id ||
++      abierta.relacionados.includes(id) ||
++      estado.devueltos.has(id);
++    const entrada = conocido ? await catalogo.obtener(id) : undefined;
+     if (!entrada)
+       return JSON.stringify({
+-        error: `No hay ninguna entrada con id «${id}». Usa un id de la lista.`,
++        error: `No conozco la entrada «${id}». Usa un id devuelto por buscar_tramites.`,
+       });
+     const texto = estado.marcoEnviado
+       ? "(ya enviado más arriba)"
+@@ -139,23 +137,29 @@ async function ejecutar(
+     estado.marcoEnviado = true;
+     estado.consultadas.set(entrada.id, entrada);
+     estado.usoHerramientas = true;
+-    anotarCandidata(estado, entrada.id, abierta);
++    anotarCandidata(estado, entrada.id, abierta.id);
+     return JSON.stringify({ entrada, marco: texto });
+   }
+ 
+-  if (llamada.function.name === "buscar_tramites" && buscar) {
+-    const consulta = typeof args.consulta === "string" ? args.consulta : "";
+-    const fragmentos = [];
+-    for (const f of await buscar(consulta, 5)) {
+-      const e = await catalogo.obtener(f.id);
+-      if (!e) continue;
+-      fragmentos.push({ id: e.id, titulo: e.titulo, texto: f.texto });
+-      estado.material.push(e.titulo, f.texto);
+-      estado.consultadas.set(e.id, e);
+-      anotarCandidata(estado, e.id, abierta);
++  if (llamada.function.name === "buscar_tramites") {
++    // Una búsqueda por mensaje: la segunda no llega a HelmCode.
++    if (estado.buscado)
++      return JSON.stringify({
++        error: "Ya has buscado en este mensaje: elige entre esos candidatos.",
++      });
++    const respuesta = await responderBusqueda(llamada, senal);
++    const resultado = JSON.parse(respuesta.content) as
++      | ResultadoBusqueda
++      | { error: string };
++    if ("candidatos" in resultado) {
++      estado.buscado = true;
++      estado.usoHerramientas = true;
++      for (const c of resultado.candidatos) {
++        estado.devueltos.set(c.id, c.titulo);
++        estado.material.push(`${c.titulo} — ${c.organismo}`);
++      }
+     }
+-    estado.usoHerramientas = true;
+-    return JSON.stringify({ fragmentos });
++    return respuesta.content;
+   }
+ 
+   return JSON.stringify({ error: "Herramienta desconocida." });
+@@ -186,7 +190,13 @@ function cerrar(
+   estado: Estado,
+ ): Resultado {
+   const comun = { idioma, proveedor: "helmcode" as const };
+-  const candidatas: Candidata[] = estado.candidatas
++  // Las consultadas y, de lo que devolvió la búsqueda, lo que el texto nombra.
++  const nombradas = [...estado.devueltos]
++    .filter(([id, titulo]) => id !== abierta.id && texto.includes(titulo))
++    .map(([id]) => id);
++  const candidatas: Candidata[] = [
++    ...new Set([...estado.candidatas, ...nombradas]),
++  ]
+     .slice(0, MAX_CANDIDATAS)
+     .map((id) => ({ id, confianza: "media" }));
+ 
+@@ -244,21 +254,19 @@ export const motorAgente: Motor = {
+     const idioma = detectarIdioma(
+       historial.findLast((t) => t.rol === "ciudadano")?.texto ?? "",
+     );
+-    const entradas = await catalogo.listar();
+-    const lista = entradas.map((e) => `- ${e.id} — ${e.titulo}`).join("\n");
+-    const herramientas = buscar
+-      ? [consultarContexto, buscarTramites]
+-      : [consultarContexto];
++    const herramientas: Herramienta[] = [consultarContexto, buscarTramites];
+ 
+     const estado: Estado = {
+-      material: [lista],
++      material: [PAG],
+       consultadas: new Map(),
+       candidatas: [],
++      devueltos: new Map(),
++      buscado: false,
+       marcoEnviado: false,
+       usoHerramientas: false,
+     };
+     const mensajes: MensajeChat[] = [
+-      { role: "system", content: sistema(abierta, lista, Boolean(buscar)) },
++      { role: "system", content: sistema(abierta) },
+       ...historial.map((t) => ({
+         role: t.rol === "ciudadano" ? ("user" as const) : ("assistant" as const),
+         content: t.texto,
+@@ -279,7 +287,7 @@ export const motorAgente: Motor = {
+         mensajes.push({
+           role: "tool",
+           tool_call_id: llamada.id,
+-          content: await ejecutar(llamada, estado, abierta.id),
++          content: await ejecutar(llamada, estado, abierta, senal),
+         });
+     }
+     // No se llega aquí: la última vuelta siempre cierra.
+diff --git a/src/lib/rag.ts b/src/lib/rag.ts
+deleted file mode 100644
+index e7fc6d7..0000000
+--- a/src/lib/rag.ts
++++ /dev/null
+@@ -1,8 +0,0 @@
+-// TODO(Saúl): el RAG del índice de trámites (docs/index_specification.md en la
+-// rama indexacion-valencia). Recibe lenguaje natural y devuelve los `k`
+-// fragmentos más parecidos, cada uno con el id de su entrada del catálogo.
+-// Mientras sea null, el agente no ofrece la herramienta `buscar_tramites`.
+-export type Fragmento = { id: string; texto: string; puntuacion: number };
+-
+-export const buscar: ((consulta: string, k?: number) => Promise<Fragmento[]>) | null =
+-  null;
+```
+
+## Pruebas
+
+- `bun scripts/unitarias.ts`, `bun --preload ./scripts/sin-server-only.ts scripts/unitarias-chat.ts`, `bun run probar:buscador`, `bunx tsc --noEmit`, `bun run build`.
+- `HELMCODE_MODEL=glm5.3-flash bun run probar:agente` (3 frases).
+- `bun scripts/probar-chat.ts http://localhost:3001/brujula-a` con `HELMCODE_MODEL=glm5.3-flash bunx next dev -p 3001 --webpack` (11 escenarios).
+
+Primer resultado (v1 ya implementada en la rama): todo en verde. Con glm, unos 30–36 s por pregunta sobre otro trámite, y la ruta corta a los 45 s.
+
+## Riesgos y dudas para el revisor
+
+1. **Latencia:** son 3–4 llamadas a glm y el corte de la ruta está en 45 s. ¿Bajar `MAX_LLAMADAS` a 3 o subir el timeout (con `maxDuration = 60`)?
+2. **Candidatas por título literal:** si el modelo parafrasea el título, la candidata no aparece en el botón «Abrir». Se aceptan falsos negativos; también hay falsos positivos si el texto nombra un título para descartarlo (aceptado).
+3. **Restricción de ids en `consultar_contexto`:** en una conversación de varios turnos, el id que se buscó en un turno anterior ya no está en `devueltos` (el estado es por mensaje). El modelo tendría que volver a buscar, lo que gasta una búsqueda.
+4. **`JSON.parse(respuesta.content)`:** `responder` siempre devuelve JSON válido; si cambiara, `ejecutar` lanzaría y la ruta daría 502.
+5. **Material con títulos y organismos de 10 candidatos:** puede respaldar cifras que aparezcan en un título (p. ej. «TR.OT.60» o «29-N»). Hoy se acepta.
