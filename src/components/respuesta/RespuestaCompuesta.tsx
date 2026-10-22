@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Fuentes } from "@/components/Fuentes";
+import { Escuchar } from "./Escuchar";
 import { textosRespuesta, type IdiomaRespuesta } from "./textos";
 
 // Respuesta compuesta (tickets 03, 09 y 10). Sin estado ni hooks: sirve en
@@ -83,6 +84,8 @@ export function RespuestaCompuesta({
         <p className="mt-3 text-base text-(--text-secondary)" lang="es">
           {e.organismo} · {e.administracion}
         </p>
+        {/* La key lo desmonta, y lo para, al cambiar de entrada o de idioma. */}
+        <Escuchar key={`${e.id}.${idioma}`} id={e.id} idioma={idioma} tx={tx} />
         {!e.verificado && (
           <p className="mt-4 flex gap-3 rounded-xl px-5 py-4 text-base ring-1 ring-destructive/40">
             <TriangleAlert

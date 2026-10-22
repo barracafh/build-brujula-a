@@ -20,6 +20,11 @@ export const textosRespuesta = {
     marcaSinVerificar: "Sin verificar",
     sinVerificar: "Información sin verificar: compruébala en la sede oficial.",
     contenidoCastellano: "Contenido oficial en castellano",
+    escuchar: "Escuchar",
+    pausar: "Pausar",
+    escucharRespuesta: "Escuchar la respuesta",
+    pausarRespuesta: "Pausar la respuesta",
+    audioError: "No hemos podido reproducir el audio.",
   },
   va: {
     tipoTramite: "Tràmit",
@@ -37,6 +42,11 @@ export const textosRespuesta = {
     marcaSinVerificar: "Sense verificar",
     sinVerificar: "Informació sense verificar: comprova-la en la seu oficial.",
     contenidoCastellano: "Contingut oficial en castellà",
+    escuchar: "Escoltar",
+    pausar: "Pausar",
+    escucharRespuesta: "Escoltar la resposta",
+    pausarRespuesta: "Pausar la resposta",
+    audioError: "No hem pogut reproduir l'àudio.",
   },
 } satisfies Record<IdiomaRespuesta, Record<string, string>>;
 
