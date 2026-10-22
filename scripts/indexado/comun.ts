@@ -5,6 +5,17 @@ import { readFile, writeFile } from "node:fs/promises";
 export const DIR_CACHE = ".cache/indexado";
 export const DIR_SEDE = `${DIR_CACHE}/sede`;
 export const DIR_FICHAS = `${DIR_CACHE}/fichas`;
+export const RUTA_CATALOGO_VALENCIA = "src/datos/catalogo-valencia.json";
+// resumen_sencillo de los 37 trámites (los 21 de la organización y los 16 de
+// València). Solo sirve para el embedding de la variante D; nunca se muestra.
+export const RUTA_RESUMENES = "src/datos/resumenes.json";
+
+// Vectores de las tres variantes, de embeber.ts a evaluar.ts.
+export const RUTA_VARIANTES = `${DIR_CACHE}/variantes.json`;
+export type Variantes = {
+  generado: string;
+  items: { id: string; origen: "organizacion" | "valencia"; A: number[]; D: number[]; frases: number[][] }[];
+};
 
 // Lo que guarda la captura [1]: el texto visible de la ficha, sin tocar.
 // `archivo` es el código de la URL; `codigo`, el que imprime la ficha (los
@@ -79,7 +90,7 @@ export const esperar = (ms: number) => new Promise((r) => setTimeout(r, ms));
 // Pausa entre llamadas a HelmCode: la clave es compartida por todos los equipos.
 export const PAUSA_IA_MS = 3000;
 
-const MODELO_EMBEDDINGS = "qwen3-embedding";
+export const MODELO_EMBEDDINGS = "qwen3-embedding";
 export const DIMENSIONES = 1536;
 const LOTE = 32;
 

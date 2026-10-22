@@ -4,12 +4,13 @@
 // Lo hecho se guarda en disco: si se relanza, no repite llamadas.
 //   bun scripts/indexado/estructurar.ts
 import { existsSync } from "node:fs";
-import { mkdir } from "node:fs/promises";
+import { mkdir, readdir } from "node:fs/promises";
 import { completar } from "../../src/lib/ia";
 import { tramites, type Tramite } from "../../src/lib/catalogo";
 import {
   DIR_FICHAS,
   PAUSA_IA_MS,
+  RUTA_RESUMENES,
   archivosCapturados,
   cifrasInventadas,
   escribirJson,
@@ -19,8 +20,6 @@ import {
   leerJson,
   type Captura,
 } from "./comun";
-
-const RUTA_RESUMENES = "src/datos/resumenes-catalogo.json";
 
 // Lo que redacta el LLM. El resto de campos de Tramite se fijan en código.
 type Extraccion = Pick<
@@ -130,9 +129,14 @@ async function estructurarFichas() {
   }
 }
 
-// Los resúmenes de la organización: el propio fichero hace de caché.
-async function resumirCatalogo() {
+// Los resúmenes de la organización: el propio fichero hace de caché. Los de
+// València salen de las fichas ya estructuradas.
+async function resumir() {
   const resumenes = existsSync(RUTA_RESUMENES) ? await leerJson<Record<string, string>>(RUTA_RESUMENES) : {};
+  for (const archivo of await readdir(DIR_FICHAS)) {
+    const ficha = await leerJson<FichaSinRevisar>(`${DIR_FICHAS}/${archivo}`);
+    if (ficha.resumen_sencillo) resumenes[ficha.id] ??= ficha.resumen_sencillo;
+  }
   for (const t of tramites) {
     if (resumenes[t.id]) continue;
     const { titulo, organismo, requisitos_clave, pasos, documentacion } = t;
@@ -148,7 +152,8 @@ async function resumirCatalogo() {
       console.error(`✗ ${t.id}: ${(error as Error).message}`);
     }
   }
+  await escribirJson(RUTA_RESUMENES, resumenes);
 }
 
 await estructurarFichas();
-await resumirCatalogo();
+await resumir();
