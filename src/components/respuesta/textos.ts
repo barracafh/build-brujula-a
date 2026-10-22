@@ -27,6 +27,14 @@ export const textosRespuesta = {
     audioError: "No hemos podido reproducir el audio.",
     anadirCalendario: "Añadir a Google Calendar",
     pestanaNueva: "(se abre en una pestaña nueva)",
+    contadoDesdeHoy: "Contado desde hoy",
+    cuentaHabiles:
+      "Contamos desde el día siguiente, sin sábados, domingos ni festivos nacionales o de la Comunitat Valenciana, según el",
+    calendarioInhabiles: "calendario oficial de días inhábiles de 2026",
+    sinFiestasLocales:
+      "No contamos las fiestas locales: si hay alguna, puede que tengas un día más.",
+    cuentaNaturales:
+      "Contamos desde el día siguiente, todos los días seguidos (naturales).",
   },
   va: {
     tipoTramite: "Tràmit",
@@ -51,6 +59,14 @@ export const textosRespuesta = {
     audioError: "No hem pogut reproduir l'àudio.",
     anadirCalendario: "Afegir a Google Calendar",
     pestanaNueva: "(s'obri en una pestanya nova)",
+    contadoDesdeHoy: "Comptat des de hui",
+    cuentaHabiles:
+      "Comptem des de l'endemà, sense dissabtes, diumenges ni festius nacionals o de la Comunitat Valenciana, segons el",
+    calendarioInhabiles: "calendari oficial de dies inhàbils de 2026",
+    sinFiestasLocales:
+      "No comptem les festes locals: si n'hi ha alguna, pot ser que tingues un dia més.",
+    cuentaNaturales:
+      "Comptem des de l'endemà, tots els dies seguits (naturals).",
   },
 } satisfies Record<IdiomaRespuesta, Record<string, string>>;
 

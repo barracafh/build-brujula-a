@@ -1,9 +1,20 @@
 import type { Entrada } from "@/lib/entrada";
 import { fechasPlazo, type FechaPlazo } from "@/datos/fechas-plazo";
-import type { IdiomaRespuesta } from "@/components/respuesta/textos";
+import { plazosRelativos, type PlazoRelativo } from "@/datos/plazos-relativos";
+import {
+  anioInhabiles,
+  fuenteInhabiles,
+  inhabiles,
+} from "@/datos/dias-inhabiles";
+import {
+  textosRespuesta,
+  type IdiomaRespuesta,
+} from "@/components/respuesta/textos";
 
-// Enlace «Añadir a Google Calendar» del plazo (ticket 19). Solo fechas fijas
-// que aparecen literales en el plazo y que aún no han pasado.
+// Enlace «Añadir a Google Calendar» del plazo (ticket 19): fechas fijas que
+// aparecen literales en el plazo y aún no han pasado, y plazos que cuentan
+// desde una fecha de cada persona («15 días hábiles desde…»), contados desde
+// hoy.
 
 const MESES = [
   "enero",
@@ -27,10 +38,21 @@ function enLetra(fecha: string) {
 }
 
 // Hoy en Madrid como "AAAA-MM-DD": las fechas ISO se comparan como texto.
-const hoy = () =>
+export const hoy = () =>
   new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Madrid" }).format(
     new Date(),
   );
+
+// "2026-11-10" → "2026-11-11", en UTC para no cruzar cambios de hora.
+function diaSiguiente(fecha: string) {
+  const [a, m, d] = fecha.split("-").map(Number);
+  return new Date(Date.UTC(a, m - 1, d + 1)).toISOString().slice(0, 10);
+}
+
+function esFinDeSemana(fecha: string) {
+  const dia = new Date(`${fecha}T00:00:00Z`).getUTCDay();
+  return dia === 0 || dia === 6;
+}
 
 export function fechasAbiertas(e: Entrada): FechaPlazo[] {
   const plazo = e.plazo;
@@ -41,16 +63,63 @@ export function fechasAbiertas(e: Entrada): FechaPlazo[] {
   );
 }
 
-// Evento de día entero: Google toma el día final como excluido.
+function plazoRelativo(e: Entrada): PlazoRelativo | undefined {
+  const p = plazosRelativos[e.id];
+  const plazo = e.plazo;
+  if (!p || !plazo) return undefined;
+  return p.literal.every((l) => plazo.includes(l)) ? p : undefined;
+}
+
+// Cuenta desde el día siguiente (Ley 39/2015, art. 30). En días hábiles se
+// saltan sábados, domingos y los inhábiles de src/datos/; si algún día contado
+// cae fuera del año de ese calendario, no se puede confirmar y devuelve null.
+export function calcularPlazo(desde: string, p: PlazoRelativo): string | null {
+  let fecha = desde;
+  let quedan = p.dias;
+  while (quedan > 0) {
+    fecha = diaSiguiente(fecha);
+    if (p.tipo === "habiles") {
+      if (!fecha.startsWith(`${anioInhabiles}-`)) return null;
+      if (esFinDeSemana(fecha) || inhabiles.has(fecha)) continue;
+    }
+    quedan--;
+  }
+  return fecha;
+}
+
+// Plazo que cuenta desde una fecha de cada persona, contado desde hoy. La nota
+// del evento dice desde cuándo y cómo se contó, y que si esa fecha fue antes el
+// plazo termina antes. Sin calendario para algún día contado, no hay enlace.
+export function enlaceRelativo(e: Entrada, idioma: IdiomaRespuesta) {
+  const p = plazoRelativo(e);
+  if (!p) return undefined;
+  const h = hoy();
+  const fecha = calcularPlazo(h, p);
+  if (!fecha) return undefined;
+  const tx = textosRespuesta[idioma];
+  const cuenta =
+    p.tipo === "habiles"
+      ? `${tx.cuentaHabiles} ${tx.calendarioInhabiles} (${fuenteInhabiles.url}). ${tx.sinFiestasLocales}`
+      : tx.cuentaNaturales;
+  const nota = `${tx.contadoDesdeHoy}, ${fechaCorta(h)}. ${p.siAntes[idioma]} ${cuenta}`;
+  return {
+    que: p.que[idioma],
+    href: enlaceGoogleCalendar(e, { fecha, que: p.que }, idioma, nota),
+  };
+}
+
+// "2026-11-10" → "10/11/2026".
+export const fechaCorta = (fecha: string) =>
+  fecha.split("-").reverse().join("/");
+
+// Evento de día entero: Google toma el día final como excluido. `nota` va al
+// principio de la descripción, antes del plazo literal.
 export function enlaceGoogleCalendar(
   e: Entrada,
-  f: FechaPlazo,
+  f: Pick<FechaPlazo, "fecha" | "que">,
   idioma: IdiomaRespuesta,
+  nota?: string,
 ) {
-  const [a, m, d] = f.fecha.split("-").map(Number);
-  const siguiente = new Date(Date.UTC(a, m - 1, d + 1))
-    .toISOString()
-    .slice(0, 10);
   // El enlace del trámite suele ser también la primera fuente: va una vez.
   const enlaces = new Set([
     e.enlace_tramite ?? e.enlace_info,
@@ -59,8 +128,8 @@ export function enlaceGoogleCalendar(
   const p = new URLSearchParams({
     action: "TEMPLATE",
     text: `${f.que[idioma]} · ${e.titulo}`,
-    dates: `${f.fecha.replaceAll("-", "")}/${siguiente.replaceAll("-", "")}`,
-    details: [e.plazo, ...enlaces].filter(Boolean).join("\n\n"),
+    dates: `${f.fecha.replaceAll("-", "")}/${diaSiguiente(f.fecha).replaceAll("-", "")}`,
+    details: [nota, e.plazo, ...enlaces].filter(Boolean).join("\n\n"),
   });
   return `https://calendar.google.com/calendar/render?${p}`;
 }

@@ -205,4 +205,21 @@ Añadir la línea a «Decisions so far» de `.scratch/brujula/map.md` y anotar e
   - `dates` sale `20261119/20261120`, `20261125/20261126` y `20261110/20261111`.
   - El nombre accesible es, por ejemplo, «Añadir a Google Calendar: Último día para pedir el voto por correo (se abre en una pestaña nueva)», y en valenciano «Afegir a Google Calendar: …».
   - A 320 px no hay scroll horizontal y `bun run build` pasa.
-- **Falta para cerrar:** abrir uno de los enlaces con una sesión de Google iniciada y comprobar que el evento cae el día correcto. Sin sesión, Google redirige a la página de producto de Calendar y no se ve el evento. Siguen sin revisar los textos en valenciano de `fechas-plazo.ts`.
+- **Falta para cerrar:** abrir uno de los enlaces con una sesión de Google iniciada y comprobar que el evento cae el día correcto. Sin sesión, Google redirige a la página de producto de Calendar y no se ve el evento. Siguen sin revisar los textos en valenciano de `fechas-plazo.ts` y `plazos-relativos.ts`.
+
+## Comments
+
+- 22/10/2026, Guillem: «si hay uno que es en 15 días, podríamos hacer que mire la fecha y sume los días». Esto sustituye la decisión «Solo fechas fijas» de arriba para tres entradas:
+  - **Qué entradas:** `prestacion-desempleo` y `inscripcion-demandante-labora` (15 días hábiles) y `multa-dgt` (20 días naturales), en `src/datos/plazos-relativos.ts`. Cada una lleva fragmentos que tienen que estar literales en su `plazo` («15 días hábiles», «20 días naturales»); si el catálogo cambia, el cálculo desaparece.
+  - **Qué queda fuera:** `cambio-domicilio-dgt`, porque su plazo dice «15 días» sin decir si son hábiles o naturales (regla 4). Tampoco entran los plazos relativos que son de un caso particular: la incorporación sobrevenida de `ayudas-comedor-escolar` y las subsanaciones de los pasos.
+  - **Desde hoy, solo el botón:** Guillem pidió después «que sea desde la fecha actual y solo el añadir al Google Calendar». Así que no se pide ninguna fecha: el plazo se cuenta desde hoy y en la tarjeta sol solo aparece el botón `outline`. Lo que antes explicaba la tarjeta va ahora al principio de la descripción del evento: «Contado desde hoy, 22/10/2026. Si el despido o el fin del contrato fue antes, el plazo termina antes.», seguido de cómo se cuenta y del enlace al BOE. Lo genera `enlaceRelativo()` en `src/lib/calendario.ts`, con `siAntes` de `src/datos/plazos-relativos.ts`.
+  - **Riesgo aceptado:** quien consulte días después del despido o de la notificación recibe un recordatorio más tarde que su plazo real. Solo lo avisa la descripción del evento. Se intentó antes con un campo de fecha, que evitaba esto, y se quitó a petición de Guillem.
+  - **Cómo se cuenta:** desde el día siguiente (Ley 39/2015, art. 30, que cita `contexto.md`). Los días hábiles saltan sábados, domingos y los días inhábiles de 2026, nacionales y de la Comunitat Valenciana, del calendario de la AGE ([BOE-A-2025-23702](https://www.boe.es/diario_boe/txt.php?id=BOE-A-2025-23702)). Los copié del anexo en `src/datos/dias-inhabiles.ts`: 1 y 6/1, 19/3, 3 y 6/4, 1/5, 24/6, 9 y 12/10, 8 y 25/12. El 2/11 y el 7/12 solo son inhábiles en otras comunidades.
+  - **Del lado seguro en el cómputo:** solo se quitan días que con seguridad son inhábiles. Las fiestas locales y el art. 30.6 (día inhábil en la sede del órgano) no se cuentan, así que, contando desde la fecha correcta, la fecha calculada puede salir antes que la real, nunca después. La descripción del evento lo dice y enlaza el BOE.
+  - **Sin calendario, no hay botón:** si un día contado cae fuera de 2026, el botón no aparece. El calendario de 2027 aún no está publicado; desde hoy, eso pasa con el paro a partir del 10/12. Los días naturales no necesitan calendario.
+  - **Comprobado:**
+    - `calcularPlazo` da 12/11 para el paro y 11/11 para la multa desde el 22/10; desde el 8/10, el paro da 2/11 (salta el 9 y el 12/10 y el fin de semana); desde el 10/12 devuelve `null`.
+    - En el navegador, el botón del paro lleva `dates=20261112/20261113` y la nota al principio de la descripción.
+    - El botón mide 205 px en escritorio y ocupa todo el ancho por debajo de `md`, como «Hacer el trámite».
+    - `bun run build` pasa.
+- 22/10/2026: revisadas las 21 entradas y todos sus campos en busca de fechas. No falta ninguna fecha fija abierta en `plazo`. Las únicas fechas que no van son las de la `nota` de `voto-por-correo` para quien vive fuera: el 31/10 para quien reside temporalmente en el extranjero, y del 21 al 26/11 y el 24/11 para el CERA. Son de otro grupo y no llevan año.
