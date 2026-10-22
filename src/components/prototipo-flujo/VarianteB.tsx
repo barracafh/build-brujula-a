@@ -34,6 +34,7 @@ export function VarianteB({ c }: { c: Conversacion }) {
   const pensando = estado.fase === "pensando";
   const fase = pensando ? estado.previa : estado.fase;
   const primera = estado.mensajes.find((m) => m.de === "ciudadano")?.texto;
+  const ultima = estado.mensajes.findLast((m) => m.de === "ciudadano")?.texto;
 
   return (
     <main
@@ -91,7 +92,7 @@ export function VarianteB({ c }: { c: Conversacion }) {
         )}
 
         {(fase === "aclaracion" || fase === "cierre") && (
-          <Aclaracion c={c} t={t} primera={primera} />
+          <Aclaracion c={c} t={t} primera={ultima} />
         )}
 
         {fase === "respuesta" && <Respuesta c={c} t={t} primera={primera} />}
@@ -152,9 +153,26 @@ function Aclaracion({
   const [ninguna, setNinguna] = useState(false);
   if (!ultimo || ultimo.de !== "brujula") return null;
   const esCierre = ultimo.tipo === "cierre";
+  // Si la aclaración sale al afinar una respuesta, se puede volver a ella.
+  const anterior = c.estado.entradaId
+    ? getTramite(c.estado.entradaId)
+    : undefined;
 
   return (
     <section className="mt-8 grid gap-6">
+      {anterior && (
+        <div>
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            onClick={c.volver}
+            className="h-auto min-h-11 justify-start py-2 text-left whitespace-normal"
+          >
+            ← {t.volverA}: <span lang="es">{anterior.titulo}</span>
+          </Button>
+        </div>
+      )}
       <Consulta t={t} texto={primera} />
       {ultimo.tipo === "aclaracion" && (
         <Badge variant="outline" className="font-mono uppercase">

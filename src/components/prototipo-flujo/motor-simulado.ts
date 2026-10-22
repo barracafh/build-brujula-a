@@ -340,9 +340,18 @@ export function useConversacion() {
     );
   }
 
+  // Desde una aclaración surgida al afinar: recupera la respuesta que había,
+  // sin reclasificar.
+  function volver() {
+    setEstado((e) =>
+      e.entradaId ? { ...e, fase: "respuesta", candidatas: [], ronda: 0 } : e,
+    );
+  }
+
   return {
     estado,
     enviar,
+    volver,
     reintentar,
     elegir,
     reiniciar: () => setEstado(INICIAL),

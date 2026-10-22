@@ -21,6 +21,7 @@ import {
 export const UI = {
   es: {
     afinar: "Afina tu consulta",
+    volverA: "Volver a",
     afinarPista: "Añade detalles o corrige lo que has dicho.",
     enviar: "Enviar",
     pensando: "Pensando…",
@@ -39,6 +40,7 @@ export const UI = {
   },
   va: {
     afinar: "Afina la teua consulta",
+    volverA: "Tornar a",
     afinarPista: "Afig detalls o corregix el que has dit.",
     enviar: "Enviar",
     pensando: "Pensant…",
