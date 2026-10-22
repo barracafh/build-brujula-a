@@ -7,7 +7,7 @@ Cómo traemos los trámites que faltan, cómo los estructuramos y cómo los conv
 | Entra | No entra |
 |---|---|
 | Los 21 trámites de `datos/catalogo-tramites-ayudas.json` (solo se leen y se crea su embedding) | Rastrear GVA, Labora, SEPE o DGT |
-| Los 16 trámites de València enlazados desde la página de trámites de `SETUP.md` | El catálogo completo de `sede.valencia.es` (cientos de trámites [sin verificar]) |
+| Los 16 trámites de València enlazados desde la página de trámites de `SETUP.md` que la sede sirvió (UR.LC.10 dio error) | El catálogo completo de `sede.valencia.es` (cientos de trámites [sin verificar]) |
 | Estructurarlos con el formato del catálogo de la organización | PDFs e impresos enlazados (se guarda solo su URL) |
 | Embeddings con `qwen3-embedding` a 1.536 dimensiones | El retrieval: búsqueda, umbral, reranker e integración con Jev |
 
@@ -33,11 +33,12 @@ Los 16 trámites de la página de `SETUP.md`, capturados el 22/10/2026:
 | LA.OT.10 | Certificado referido a antecedentes de la existencia de una Actividad Inocua en local |
 | UR.LC.135 | Licencia de Obras Tipo II |
 | UR.LC.140 | Declaración Responsable de Obra Tipo II |
-| UR.LC.10 | Comunicación previa a la ejecución de Obras |
+| ~~UR.LC.10~~ | Comunicación previa a la ejecución de Obras. **Fuera:** la sede dio error dos veces |
 | VP.PU.55 | Licencia de publicidad |
 | PC.OT.20 | Certificados de fe de vida |
 | CU.US.10 | Solicitud de uso de las Salas de Exposiciones de las Juntas Municipales |
-| — (enlace web) | Inscripción en el Registro Municipal de Entidades. Hay que revisarlo: no tiene ficha de procedimiento |
+| PC.AE.10 | Inscripción en el Registro Municipal de Entidades (URL `WEB_ASSET_CRG_0141`) |
+| PC.AE.40 | Actualización de datos en el Registro Municipal de Entidades (URL `WEB_ASSET_1_20170000428694`) |
 | PC.AE.50 | Comunicación anual de Datos al Registro Municipal de Entidades |
 
 ## 3. Pipeline
@@ -55,8 +56,7 @@ fuentes-valencia.json ─► [1] Captura (Chrome) ─► [2] Estructuración (gl
 ### [1] Captura con Chrome (Claude in Chrome)
 
 - Una sola pestaña y una ficha cada 10 s, sin paralelo. Solo esas 16 URLs: no se siguen enlaces ni se descargan PDFs.
-- Por ficha se guarda en `.cache/indexado/sede/<codigo>.json`: `{ codigo, url, url_final, consultado, titulo, texto }`. Es el texto visible, tal cual.
-- Antes de capturar las 16 se abre una y se ajusta la extracción a sus secciones reales [sin verificar cuáles son].
+- Por ficha se guarda `.cache/indexado/sede/<codigo de la URL>.txt`: cabecera `URL_FINAL` y `CONSULTADO`, el texto visible entre `---` y la lista de enlaces (`texto -> url`). Repeticiones literales se sustituyen por una nota `[Captura: …]`; las cifras se conservan todas.
 - Es una decisión consciente del equipo: queda fuera de la franja `Visit-time` del robots.txt de la sede (punto 10 de `decisiones.md`).
 
 ### [2] Estructuración
@@ -103,7 +103,7 @@ fuentes-valencia.json ─► [1] Captura (Chrome) ─► [2] Estructuración (gl
 
 ```
 src/datos/fuentes-valencia.json     entrada: 16 URLs                         se sube
-.cache/indexado/sede/*.json         texto capturado                          NO se sube (.gitignore)
+.cache/indexado/sede/*.txt          texto capturado                          NO se sube (.gitignore)
 .cache/indexado/fichas/*.json       salida del LLM sin revisar               NO se sube
 src/datos/catalogo-valencia.json    16 fichas revisadas                      se sube
 src/datos/resumenes-catalogo.json   resumen_sencillo de los 21 de la org.    se sube
@@ -145,7 +145,4 @@ En total, menos de 50 llamadas, una sola vez.
 
 ## 7. Pendiente
 
-- Ver la primera ficha de la sede y fijar qué secciones extraer.
-- Decidir qué se hace con «Inscripción en el Registro Municipal de Entidades», que no tiene ficha de procedimiento.
 - Escribir las preguntas de evaluación (sección 5).
-- Añadir `.cache/` a `.gitignore`.

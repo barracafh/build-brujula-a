@@ -106,3 +106,7 @@ Dominios del catálogo que **no** rastreamos: gva.es, sede.gva.es, labora.gva.es
     - Claude compara cada campo con el texto capturado de la sede, quita lo que no esté respaldado y deja un registro de cambios en `.cache/indexado/revision.md`.
     - `verificado: true` pasa a significar «revisado por IA contra la ficha oficial» y se dice en `nota`.
     - Riesgo aceptado: un modelo que revisa la salida de otro modelo puede dejar pasar errores. La validación automática de cifras (paso 3) sigue siendo obligatoria.
+14. **Captura hecha (22/10/2026): 16 fichas de 17. UR.LC.10 queda fuera.**
+    - La sede devolvió «PAGINA DE ERROR – Dificultad Técnica» para UR.LC.10 en los dos intentos. No se insiste para no cargar la sede. El alcance sigue en **37 trámites** (21 de la organización + 16 de València).
+    - Los dos enlaces web del Registro Municipal de Entidades sí tienen ficha: `WEB_ASSET_CRG_0141` es **PC.AE.10** (Inscripción) y `WEB_ASSET_1_20170000428694` es **PC.AE.40** (Actualización de datos). Se indexan con su código real.
+    - El texto se guarda como `.txt` (cabecera `URL_FINAL` y `CONSULTADO`, texto visible y lista de enlaces), no como `.json`: es más fácil de revisar.
