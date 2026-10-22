@@ -18,3 +18,12 @@ Generar por adelantado el audio de cada entrada del catálogo con ElevenLabs y s
 - Si el ticket 14 decide leer en valenciano también los textos fijos de la interfaz, se pregeneran igual, una versión por idioma.
 
 Hecho cuando todas las entradas del catálogo tienen su MP3 en `public/audio/`, el manifiesto está en el repo, `bun run build` pasa y la resolución anota los créditos gastados, el tamaño total y el `voice_id` usado.
+
+## Notas
+
+- 22/10/2026, de [Escuchar la respuesta: qué se lee y cuándo se genera](14-escuchar-respuesta.md), que ya desbloquea este ticket:
+  - **Guion:** el aviso de entrada sin verificar (si lo hay), el titular, el organismo, los pasos, el plazo, los requisitos, la documentación, la `nota` normalizada y una frase final que remite a «Hacer el trámite» o al 012. Sin URL y sin fuentes. Se aplica la tabla de pronunciación de `src/datos/`, que hay que crear.
+  - **Dos MP3 por entrada:** `public/audio/<id>.es.mp3` y `public/audio/<id>.va.mp3`. El contenido va siempre en castellano (`language_code: "es"`). Las etiquetas y la frase final, en el idioma de la versión (`ca` en la valenciana). Cada fragmento se genera aparte y se concatena, y los fragmentos de contenido se generan una sola vez para los dos idiomas. El hash del manifiesto va por fragmento.
+  - **Voz:** Alice, `Xb7hH8MSUJpSbSDYk0k2`, con `eleven_v4_turbo`. **Antes de generar todo**, que alguien del equipo escuche una entrada completa en los dos idiomas. Si no convence, la alternativa probada es George, `JBFqnCBsd6RMkjVDRZzb`.
+  - **Formato:** `mp3_22050_32`, unos 4 KB por segundo, en total unos 18 MB [SPECULATION: extrapolado].
+  - **Duración:** el componente necesita la duración de cada MP3 para el nombre accesible y para «Pausar · 0:42 / 1:20». Guardarla en el manifiesto.

@@ -48,13 +48,13 @@ Decisiones sobre la voz con ElevenLabs (suscripción del plan Creator), tomadas 
 - [Clave de ElevenLabs en local y en Vercel](issues/12-clave-elevenlabs.md): clave en `.env.local` y verificada con llamadas reales (plan Creator, 131.000 caracteres al mes, no 275.000; renueva el 22/11/2026); sin `voices_read`, así que el `voice_id` va fijo; Vercel pasa a los organizadores.
 - [Consulta por voz: cómo se habla a Brújula](issues/13-consulta-por-voz.md): botón «Dictar» `outline` junto a Buscar, pulsar para empezar y parar, en todas las cajas; Scribe por lotes rellena la caja sin enviar; para a los 60 s; el idioma detectado cambia la interfaz si no se eligió a mano; Creator no admite retención cero.
 - [Aviso del primer uso con ElevenLabs](issues/15-aviso-elevenlabs.md): un solo aviso al inicio con texto fijo que nombra a Jev, HelmCode y ElevenLabs («tu voz va a ElevenLabs (en EE. UU.), que guarda el audio y el texto»); «Más información» en un desplegable y «Retirar la aceptación» desde «Privacidad» en el pie; pendiente de validar con un experto humano.
+- [Escuchar la respuesta: qué se lee y cuándo se genera](issues/14-escuchar-respuesta.md): se lee todo lo visible en orden, sin URL ni fuentes y con una tabla de pronunciación solo para el audio; un MP3 por entrada e idioma (etiquetas en valenciano, contenido en castellano); botón `outline` «Escuchar» → «Pausar · 0:42 / 1:20» sin adelantar; voz Alice, provisional hasta que alguien la escuche.
 
 ## Not yet specified
 
 - Textos de las plantillas fijas de la interfaz en castellano y valenciano. Punto de partida: los del prototipo del flujo (`UI` en `src/components/prototipo-flujo/piezas.tsx`, rama `prototype/flujo-consulta`), más el anuncio «Sigue siendo: <título>» de [Accesibilidad del flujo por pantallas](issues/09-accesibilidad-flujo-pantallas.md).
 - Prompt o configuración de cada proveedor (clasificación y redacción de aclaraciones).
 - Ruta propia de cada entrada: forma de la URL y qué se ve al entrar por ella sin consulta previa.
-- Voz en la aclaración: si las preguntas de aclaración, redactadas por HelmCode en `es` o `va`, también se pueden escuchar. Contestarlas hablando ya está resuelto (el micrófono va en todas las cajas). Depende de cómo quede la escucha de la respuesta.
 
 ## Out of scope
 
@@ -63,3 +63,4 @@ Decisiones sobre la voz con ElevenLabs (suscripción del plan Creator), tomadas 
 - Traducción del contenido de las entradas: riesgo de alterar plazos o requisitos (regla 4).
 - Agentes de voz de ElevenLabs (ElevenAgents, widget o teléfono): el agente habla con texto generado por un LLM, y eso rompe «la IA elige entradas» y la regla 4.
 - Usos creativos de ElevenLabs (voz en off, doblaje) fuera del producto: solo para el pitch, si sobra tiempo.
+- Escuchar las preguntas de aclaración: HelmCode las redacta en directo y habría que generar audio al vuelo, lo que se descartó para la respuesta ([Escuchar la respuesta](issues/14-escuchar-respuesta.md)).
