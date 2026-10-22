@@ -17,6 +17,7 @@ import {
 } from "./piezas";
 import { EJEMPLOS, PAG, lang, textosFlujo, type TextosFlujo } from "./textos";
 import { useConversacion, type Conversacion } from "./useConversacion";
+import { ConmutadorVoz } from "./prototipo-voz/Conmutador";
 
 // Flujo por pantallas (ticket 02, variante B) con la accesibilidad del ticket
 // 09: cada pantalla nueva entra con un fundido, el foco va a su h1 y la página
@@ -36,6 +37,7 @@ export function Flujo() {
 
   return (
     <div lang={lang(c.idioma)}>
+      <ConmutadorVoz />
       <div className="flex flex-wrap items-center justify-between gap-3">
         {pantalla.tipo !== "inicio" ? (
           <Button

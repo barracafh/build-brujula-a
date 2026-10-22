@@ -8,6 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { MAX_CARACTERES } from "@/lib/motor/contrato";
 import type { Candidata, Conversacion } from "./useConversacion";
 import { PAG, lang, type TextosFlujo } from "./textos";
+import { Microfono } from "./prototipo-voz/Microfono";
+import { useVarianteVoz } from "./prototipo-voz/Conmutador";
 
 export const titular =
   "rounded-md text-[clamp(30px,5vw,48px)] leading-[1.1] tracking-[-0.02em] outline-none";
@@ -38,6 +40,25 @@ export function Composer({
   className?: string;
 }) {
   const [texto, setTexto] = useState("");
+  const variante = useVarianteVoz();
+  // PROTOTIPO (ticket 13): la transcripción se añade a la caja; no se envía sola.
+  const microfono = (
+    <Microfono
+      variante={variante}
+      grande={grande}
+      idioma={c.idioma}
+      idCaja={id}
+      deshabilitado={c.pensando}
+      alTexto={(tr) =>
+        setTexto((prev) =>
+          (prev.trim() ? `${prev.trimEnd()} ${tr.texto}` : tr.texto).slice(
+            0,
+            MAX_CARACTERES,
+          ),
+        )
+      }
+    />
+  );
 
   function enviar(e?: FormEvent) {
     e?.preventDefault();
@@ -58,6 +79,7 @@ export function Composer({
       >
         {etiqueta}
       </label>
+      {grande && variante === "C" && microfono}
       <div className={cn(grande ? "grid gap-3" : "flex items-end gap-2")}>
         <Textarea
           id={id}
@@ -82,7 +104,8 @@ export function Composer({
             grande ? "min-h-24 px-4 py-3 text-lg md:text-lg" : "min-h-11",
           )}
         />
-        <div>
+        {!grande && microfono}
+        <div className={cn(grande && "flex flex-wrap items-start gap-2")}>
           <Button
             type="submit"
             variant={principal ? "sunset" : "outline"}
@@ -92,6 +115,7 @@ export function Composer({
           >
             {grande ? t.buscar : t.enviar}
           </Button>
+          {grande && variante !== "C" && microfono}
         </div>
       </div>
       {pista && (
