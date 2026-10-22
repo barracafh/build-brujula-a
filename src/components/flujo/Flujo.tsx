@@ -287,8 +287,9 @@ function Inicio({
           </li>
         ))}
       </ul>
-      <Avisos t={t} id="consulta" className="mt-6" />
       <Recientes c={c} t={t} recientes={recientes} />
+      {/* Al final de la pantalla: siguen describiendo la caja por aria-describedby. */}
+      <Avisos t={t} id="consulta" className="mt-16" />
     </>
   );
 }
