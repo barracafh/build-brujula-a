@@ -1,4 +1,7 @@
 // Piezas compartidas por los scripts de indexación (docs/index_specification.md).
+import { existsSync } from "node:fs";
+import { readFile, writeFile } from "node:fs/promises";
+
 export const DIR_CACHE = ".cache/indexado";
 export const DIR_SEDE = `${DIR_CACHE}/sede`;
 export const DIR_FICHAS = `${DIR_CACHE}/fichas`;
@@ -19,7 +22,7 @@ export type Captura = {
 // Formato del .txt: cabecera, `---`, texto visible, `---`, `ENLACES:` y una
 // línea `texto -> url` por enlace.
 export async function leerCaptura(archivo: string): Promise<Captura> {
-  const crudo = await Bun.file(`${DIR_SEDE}/${archivo}.txt`).text();
+  const crudo = await readFile(`${DIR_SEDE}/${archivo}.txt`, "utf8");
   const [cabecera, texto, pie = ""] = crudo.split(/^---$/m).map((p) => p.trim());
   const campo = (nombre: string) => cabecera.match(new RegExp(`^${nombre}: (.+)$`, "m"))?.[1].trim() ?? "";
   const lineas = texto.split("\n").map((l) => l.trim()).filter(Boolean);
@@ -42,11 +45,15 @@ export async function leerCaptura(archivo: string): Promise<Captura> {
 
 // Los 16 archivos capturados, en el orden de src/datos/fuentes-valencia.json.
 export async function archivosCapturados(): Promise<string[]> {
-  const fuentes: { items: { url: string }[] } = await Bun.file("src/datos/fuentes-valencia.json").json();
-  const archivos = fuentes.items.map((f) => new URL(f.url).pathname.split("/").pop()!);
-  const existe = await Promise.all(archivos.map((a) => Bun.file(`${DIR_SEDE}/${a}.txt`).exists()));
-  return archivos.filter((_, i) => existe[i]);
+  const fuentes = await leerJson<{ items: { url: string }[] }>("src/datos/fuentes-valencia.json");
+  return fuentes.items
+    .map((f) => new URL(f.url).pathname.split("/").pop()!)
+    .filter((a) => existsSync(`${DIR_SEDE}/${a}.txt`));
 }
+
+export const leerJson = async <T>(ruta: string): Promise<T> => JSON.parse(await readFile(ruta, "utf8"));
+
+export const escribirJson = (ruta: string, valor: unknown) => writeFile(ruta, JSON.stringify(valor, null, 2) + "\n");
 
 // El LLM a veces envuelve el JSON en ```json o lo precede de <think>.
 export function extraerJson<T>(respuesta: string): T {

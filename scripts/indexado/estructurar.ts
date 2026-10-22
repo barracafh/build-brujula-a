@@ -3,6 +3,7 @@
 // llamadas, y genera el resumen_sencillo de los 21 trámites de la organización.
 // Lo hecho se guarda en disco: si se relanza, no repite llamadas.
 //   bun scripts/indexado/estructurar.ts
+import { existsSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { completar } from "../../src/lib/ia";
 import { tramites, type Tramite } from "../../src/lib/catalogo";
@@ -11,9 +12,11 @@ import {
   PAUSA_IA_MS,
   archivosCapturados,
   cifrasInventadas,
+  escribirJson,
   esperar,
   extraerJson,
   leerCaptura,
+  leerJson,
   type Captura,
 } from "./comun";
 
@@ -114,12 +117,12 @@ async function estructurarFichas() {
   await mkdir(DIR_FICHAS, { recursive: true });
   for (const archivo of await archivosCapturados()) {
     const captura = await leerCaptura(archivo);
-    const destino = Bun.file(`${DIR_FICHAS}/${captura.codigo}.json`);
-    if (await destino.exists()) continue;
+    const destino = `${DIR_FICHAS}/${captura.codigo}.json`;
+    if (existsSync(destino)) continue;
     try {
       const respuesta = await llamar(PROMPT_FICHA, `${captura.titulo}\n\n${captura.texto}`);
       const ficha = aFicha(captura, extraerJson<Extraccion>(respuesta));
-      await Bun.write(destino, JSON.stringify(ficha, null, 2) + "\n");
+      await escribirJson(destino, ficha);
       console.log(`✓ ${captura.codigo}${ficha.revisar.length ? ` (revisar: ${ficha.revisar.length})` : ""}`);
     } catch (error) {
       console.error(`✗ ${captura.codigo}: ${(error as Error).message}`);
@@ -129,8 +132,7 @@ async function estructurarFichas() {
 
 // Los resúmenes de la organización: el propio fichero hace de caché.
 async function resumirCatalogo() {
-  const archivo = Bun.file(RUTA_RESUMENES);
-  const resumenes: Record<string, string> = (await archivo.exists()) ? await archivo.json() : {};
+  const resumenes = existsSync(RUTA_RESUMENES) ? await leerJson<Record<string, string>>(RUTA_RESUMENES) : {};
   for (const t of tramites) {
     if (resumenes[t.id]) continue;
     const { titulo, organismo, requisitos_clave, pasos, documentacion } = t;
@@ -140,7 +142,7 @@ async function resumirCatalogo() {
       const malas = cifrasInventadas(resumen_sencillo, ficha);
       if (malas.length) throw new Error(`cifras inventadas (${malas.join(", ")})`);
       resumenes[t.id] = resumen_sencillo.trim();
-      await Bun.write(archivo, JSON.stringify(resumenes, null, 2) + "\n");
+      await escribirJson(RUTA_RESUMENES, resumenes);
       console.log(`✓ ${t.id}`);
     } catch (error) {
       console.error(`✗ ${t.id}: ${(error as Error).message}`);
