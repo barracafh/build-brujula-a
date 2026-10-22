@@ -45,7 +45,6 @@ export function Flujo() {
       if (window.location.hash !== "#privacidad") return;
       setRevisando(true);
       setAnuncioAviso("");
-      setCambioAviso((n) => n + 1);
     };
     abrir();
     window.addEventListener("hashchange", abrir);
@@ -59,40 +58,16 @@ export function Flujo() {
       history.replaceState(null, "", window.location.pathname + window.location.search);
   }
 
+  function retirarAceptacion() {
+    retirar();
+    c.reiniciar();
+    setRevisando(false);
+    setAnuncioAviso(t.aviso.retirada);
+    if (window.location.hash === "#privacidad")
+      history.replaceState(null, "", window.location.pathname + window.location.search);
+  }
+
   const { pantalla, consulta } = c;
-
-  // Hasta saber si hay aceptación (servidor y antes de hidratar), nada.
-  if (aceptado === null) return <div lang={lang(c.idioma)} className="min-h-[60dvh]" />;
-
-  if (!aceptado || revisando)
-    return (
-      <div lang={lang(c.idioma)}>
-        <div className="flex justify-end">
-          <SelectorIdioma c={c} t={t} />
-        </div>
-        <div role="status" className="sr-only">
-          {anuncioAviso}
-        </div>
-        <Aviso
-          t={t}
-          aceptado={aceptado}
-          refTitular={refTitular}
-          onAceptar={() => {
-            aceptar();
-            cerrarAviso();
-          }}
-          onVolver={cerrarAviso}
-          onRetirar={() => {
-            retirar();
-            c.reiniciar();
-            setRevisando(false);
-            setAnuncioAviso(t.aviso.retirada);
-            if (window.location.hash === "#privacidad")
-              history.replaceState(null, "", window.location.pathname + window.location.search);
-          }}
-        />
-      </div>
-    );
 
   return (
     <div lang={lang(c.idioma)}>
@@ -117,6 +92,22 @@ export function Flujo() {
       <div role="status" className="sr-only">
         {c.anuncio}
       </div>
+
+      <Aviso
+        t={t}
+        lang={lang(c.idioma)}
+        abierto={aceptado === false || (aceptado === true && revisando)}
+        aceptado={aceptado === true}
+        anuncio={anuncioAviso}
+        selectorIdioma={<SelectorIdioma c={c} t={t} />}
+        onAceptar={() => {
+          aceptar();
+          setAnuncioAviso("");
+          cerrarAviso();
+        }}
+        onVolver={cerrarAviso}
+        onRetirar={retirarAceptacion}
+      />
       {c.pensando && (
         <p
           aria-hidden="true"
