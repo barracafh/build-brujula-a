@@ -18,11 +18,14 @@ import {
 export function Dictar({
   t,
   grande,
+  icono = false,
   deshabilitado,
   alTexto,
 }: {
   t: TextosFlujo;
   grande: boolean;
+  // Solo el micro, redondo y sin texto, como en la barra de ChatGPT.
+  icono?: boolean;
   deshabilitado: boolean;
   alTexto: (tr: Transcripcion) => void;
 }) {
@@ -52,11 +55,17 @@ export function Dictar({
   const anuncio = grabando ? v.grabando : mensaje;
 
   return (
-    <div className={cn("grid gap-2", grande && "max-md:w-full")}>
+    <div
+      className={cn(
+        icono ? "contents" : "grid gap-2",
+        grande && "max-md:w-full",
+      )}
+    >
       <Button
         type="button"
-        variant="outline"
-        size="lg"
+        variant={icono ? "ghost" : "outline"}
+        size={icono ? "icon-lg" : "lg"}
+        aria-label={icono ? (grabando ? v.parar : v.dictar) : undefined}
         disabled={deshabilitado || ocupado}
         aria-pressed={grabando}
         onClick={() => {
@@ -64,20 +73,25 @@ export function Dictar({
           if (grabando) g.parar();
           else g.empezar();
         }}
-        className={cn("min-h-11", grande && "max-md:w-full")}
+        className={cn(
+          icono
+            ? "size-11 rounded-full"
+            : cn("min-h-11", grande && "max-md:w-full"),
+        )}
       >
         {grabando ? (
           <SquareIcon aria-hidden="true" />
         ) : (
           <MicIcon aria-hidden="true" />
         )}
-        {grabando ? `${v.parar} · ${reloj(g.segundos)}` : v.dictar}
+        {!icono && (grabando ? `${v.parar} · ${reloj(g.segundos)}` : v.dictar)}
       </Button>
-      {mensaje && (grande || !grabando) && (
+      {mensaje && (grande || icono || !grabando) && (
         <p
           aria-hidden="true"
           className={cn(
             "text-sm text-(--text-secondary)",
+            icono && "order-last basis-full px-3 pb-1",
             grabando && "font-mono tabular-nums",
           )}
         >

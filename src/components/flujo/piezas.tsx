@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent, type Ref } from "react";
-import { Info, TriangleAlert } from "lucide-react";
+import { ArrowUpIcon, Info, TriangleAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -62,6 +62,7 @@ export function Composer({
     <Dictar
       t={t}
       grande={false}
+      icono={grande}
       deshabilitado={c.pensando}
       alTexto={(tr) => {
         setTexto((prev) =>
@@ -126,21 +127,36 @@ export function Composer({
           placeholder={grande ? t.ejemploCaja : undefined}
           aria-describedby={descripcion}
           className={cn(
-            "min-h-11 min-w-0 flex-1 text-base max-sm:basis-full md:text-base",
+            "min-h-11 min-w-0 flex-1 text-base md:text-base",
+            !grande && "max-sm:basis-full",
             grande &&
               "resize-none border-0 bg-transparent px-3 py-2 text-lg shadow-none focus-visible:ring-0 md:text-lg dark:bg-transparent",
           )}
         />
         {dictar}
-        <Button
-          type="submit"
-          variant={principal ? "sunset" : "outline"}
-          size="lg"
-          disabled={c.pensando}
-          className={cn("min-h-11", grande && "px-4 max-sm:ml-auto")}
-        >
-          {grande ? t.buscar : t.enviar}
-        </Button>
+        {grande ? (
+          // Como en ChatGPT: flecha redonda, apagada hasta que hay texto.
+          <Button
+            type="submit"
+            variant={principal ? "sunset" : "default"}
+            size="icon-lg"
+            aria-label={t.buscar}
+            disabled={c.pensando || !texto.trim()}
+            className="size-11 rounded-full"
+          >
+            <ArrowUpIcon aria-hidden="true" />
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            variant={principal ? "sunset" : "outline"}
+            size="lg"
+            disabled={c.pensando}
+            className="min-h-11"
+          >
+            {t.enviar}
+          </Button>
+        )}
       </div>
       {pista && (
         <p id={`${id}-pista`} className="text-sm text-(--text-secondary)">
