@@ -2,6 +2,7 @@
 
 Type: prototype
 Status: open
+Claimed: sí (sesión 22/10/2026)
 Blocked by: 11, 12
 
 ## Question
