@@ -36,7 +36,7 @@ Decisiones de partida, tomadas al trazar el mapa (22/10/2026):
 - [Accesibilidad del flujo por pantallas](issues/09-accesibilidad-flujo-pantallas.md): cada pantalla nueva lleva el foco a su `h1` y vuelve arriba; «Pensando…» es una región de estado fija y visible con la pantalla anterior `inert`; afinar sin cambio anuncia «Sigue siendo: <título>»; la barra de afinar devuelve el foco al cerrarse.
 - [Tarjetas de la respuesta: lado a lado o apiladas](issues/10-tarjetas-respuesta-apiladas.md): apiladas a todo el ancho, con etiquetas mono como `h2`, pastillas con icono sobre `bg-muted` y la nota en tarjeta visible antes de «Dónde se hace»; pendiente de que Nico lo ratifique.
 - [¿Jev es compatible con la regla 3?](issues/08-jev-y-regla-3.md): Jev se admite en producción con aviso aceptado en el primer uso y minimización de DNI, correos y teléfonos; pendiente de validar con un experto humano.
-- [Conjunto de evaluación](issues/06-conjunto-evaluacion.md): Jev y HelmCode empatan en precisión (92 % y 88 % en las consultas nuevas); Jev es unas 18 veces más rápido pero cae con una inyección; la cadena actual es Jev solo; encaje recomendado de 0,20.
+- [Conjunto de evaluación](issues/06-conjunto-evaluacion.md): Jev y HelmCode empatan en precisión (92 % y 88 % en las consultas nuevas); Jev es unas 18 veces más rápido pero cae con una inyección; con clave clasifica Jev y HelmCode solo entra si falla; encaje recomendado de 0,20.
 
 ## Not yet specified
 
