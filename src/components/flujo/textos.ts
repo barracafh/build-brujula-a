@@ -39,6 +39,21 @@ export const textosFlujo = {
     buscarPag: "Buscar en administracion.gob.es",
     esEsta: (titulo: string) => `Es esta: ${titulo}.`,
     sigueSiendo: (titulo: string) => `Sigue siendo: ${titulo}`,
+    voz: {
+      dictar: "Dictar",
+      parar: "Parar",
+      permiso: "Permite el micrófono en el navegador.",
+      grabando: "Grabando",
+      transcribiendo: "Pasando tu voz a texto…",
+      listo: "Listo. Revisa el texto y envíalo.",
+      tope: "Hemos parado al minuto. Revisa el texto o añade lo que falte escribiendo.",
+      denegado:
+        "No tenemos permiso para el micrófono. Puedes escribir tu consulta.",
+      error:
+        "No hemos podido pasar tu voz a texto. Puedes escribir tu consulta.",
+      sinSoporte:
+        "Este navegador no permite dictar. Puedes escribir tu consulta.",
+    },
     aviso: {
       titulo: "Antes de empezar",
       intro:
@@ -107,6 +122,21 @@ export const textosFlujo = {
     buscarPag: "Cercar en administracion.gob.es",
     esEsta: (titulo: string) => `És este: ${titulo}.`,
     sigueSiendo: (titulo: string) => `Continua sent: ${titulo}`,
+    voz: {
+      dictar: "Dictar",
+      parar: "Parar",
+      permiso: "Permet el micròfon en el navegador.",
+      grabando: "Gravant",
+      transcribiendo: "Passant la teua veu a text…",
+      listo: "Fet. Revisa el text i envia'l.",
+      tope: "Hem parat al minut. Revisa el text o afig el que falte escrivint.",
+      denegado:
+        "No tenim permís per al micròfon. Pots escriure la teua consulta.",
+      error:
+        "No hem pogut passar la teua veu a text. Pots escriure la teua consulta.",
+      sinSoporte:
+        "Este navegador no permet dictar. Pots escriure la teua consulta.",
+    },
     aviso: {
       titulo: "Abans de començar",
       intro:

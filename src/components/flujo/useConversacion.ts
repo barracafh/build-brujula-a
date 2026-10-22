@@ -238,6 +238,10 @@ export function useConversacion() {
     reintentar: () => reintento.current?.(),
     cambiarIdioma: (idioma: Idioma) =>
       setEstado((e) => ({ ...e, idioma, idiomaManual: true })),
+    // El idioma que detecta el dictado (ticket 13) solo manda si el
+    // ciudadano no lo ha elegido a mano.
+    idiomaDetectado: (idioma: Idioma) =>
+      setEstado((e) => (e.idiomaManual ? e : { ...e, idioma })),
   };
 }
 
