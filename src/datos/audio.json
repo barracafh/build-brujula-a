@@ -80,8 +80,8 @@
     },
     "bono-alquiler-joven": {
       "es": {
-        "segundos": 226,
-        "bytes": 904047,
+        "segundos": 225.9,
+        "bytes": 903733,
         "fragmentos": [
           "205bd2abe2c2eaa1",
           "89063653f6c389fe",
@@ -98,8 +98,8 @@
         ]
       },
       "va": {
-        "segundos": 226.2,
-        "bytes": 904675,
+        "segundos": 226.1,
+        "bytes": 904361,
         "fragmentos": [
           "205bd2abe2c2eaa1",
           "ee0bd6a08190cfcd",
@@ -698,8 +698,8 @@
     },
     "xarxa-llibres": {
       "es": {
-        "segundos": 137.3,
-        "bytes": 549200,
+        "segundos": 133,
+        "bytes": 532168,
         "fragmentos": [
           "75c590bde204f3c1",
           "89063653f6c389fe",
@@ -711,13 +711,13 @@
           "b6b29e6db6876513",
           "4b371dcb4734281a",
           "67881a3fa51fee7b",
-          "63e761e07f828741",
+          "05a470f552cc8c0b",
           "9acad780e3698eec"
         ]
       },
       "va": {
-        "segundos": 137.5,
-        "bytes": 549828,
+        "segundos": 133.2,
+        "bytes": 532796,
         "fragmentos": [
           "75c590bde204f3c1",
           "ee0bd6a08190cfcd",
@@ -729,7 +729,7 @@
           "6924d9b8664b60df",
           "4b371dcb4734281a",
           "cfd0a39aab83b18f",
-          "63e761e07f828741",
+          "05a470f552cc8c0b",
           "478a6d01a8057474"
         ]
       }

@@ -19,5 +19,5 @@ export const notasSustituidas: Record<string, string | null> = {
   "ayudas-comedor-escolar":
     "Importe: hasta 4,35 €/día (Infantil, Primaria y ESO), 5,54 € (educación especial). No es un trámite online: se entrega en el centro.",
   "xarxa-llibres":
-    "No es un trámite online: se entrega en el centro. La sede y la Conselleria lo llaman «Programa Banco de Libros». Dudas: ajudesllibres@gva.es.",
+    "No es un trámite online: se entrega en el centro. La sede y la Conselleria lo llaman «Programa Banco de Libros».",
 };
