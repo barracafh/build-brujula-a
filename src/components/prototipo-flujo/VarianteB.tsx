@@ -5,6 +5,7 @@
 // El chat queda plegado en una barra «Afinar» sobre la respuesta.
 
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FichaTramite } from "@/components/FichaTramite";
@@ -35,6 +36,11 @@ export function VarianteB({ c }: { c: Conversacion }) {
   const fase = pensando ? estado.previa : estado.fase;
   const primera = estado.mensajes.find((m) => m.de === "ciudadano")?.texto;
   const ultima = estado.mensajes.findLast((m) => m.de === "ciudadano")?.texto;
+  const preguntas = estado.mensajes.filter((m) => m.de === "brujula").length;
+  const pantalla =
+    fase === "aclaracion" || fase === "cierre"
+      ? `${fase}-${preguntas}`
+      : `${fase}-${estado.entradaId}`;
 
   return (
     <main
@@ -69,7 +75,17 @@ export function VarianteB({ c }: { c: Conversacion }) {
         </p>
       )}
 
-      <div className={pensando ? "opacity-50" : undefined}>
+      <div
+        className={cn(
+          "transition-opacity duration-200 motion-reduce:transition-none",
+          pensando && "opacity-50",
+        )}
+      >
+        {/* Cada pantalla nueva entra con un fundido; la clave cambia al sustituirla. */}
+        <div
+          key={pantalla}
+          className="transition-opacity duration-300 ease-(--ease-brand) motion-reduce:transition-none starting:opacity-0"
+        >
         {fase === "inicio" && (
           <>
             <div className="mt-6">
@@ -124,6 +140,7 @@ export function VarianteB({ c }: { c: Conversacion }) {
             </div>
           </section>
         )}
+        </div>
       </div>
     </main>
   );
