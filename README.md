@@ -1,3 +1,9 @@
+> **Build night BARRACA x SOTI** · 22 de octubre de 2026, Flywire, València.
+>
+> **Brújula · Asistente de trámites**, de The Shakers (track Brújula). Encuentra el trámite y el siguiente paso. Publicada en https://build.barraca.house/brujula-a; la IA funciona hasta el 30 de noviembre de 2026.
+>
+> Repo archivado: es el código tal como quedó tras la noche. Si quieres seguir con él, haz un fork. El CLI del evento y su registro ya no existen, así que las instrucciones de `buildnight` que haya más abajo ya no sirven.
+
 # Brújula · Procedure assistant
 
 **Describe your situation in your own words and Brújula tells you which official procedure or benefit you need, the steps, the documents, the deadline, and the direct link to the official website.**
