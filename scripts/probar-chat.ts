@@ -1,6 +1,6 @@
 import { plantillas } from "../src/lib/motor/plantillas";
 
-const base = process.argv[2] ?? "http://localhost:3000/brujula-a";
+const base = process.argv[2] ?? "http://localhost:3000/punto-atencion-ciudadana/brujula-a";
 
 type Caso = {
   nombre: string;

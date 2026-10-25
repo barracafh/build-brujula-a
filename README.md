@@ -1,6 +1,6 @@
 > **Build night BARRACA x SOTI** · 22 de octubre de 2026, Flywire, València.
 >
-> **Brújula · Asistente de trámites**, de The Shakers (track Brújula). Encuentra el trámite y el siguiente paso. Publicada en https://build.barraca.house/brujula-a; la IA funciona hasta el 30 de noviembre de 2026.
+> **Brújula · Asistente de trámites**, de The Shakers (track Brújula). Encuentra el trámite y el siguiente paso. Publicada en https://build.barraca.house/punto-atencion-ciudadana/brujula-a; la IA funciona hasta el 30 de noviembre de 2026.
 >
 > Repo archivado: es el código tal como quedó tras la noche. Si quieres seguir con él, haz un fork. El CLI del evento y su registro ya no existen, así que las instrucciones de `buildnight` que haya más abajo ya no sirven.
 
@@ -8,7 +8,7 @@
 
 **Describe your situation in your own words and Brújula tells you which official procedure or benefit you need, the steps, the documents, the deadline, and the direct link to the official website.**
 
-Live demo: <https://build.barraca.house/brujula-a> (the interface is in Spanish and Valencian).
+Live demo: <https://build.barraca.house/punto-atencion-ciudadana/brujula-a> (the interface is in Spanish and Valencian).
 
 Brújula ("compass" in Spanish) is an experimental tool for residents of the Comunitat Valenciana (Spain). It is not an official service.
 
@@ -119,7 +119,7 @@ bun install --frozen-lockfile
 bun run dev
 ```
 
-Open <http://localhost:3000/brujula-a>. The app lives under `/<team>` (the `equipo` field of `ficha.json`), also locally. Do not change that field.
+Open <http://localhost:3000/punto-atencion-ciudadana/brujula-a>. The app lives under `/<team>` (the `equipo` field of `ficha.json`), also locally. Do not change that field.
 
 Create `.env.local` (never committed). All keys are server-side only, never `NEXT_PUBLIC_*`:
 
@@ -147,7 +147,7 @@ bun run probar:agente               # follow-up chat loop (needs keys)
 
 ## Deploy
 
-Every push to `main` is published automatically at <https://build.barraca.house/brujula-a>. If `bun run build` fails, nothing is published. Keys are already set in the Vercel project.
+Every push to `main` is published automatically at <https://build.barraca.house/punto-atencion-ciudadana/brujula-a>. If `bun run build` fails, nothing is published. Keys are already set in the Vercel project.
 
 ## Event delivery
 
